@@ -1,9 +1,15 @@
+import 'package:cap/home_page.dart';
+import 'package:cap/pages/reglages.dart';
+import 'package:cap/pages/salon.dart';
 import 'package:flutter/material.dart';
-import 'package:shakeup/pages/reglages.dart';
-import 'package:shakeup/pages/salon.dart';
+import 'package:flutter/services.dart';
 
-void main() {
-  runApp(MyApp());
+Future<void> main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeRight, DeviceOrientation.landscapeLeft])
+      .then((_) {
+    runApp(const MyApp());
+  });
 }
 
 //StatelessWidget   taper st    //pour consulter du contenu ex page d accueil
@@ -17,11 +23,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const SalonPage(),
-      routes: {
-        '/privacy': (context) => const PrivacyPolicyPage(),
-        '/terms': (context) => const TermsPage(),
-      },
+      home: const HomePage(),
     );
   }
 }

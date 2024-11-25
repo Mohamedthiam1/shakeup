@@ -1,3 +1,5 @@
+import 'package:cap/pages/fiche_screen.dart';
+import 'package:cap/pages/mini_jeu_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -249,8 +251,7 @@ class NavigationBar extends StatelessWidget {
                                             .white, // Couleur de fond blanche
                                         boxShadow: [
                                           BoxShadow(
-                                            color: Color(
-                                                0x40000000), // Couleur de l'ombre
+                                            color: Color(0x40000000), // Couleur de l'ombre
                                             blurRadius: 4, // Flou de l'ombre
                                             offset: Offset(
                                                 0, 2), // Décalage de l'ombre
@@ -1002,22 +1003,32 @@ class Footer extends StatelessWidget {
         children: [
           // Image pour "Fiches"
           IconButton(
-            icon: Image.asset(
-              'assets/images/fichiers.png', // Remplacez par le chemin de votre image
-              width: 40, // Ajustez la taille
-              height: 40,
+            icon: ClipRRect(
+              borderRadius: BorderRadius.circular(5),
+              child: Image.asset(
+                'assets/images/fichiers.png',
+                width: 40, // Ajustez la taille
+                height: 40,
+              ),
             ),
             onPressed: () {
               // Naviguer vers "fiches"
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const FicheScreen()), // Lien vers la page d'histoire
+              );
             },
           ),
 
 // Image pour "Histoire"
           IconButton(
-            icon: Image.asset(
-              'assets/images/livres.png',
-              width: 40,
-              height: 40,
+            icon: ClipRRect(
+              borderRadius: BorderRadius.circular(5),
+              child: Image.asset(
+                'assets/images/livres.png',
+                width: 40,
+                height: 40,
+              ),
             ),
             onPressed: () {
               // Naviguer vers la page d'histoire
@@ -1050,15 +1061,18 @@ class Footer extends StatelessWidget {
 
           // Image pour "Mini Jeux"
           IconButton(
-            icon: Image.asset(
-              'assets/images/jeux.png',
-              width: 40,
-              height: 40,
+            icon: ClipRRect(
+              borderRadius: BorderRadius.circular(5),
+              child: Image.asset(
+                'assets/images/jeux.png',
+                width: 40,
+                height: 40,
+              ),
             ),
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const TrouverAbriPage()),
+                MaterialPageRoute(builder: (context) => const MiniJeuScreen()),
               );
             },
           ),
@@ -1066,10 +1080,13 @@ class Footer extends StatelessWidget {
 
           // Image pour "Classement"
           IconButton(
-            icon: Image.asset(
-              'assets/images/classement.png',
-              width: 40,
-              height: 40,
+            icon: ClipRRect(
+              borderRadius: BorderRadius.circular(5),
+              child: Image.asset(
+                'assets/images/classement.png',
+                width: 40,
+                height: 40,
+              ),
             ),
             onPressed: () {
               Navigator.push(

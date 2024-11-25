@@ -27,7 +27,7 @@ class _MiniJeuScreenState extends State<MiniJeuScreen> {
                 children: [
                   SizedBox(
                     width: screenWidth * 0.3, // 30% de la largeur de l'écran
-                    child: Image.asset('assets/img5.jpg'),
+                    child: Image.asset('assets/images/img5.jpg'),
                   ),
                   Text('Trouver l’abri'),
                 ],
@@ -37,7 +37,7 @@ class _MiniJeuScreenState extends State<MiniJeuScreen> {
                 children: [
                   SizedBox(
                     width: screenWidth * 0.3, // 30% de la largeur de l'écran
-                    child: Image.asset('assets/img4.jpg'),
+                    child: Image.asset('assets/images/img4.jpg'),
                   ),
                   Text('Kit de survie'),
                 ],
@@ -47,7 +47,7 @@ class _MiniJeuScreenState extends State<MiniJeuScreen> {
                 children: [
                   SizedBox(
                     width: screenWidth * 0.3, // 30% de la largeur de l'écran
-                    child: Image.asset('assets/img3.jpg'),
+                    child: Image.asset('assets/images/img3.jpg'),
                   ),
                   Text('Éviter les dangers'),
                 ],
