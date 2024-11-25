@@ -40,76 +40,86 @@ class _QuizPageState extends State<QuizPage> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         title: const Text("Test-Quiz"),
         backgroundColor: Colors.green[200],
+        actions: [
+          Row(
+            children: [
+              Image.asset(
+                'assets/images/icons8-time-40.png',
+                width: 24,
+                height: 24,
+              ),
+              const SizedBox(width: 4),
+              Text("$remainingTime sec"),
+            ],
+          ),
+        ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Row for points and timer
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Image.asset(
-                      'assets/icons8-police-badge-40.png',
-                      width: 24,
-                      height: 24,
-                    ),
-                    const SizedBox(width: 4),
-                    const Text("NB points gagnés"),   //voir avec firebase pour changer la fct du nb de pnts
-                  ],
-                ),
-                Row(
-                  children: [
-                    Image.asset(
-                      'assets/icons8-time-40.png',
-                      width: 24,
-                      height: 24,
-                    ),
-                    const SizedBox(width: 4),
-                    Text("$remainingTime sec"),
-                  ],
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
+      body: Container(
+        width: width,
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Container(
+            alignment: Alignment.center,
+            margin: EdgeInsets.symmetric(horizontal: width * 0.035),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // Row for points and timer
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Image.asset(
+                            'assets/images/icons8-police-badge-40.png',
+                            width: 24,
+                            height: 24,
+                          ),
+                          const SizedBox(width: 4),
+                          const Text("NB points gagnés"),   //voir avec firebase pour changer la fct du nb de pnts
+                        ],
+                      ),
 
-            // Question container
-            Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.black),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Text(
-                "Question/animation/image",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 18),
-              ),
-            ),
-            const SizedBox(height: 10),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
 
-            // Answer buttons grid
-            Expanded(
-              child: GridView.count(
-                crossAxisCount: 4,
-                mainAxisSpacing: 16,
-                crossAxisSpacing: 16,
-                children: const [
-                  AnswerButton(text: "Réponse A", color: Colors.red),
-                  AnswerButton(text: "Réponse B", color: Colors.green),
-                  AnswerButton(text: "Réponse C", color: Colors.yellow),
-                  AnswerButton(text: "Réponse D", color: Colors.blue),
+                  // Question container
+                  Container(
+                    margin: EdgeInsets.only(bottom: 10),
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Text(
+                      "Question/animation/image",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+
+                  // Answer buttons grid
+                  Wrap(
+                    alignment: WrapAlignment.spaceEvenly,
+                    children: const [
+                      AnswerButton(text: "Réponse A", color: Colors.red),
+                      AnswerButton(text: "Réponse B", color: Colors.green),
+                      AnswerButton(text: "Réponse C", color: Colors.yellow),
+                      AnswerButton(text: "Réponse D", color: Colors.blue),
+                    ],
+                  ),
                 ],
               ),
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -124,13 +134,14 @@ class AnswerButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 100, // Fixed width for a smaller rectangle
-      height: 60, // Fixed height for a smaller rectangle
+    return Container(
+      height: 120,
+      width: 300,
+      margin: EdgeInsets.only(right: 25, bottom: 20),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: color,
-          padding: EdgeInsets.zero,
+          // padding: EdgeInsets.zero,
           side: BorderSide(color: color, width: 2),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),

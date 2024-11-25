@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class FichePage extends StatelessWidget {
-  const FichePage({super.key});
+class FormationAvant extends StatelessWidget {
+  const FormationAvant({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -5,57 +5,65 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Réglages'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child:Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Social Media Connect Section
-              Container(
-                decoration: BoxDecoration(
-                  color: const Color(0xFFC7E4BF),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                padding: const EdgeInsets.all(10),
-                child: const Column(
-                  children: [
-                    Text(
-                      'Connexion',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        child: Container(
+          width: width,
+          child: SingleChildScrollView(
+            child: Container(
+              alignment: Alignment.center,
+              margin: EdgeInsets.symmetric(horizontal: width * 0.03),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // Social Media Connect Section
+                  Container(
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFC7E4BF),
+                      borderRadius: BorderRadius.circular(15),
                     ),
-                    SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    padding: const EdgeInsets.all(10),
+                    child: const Column(
                       children: [
-                        SocialButton(label: 'Google', iconPath: 'assets/icons8-google-48.png'),
-                        SocialButton(label: 'Apple', iconPath: 'assets/icons8-apple-50.png'),
-                        SocialButton(label: 'Facebook', iconPath: 'assets/icons8-facebook-48.png'),
+                        Text(
+                          'Connexion',
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            SocialButton(label: 'Google', iconPath: 'assets/images/icons8-google-48.png'),
+                            SocialButton(label: 'Apple', iconPath: 'assets/images/icons8-apple-50.png'),
+                            SocialButton(label: 'Facebook', iconPath: 'assets/images/icons8-facebook-48.png'),
+                          ],
+                        ),
                       ],
                     ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Toggle Settings
+                  const SettingToggle(title: 'Son'),
+                  const SettingToggle(title: 'Vibrations'),
+                  const SettingToggle(title: 'Musique'),
+                  const SettingToggle(title: 'Notifications'),
+
+                  // Language Dropdown
+                  const LanguageDropdown(),
+
+                  // Links and Other Options
+                  const SettingLink(title: 'Politique de confidentialité', routeName: '/privacy'),
+                  const SettingLink(title: 'Conditions d\'utilisation', routeName: '/terms'),
+                  const SettingLink(title: 'Support'),
+                ],
               ),
-              const SizedBox(height: 20),
-
-              // Toggle Settings
-              const SettingToggle(title: 'Son'),
-              const SettingToggle(title: 'Vibrations'),
-              const SettingToggle(title: 'Musique'),
-              const SettingToggle(title: 'Notifications'),
-
-              // Language Dropdown
-              const LanguageDropdown(),
-
-              // Links and Other Options
-              const SettingLink(title: 'Politique de confidentialité', routeName: '/privacy'),
-              const SettingLink(title: 'Conditions d\'utilisation', routeName: '/terms'),
-              const SettingLink(title: 'Support'),
-            ],
+            ),
           ),
         ),
       ),

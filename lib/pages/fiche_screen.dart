@@ -1,3 +1,6 @@
+import 'package:cap/pages/after_screen.dart';
+import 'package:cap/pages/formation_avant.dart';
+import 'package:cap/pages/pendant_screen.dart';
 import 'package:flutter/material.dart';
 
 class FicheScreen extends StatefulWidget {
@@ -31,6 +34,7 @@ class _FicheScreenState extends State<FicheScreen> {
               child: ElevatedButton(
                 onPressed: () {
                   // Action pour "Avant"
+                  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => AvantPage()));
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.orange.shade100, // Fond du bouton en orange clair
@@ -50,6 +54,7 @@ class _FicheScreenState extends State<FicheScreen> {
               child: ElevatedButton(
                 onPressed: () {
                   // Action pour "Pendant"
+                  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => PendantScreen()));
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.orange.shade100,
@@ -69,6 +74,7 @@ class _FicheScreenState extends State<FicheScreen> {
               child: ElevatedButton(
                 onPressed: () {
                   // Action pour "Après"
+                  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => After_Screen()));
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.orange.shade100,

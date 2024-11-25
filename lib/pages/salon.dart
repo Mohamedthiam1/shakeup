@@ -5,46 +5,55 @@ class SalonPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Salons'),
         backgroundColor: Colors.green[200],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Header
-            Container(
-              color: Colors.grey[300],
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: const Center(
-                child: Text(
-                  'Salons',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+      body: Container(
+        width: width,
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: SingleChildScrollView(
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: width * 0.03),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // Header
+                  Container(
+                    color: Colors.grey[300],
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: const Center(
+                      child: Text(
+                        'Salons',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
 
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                  const SizedBox(height: 25),
+
+                  // "Créer un salon" button
+                  SalonButton(
+                    title: '     Créer un salon',
+                    onPressed: () => showCreateSalonDialog(context),
+                  ),
+                  const SizedBox(height: 10),
+
+                  // "Rejoindre un salon" button
+                  SalonButton(
+                    title: '     Rejoindre un salon',
+                    onPressed: () => showJoinSalonDialog(context),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 25),
-
-            // "Créer un salon" button
-            SalonButton(
-              title: '     Créer un salon',
-              onPressed: () => showCreateSalonDialog(context),
-            ),
-            const SizedBox(height: 10),
-
-            // "Rejoindre un salon" button
-            SalonButton(
-              title: '     Rejoindre un salon',
-              onPressed: () => showJoinSalonDialog(context),
-            ),
-          ],
+          ),
         ),
       ),
     );

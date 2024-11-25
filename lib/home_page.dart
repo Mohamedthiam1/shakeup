@@ -1,5 +1,11 @@
+import 'package:cap/pages/PageAccueilHistoires.dart';
+import 'package:cap/pages/PageClassement.dart';
 import 'package:cap/pages/fiche_screen.dart';
 import 'package:cap/pages/mini_jeu_screen.dart';
+import 'package:cap/pages/trophee_screen.dart';
+import 'package:cap/pages/reglages.dart';
+import 'package:cap/pages/salon.dart';
+import 'package:cap/pages/test-quiz.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -46,8 +52,9 @@ class NavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return Container(
-      width: MediaQuery.of(context).size.width, // Largeur de l'écran
+      width: width, // Largeur de l'écran
       height: 66, // hauteur selon ton modèle
       padding: const EdgeInsets.symmetric(horizontal: 10),
       color:
@@ -381,338 +388,339 @@ class NavigationBar extends StatelessWidget {
               height: 35,
             ),
             onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return Dialog(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    backgroundColor: Colors.white,
-                    child: SizedBox(
-                      width: 402,
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: SingleChildScrollView( // Ajout de SingleChildScrollView pour le défilement automatique
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Center(
-                                child: Text(
-                                  'Trophées et badges',
-                                  style: GoogleFonts.arima(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w400,
-                                    letterSpacing: -0.15,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                              // Zone pour Badges avec un Container stylisé
-                              Container(
-                                width: 359,
-                                height: 37,
-                                decoration: const BoxDecoration(
-                                  color: Color(0xFFC7E4BF),
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(15),
-                                    topRight: Radius.circular(15),
-                                    bottomLeft: Radius.circular(15),
-                                    bottomRight: Radius.circular(15),
-                                  ),
-                                ),
-                                alignment: Alignment.center,
-                                child:Text(
-                                  'Badges',
-                                  style: GoogleFonts.arima(
-                                    fontSize: 18, // Taille du texte
-                                    fontWeight: FontWeight.w400,
-                                    letterSpacing: -0.15,
-                                    color: Colors.black,
-                                  ),
-                                ),
-
-                              ),
-                              const SizedBox(height: 8),
-
-                              // Badge 1
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Image.asset(
-                                    'assets/images/im1.png',
-                                    width: 30,
-                                    height: 30,
-                                  ),
-                                  const SizedBox(width: 8),
-                                  const Expanded(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Expert en sécurité',
-                                          style: TextStyle(
-                                            fontFamily: 'Arima',
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.black,
-                                            letterSpacing: -0.15,
-                                          ),
-                                        ),
-                                        Text(
-                                          'Description du badge pour illustrer les compétences de sécurité.',
-                                          style: TextStyle(
-                                            fontFamily: 'Arima',
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.blue,
-                                            letterSpacing: -0.15,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 20),
-
-                              // Badge 2
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Image.asset(
-                                    'assets/images/2.png',
-                                    width: 30,
-                                    height: 30,
-                                  ),
-                                  const SizedBox(width: 8),
-                                  const Expanded(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Défenseur de la nature',
-                                          style: TextStyle(
-                                            fontFamily: 'Arima',
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.black,
-                                            letterSpacing: -0.15,
-                                          ),
-                                        ),
-                                        Text(
-                                          'Récompense pour les actions en faveur de la nature.',
-                                          style: TextStyle(
-                                            fontFamily: 'Arima',
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.blue,
-                                            letterSpacing: -0.15,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 20),
-
-                              // Badge 3
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Image.asset(
-                                    'assets/images/3.png',
-                                    width: 30,
-                                    height: 30,
-                                  ),
-                                  const SizedBox(width: 8),
-                                  const Expanded(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Maître de la résilience',
-                                          style: TextStyle(
-                                            fontFamily: 'Arima',
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.black,
-                                            letterSpacing: -0.15,
-                                          ),
-                                        ),
-                                        Text(
-                                          'Atteint pour surmonter des défis difficiles.',
-                                          style: TextStyle(
-                                            fontFamily: 'Arima',
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.blue,
-                                            letterSpacing: -0.15,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 20),
-
-                              // Badge 4
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Image.asset(
-                                    'assets/images/4.png',
-                                    width: 30,
-                                    height: 30,
-                                  ),
-                                  const SizedBox(width: 8),
-                                  const Expanded(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Ambassadeur de la paix',
-                                          style: TextStyle(
-                                            fontFamily: 'Arima',
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.black,
-                                            letterSpacing: -0.15,
-                                          ),
-                                        ),
-                                        Text(
-                                          'Remis pour les contributions à la paix.',
-                                          style: TextStyle(
-                                            fontFamily: 'Arima',
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.blue,
-                                            letterSpacing: -0.15,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 45),
-
-                              // Zone pour Badges avec un Container stylisé
-                              Container(
-                                width: 359,
-                                height: 37,
-                                decoration: const BoxDecoration(
-                                  color: Color(0xFFC7E4BF),
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(15),
-                                    topRight: Radius.circular(15),
-                                    bottomLeft: Radius.circular(15),
-                                    bottomRight: Radius.circular(15),
-                                  ),
-                                ),
-                                alignment: Alignment.center,
-                                child:Text( 'Trophées',
-                                  style: GoogleFonts.arima(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w400,
-                                    letterSpacing: -0.15,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 20),
-
-                              // Trophée 1
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Image.asset(
-                                    'assets/images/5.png',
-                                    width: 30,
-                                    height: 30,
-                                  ),
-                                  const SizedBox(width: 8),
-                                  const Expanded(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Champion de la survie',
-                                          style: TextStyle(
-                                            fontFamily: 'Arima',
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.black,
-                                            letterSpacing: -0.15,
-                                          ),
-                                        ),
-                                        Text(
-                                          'Gagné pour avoir terminé toutes les étapes de préparation.',
-                                          style: TextStyle(
-                                            fontFamily: 'Arima',
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.blue,
-                                            letterSpacing: -0.15,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 20),
-
-                              // Trophée 2
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Image.asset(
-                                    'assets/images/6.png',
-                                    width: 30,
-                                    height: 30,
-                                  ),
-                                  const SizedBox(width: 8),
-                                  const Expanded(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Maître des premiers soins',
-                                          style: TextStyle(
-                                            fontFamily: 'Arima',
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.black,
-                                            letterSpacing: -0.15,
-                                          ),
-                                        ),
-                                        Text(
-                                          'Récompensé pour avoir appris les bases des premiers secours.',
-                                          style: TextStyle(
-                                            fontFamily: 'Arima',
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.blue,
-                                            letterSpacing: -0.15,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              );
+              Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => TropheeScreen()));
+              // showDialog(
+              //   context: context,
+              //   builder: (BuildContext context) {
+              //     return Dialog(
+              //       shape: RoundedRectangleBorder(
+              //         borderRadius: BorderRadius.circular(8.0),
+              //       ),
+              //       backgroundColor: Colors.white,
+              //       child: SizedBox(
+              //         width: 402,
+              //         child: Padding(
+              //           padding: const EdgeInsets.all(16.0),
+              //           child: SingleChildScrollView( // Ajout de SingleChildScrollView pour le défilement automatique
+              //             child: Column(
+              //               crossAxisAlignment: CrossAxisAlignment.start,
+              //               children: [
+              //                 Center(
+              //                   child: Text(
+              //                     'Trophées et badges',
+              //                     style: GoogleFonts.arima(
+              //                       fontSize: 18,
+              //                       fontWeight: FontWeight.w400,
+              //                       letterSpacing: -0.15,
+              //                       color: Colors.black,
+              //                     ),
+              //                   ),
+              //                 ),
+              //                 const SizedBox(height: 10),
+              //                 // Zone pour Badges avec un Container stylisé
+              //                 Container(
+              //                   width: 359,
+              //                   height: 37,
+              //                   decoration: const BoxDecoration(
+              //                     color: Color(0xFFC7E4BF),
+              //                     borderRadius: BorderRadius.only(
+              //                       topLeft: Radius.circular(15),
+              //                       topRight: Radius.circular(15),
+              //                       bottomLeft: Radius.circular(15),
+              //                       bottomRight: Radius.circular(15),
+              //                     ),
+              //                   ),
+              //                   alignment: Alignment.center,
+              //                   child:Text(
+              //                     'Badges',
+              //                     style: GoogleFonts.arima(
+              //                       fontSize: 18, // Taille du texte
+              //                       fontWeight: FontWeight.w400,
+              //                       letterSpacing: -0.15,
+              //                       color: Colors.black,
+              //                     ),
+              //                   ),
+              //
+              //                 ),
+              //                 const SizedBox(height: 8),
+              //
+              //                 // Badge 1
+              //                 Row(
+              //                   crossAxisAlignment: CrossAxisAlignment.start,
+              //                   children: [
+              //                     Image.asset(
+              //                       'assets/images/im1.png',
+              //                       width: 30,
+              //                       height: 30,
+              //                     ),
+              //                     const SizedBox(width: 8),
+              //                     const Expanded(
+              //                       child: Column(
+              //                         crossAxisAlignment: CrossAxisAlignment.start,
+              //                         children: [
+              //                           Text(
+              //                             'Expert en sécurité',
+              //                             style: TextStyle(
+              //                               fontFamily: 'Arima',
+              //                               fontSize: 16,
+              //                               fontWeight: FontWeight.w400,
+              //                               color: Colors.black,
+              //                               letterSpacing: -0.15,
+              //                             ),
+              //                           ),
+              //                           Text(
+              //                             'Description du badge pour illustrer les compétences de sécurité.',
+              //                             style: TextStyle(
+              //                               fontFamily: 'Arima',
+              //                               fontSize: 14,
+              //                               fontWeight: FontWeight.w400,
+              //                               color: Colors.blue,
+              //                               letterSpacing: -0.15,
+              //                             ),
+              //                           ),
+              //                         ],
+              //                       ),
+              //                     ),
+              //                   ],
+              //                 ),
+              //                 const SizedBox(height: 20),
+              //
+              //                 // Badge 2
+              //                 Row(
+              //                   crossAxisAlignment: CrossAxisAlignment.start,
+              //                   children: [
+              //                     Image.asset(
+              //                       'assets/images/2.png',
+              //                       width: 30,
+              //                       height: 30,
+              //                     ),
+              //                     const SizedBox(width: 8),
+              //                     const Expanded(
+              //                       child: Column(
+              //                         crossAxisAlignment: CrossAxisAlignment.start,
+              //                         children: [
+              //                           Text(
+              //                             'Défenseur de la nature',
+              //                             style: TextStyle(
+              //                               fontFamily: 'Arima',
+              //                               fontSize: 16,
+              //                               fontWeight: FontWeight.w400,
+              //                               color: Colors.black,
+              //                               letterSpacing: -0.15,
+              //                             ),
+              //                           ),
+              //                           Text(
+              //                             'Récompense pour les actions en faveur de la nature.',
+              //                             style: TextStyle(
+              //                               fontFamily: 'Arima',
+              //                               fontSize: 14,
+              //                               fontWeight: FontWeight.w400,
+              //                               color: Colors.blue,
+              //                               letterSpacing: -0.15,
+              //                             ),
+              //                           ),
+              //                         ],
+              //                       ),
+              //                     ),
+              //                   ],
+              //                 ),
+              //                 const SizedBox(height: 20),
+              //
+              //                 // Badge 3
+              //                 Row(
+              //                   crossAxisAlignment: CrossAxisAlignment.start,
+              //                   children: [
+              //                     Image.asset(
+              //                       'assets/images/3.png',
+              //                       width: 30,
+              //                       height: 30,
+              //                     ),
+              //                     const SizedBox(width: 8),
+              //                     const Expanded(
+              //                       child: Column(
+              //                         crossAxisAlignment: CrossAxisAlignment.start,
+              //                         children: [
+              //                           Text(
+              //                             'Maître de la résilience',
+              //                             style: TextStyle(
+              //                               fontFamily: 'Arima',
+              //                               fontSize: 16,
+              //                               fontWeight: FontWeight.w400,
+              //                               color: Colors.black,
+              //                               letterSpacing: -0.15,
+              //                             ),
+              //                           ),
+              //                           Text(
+              //                             'Atteint pour surmonter des défis difficiles.',
+              //                             style: TextStyle(
+              //                               fontFamily: 'Arima',
+              //                               fontSize: 14,
+              //                               fontWeight: FontWeight.w400,
+              //                               color: Colors.blue,
+              //                               letterSpacing: -0.15,
+              //                             ),
+              //                           ),
+              //                         ],
+              //                       ),
+              //                     ),
+              //                   ],
+              //                 ),
+              //                 const SizedBox(height: 20),
+              //
+              //                 // Badge 4
+              //                 Row(
+              //                   crossAxisAlignment: CrossAxisAlignment.start,
+              //                   children: [
+              //                     Image.asset(
+              //                       'assets/images/4.png',
+              //                       width: 30,
+              //                       height: 30,
+              //                     ),
+              //                     const SizedBox(width: 8),
+              //                     const Expanded(
+              //                       child: Column(
+              //                         crossAxisAlignment: CrossAxisAlignment.start,
+              //                         children: [
+              //                           Text(
+              //                             'Ambassadeur de la paix',
+              //                             style: TextStyle(
+              //                               fontFamily: 'Arima',
+              //                               fontSize: 16,
+              //                               fontWeight: FontWeight.w400,
+              //                               color: Colors.black,
+              //                               letterSpacing: -0.15,
+              //                             ),
+              //                           ),
+              //                           Text(
+              //                             'Remis pour les contributions à la paix.',
+              //                             style: TextStyle(
+              //                               fontFamily: 'Arima',
+              //                               fontSize: 14,
+              //                               fontWeight: FontWeight.w400,
+              //                               color: Colors.blue,
+              //                               letterSpacing: -0.15,
+              //                             ),
+              //                           ),
+              //                         ],
+              //                       ),
+              //                     ),
+              //                   ],
+              //                 ),
+              //                 const SizedBox(height: 45),
+              //
+              //                 // Zone pour Badges avec un Container stylisé
+              //                 Container(
+              //                   width: 359,
+              //                   height: 37,
+              //                   decoration: const BoxDecoration(
+              //                     color: Color(0xFFC7E4BF),
+              //                     borderRadius: BorderRadius.only(
+              //                       topLeft: Radius.circular(15),
+              //                       topRight: Radius.circular(15),
+              //                       bottomLeft: Radius.circular(15),
+              //                       bottomRight: Radius.circular(15),
+              //                     ),
+              //                   ),
+              //                   alignment: Alignment.center,
+              //                   child:Text( 'Trophées',
+              //                     style: GoogleFonts.arima(
+              //                       fontSize: 18,
+              //                       fontWeight: FontWeight.w400,
+              //                       letterSpacing: -0.15,
+              //                       color: Colors.black,
+              //                     ),
+              //                   ),
+              //                 ),
+              //                 const SizedBox(height: 20),
+              //
+              //                 // Trophée 1
+              //                 Row(
+              //                   crossAxisAlignment: CrossAxisAlignment.start,
+              //                   children: [
+              //                     Image.asset(
+              //                       'assets/images/5.png',
+              //                       width: 30,
+              //                       height: 30,
+              //                     ),
+              //                     const SizedBox(width: 8),
+              //                     const Expanded(
+              //                       child: Column(
+              //                         crossAxisAlignment: CrossAxisAlignment.start,
+              //                         children: [
+              //                           Text(
+              //                             'Champion de la survie',
+              //                             style: TextStyle(
+              //                               fontFamily: 'Arima',
+              //                               fontSize: 16,
+              //                               fontWeight: FontWeight.w400,
+              //                               color: Colors.black,
+              //                               letterSpacing: -0.15,
+              //                             ),
+              //                           ),
+              //                           Text(
+              //                             'Gagné pour avoir terminé toutes les étapes de préparation.',
+              //                             style: TextStyle(
+              //                               fontFamily: 'Arima',
+              //                               fontSize: 14,
+              //                               fontWeight: FontWeight.w400,
+              //                               color: Colors.blue,
+              //                               letterSpacing: -0.15,
+              //                             ),
+              //                           ),
+              //                         ],
+              //                       ),
+              //                     ),
+              //                   ],
+              //                 ),
+              //                 const SizedBox(height: 20),
+              //
+              //                 // Trophée 2
+              //                 Row(
+              //                   crossAxisAlignment: CrossAxisAlignment.start,
+              //                   children: [
+              //                     Image.asset(
+              //                       'assets/images/6.png',
+              //                       width: 30,
+              //                       height: 30,
+              //                     ),
+              //                     const SizedBox(width: 8),
+              //                     const Expanded(
+              //                       child: Column(
+              //                         crossAxisAlignment: CrossAxisAlignment.start,
+              //                         children: [
+              //                           Text(
+              //                             'Maître des premiers soins',
+              //                             style: TextStyle(
+              //                               fontFamily: 'Arima',
+              //                               fontSize: 16,
+              //                               fontWeight: FontWeight.w400,
+              //                               color: Colors.black,
+              //                               letterSpacing: -0.15,
+              //                             ),
+              //                           ),
+              //                           Text(
+              //                             'Récompensé pour avoir appris les bases des premiers secours.',
+              //                             style: TextStyle(
+              //                               fontFamily: 'Arima',
+              //                               fontSize: 14,
+              //                               fontWeight: FontWeight.w400,
+              //                               color: Colors.blue,
+              //                               letterSpacing: -0.15,
+              //                             ),
+              //                           ),
+              //                         ],
+              //                       ),
+              //                     ),
+              //                   ],
+              //                 ),
+              //               ],
+              //             ),
+              //           ),
+              //         ),
+              //       ),
+              //     );
+              //   },
+              // );
             },
           ),
 
@@ -896,15 +904,16 @@ class NavigationBar extends StatelessWidget {
               height: 35,
             ),
             onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return const AlertDialog(
-                    title: Text('groupe'),
-                    content: Text('Options de groupe'),
-                  );
-                },
-              );
+              Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => SalonPage()));
+              // showDialog(
+              //   context: context,
+              //   builder: (BuildContext context) {
+              //     return const AlertDialog(
+              //       title: Text('groupe'),
+              //       content: Text('Options de groupe'),
+              //     );
+              //   },
+              // );
             },
           ),
           IconButton(
@@ -914,15 +923,16 @@ class NavigationBar extends StatelessWidget {
               height: 35,
             ),
             onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return const AlertDialog(
-                    title: Text('Paramètres'),
-                    content: Text('Options de réglage'),
-                  );
-                },
-              );
+              Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => SettingsPage()));
+              // showDialog(
+              //   context: context,
+              //   builder: (BuildContext context) {
+              //     return const AlertDialog(
+              //       title: Text('Paramètres'),
+              //       content: Text('Options de réglage'),
+              //     );
+              //   },
+              // );
             },
           ),
         ],
@@ -944,7 +954,7 @@ class CenterContent extends StatelessWidget {
         ),
         ElevatedButton(
           onPressed: () {
-            // Action pour le bouton start
+            Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => QuizPage()));
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFFF6DFC5), // Couleur de fond
@@ -1034,7 +1044,7 @@ class Footer extends StatelessWidget {
               // Naviguer vers la page d'histoire
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const StoryPage()), // Lien vers la page d'histoire
+                MaterialPageRoute(builder: (context) => ModeHistoirePage()), // Lien vers la page d'histoire
               );
             },
           ),
@@ -1091,7 +1101,7 @@ class Footer extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const AdminQuizPage()),
+                MaterialPageRoute(builder: (context) => ClassementPage()),
               );
             },
           ),
