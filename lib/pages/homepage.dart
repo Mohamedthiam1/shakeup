@@ -29,9 +29,9 @@ class HomePage extends StatelessWidget {
                   ),
                   Padding(padding: EdgeInsets.only(top: 20)),
                   ElevatedButton(
-                    style: ButtonStyle(
-                        padding: WidgetStatePropertyAll(EdgeInsets.all(20)),
-                        backgroundColor: WidgetStatePropertyAll(Colors.green)
+                    style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.all(20),
+                        backgroundColor: Colors.green
                     ),
                     onPressed: () {
                       Navigator.push(
@@ -41,7 +41,7 @@ class HomePage extends StatelessWidget {
                           )
                       );
                     },
-                    child: Text("afficher planning"),
+                    child: const Text("afficher planning"),
                   )
                 ]
             )
