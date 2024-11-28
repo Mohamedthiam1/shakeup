@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 
-class StoryPage extends StatelessWidget {
-  const StoryPage({super.key});
+class Story2 extends StatelessWidget {
+  const Story2({super.key});
 
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
       body: SafeArea(
-        child: StoryPageContent(),
+        child: StoryPageContent2(),
       ),
     );
   }
 }
 
-class StoryPageContent extends StatelessWidget {
-  const StoryPageContent({super.key});
+class StoryPageContent2 extends StatelessWidget {
+  const StoryPageContent2({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class StoryPageContent extends StatelessWidget {
       children: [
         // Introduction à l'histoire
         Text(
-          'L\'histoire de Tiko et le tremblement de terre',
+          'L\'histoire de Luna la petite étoile',
           style: TextStyle(
             fontSize: 28,
             fontFamily: 'Arima',
@@ -40,7 +40,7 @@ class StoryPageContent extends StatelessWidget {
             Expanded(
               flex: 3,
               child: Text(
-                'Tiko est un petit oiseau qui vit dans un grand arbre avec ses amis. Un jour, alors qu\'il joue dehors, il ressent une secousse sous ses pattes. "Qu\'est-ce que c\'est ?", se demande-t-il.',
+                'Luna est une petite étoile qui brille dans le ciel. Une nuit, alors qu\'elle danse avec ses amies, elle ressent une vibration dans l\'espace. "Qu\'est-ce que c\'est ?", se demande-t-elle.',
                 style: TextStyle(
                   fontFamily: 'Arima',
                   fontSize: 18,
@@ -54,7 +54,7 @@ class StoryPageContent extends StatelessWidget {
             Expanded(
               flex: 2,
               child: Image.asset(
-                'assets/images/an2.png',
+                'assets/images/etoile1.png',
                 height: 150,
                 fit: BoxFit.contain,  // Utilisation de BoxFit.contain
               ),
@@ -73,7 +73,7 @@ class StoryPageContent extends StatelessWidget {
               child: AspectRatio(
                 aspectRatio: 16 / 9, // Par exemple, pour un ratio 16:9
                 child: Image.asset(
-                  'assets/images/an2.png',
+                  'assets/images/etoile2.png',
                   height: 150,
                   fit: BoxFit.contain,  // Utilisation de BoxFit.contain
                 ),
@@ -84,7 +84,7 @@ class StoryPageContent extends StatelessWidget {
             Expanded(
               flex: 3,
               child: Text(
-                'C\'était un tremblement de terre ! Tiko a eu un peu peur, mais il se souvient de ce qu\'il a appris : "Ne panique pas, trouve un endroit sûr !"',
+                'C\'était un tremblement de terre sur Terre ! Luna se rappelle que les humains doivent rester calmes. "Je dois les aider à se souvenir des conseils !"',
                 style: TextStyle(
                   fontFamily: 'Arima',
                   fontSize: 18,
@@ -107,7 +107,7 @@ class StoryPageContent extends StatelessWidget {
             Expanded(
               flex: 3,
               child: Text(
-                'Tiko se cache sous une grande pierre, à l\'abri des objets qui peuvent tomber. Heureusement, il se rappelle aussi de vérifier s\'il est en sécurité avec ses amis.',
+                'Elle commence à scintiller plus fort pour attirer l\'attention des enfants. "Cherchez un endroit sûr, restez près de vos amis !", chante-t-elle dans le ciel.',
                 style: TextStyle(
                   fontFamily: 'Arima',
                   fontSize: 18,
@@ -121,7 +121,7 @@ class StoryPageContent extends StatelessWidget {
             Expanded(
               flex: 2,
               child: Image.asset(
-                'assets/images/an2.png',
+                'assets/images/etoile3.png',
                 height: 150,
                 fit: BoxFit.contain,  // Utilisation de BoxFit.contain
               ),
@@ -133,7 +133,7 @@ class StoryPageContent extends StatelessWidget {
 
         // Conclusion
         Text(
-          'Merci d\'avoir lu cette histoire avec Tiko ! Maintenant, tu sais comment réagir en cas de tremblement de terre. Ensemble, nous sommes plus forts et plus sûrs !',
+          'Merci d\'avoir lu cette histoire avec Luna ! Maintenant, tu sais comment réagir en cas de tremblement de terre. Ensemble, nous sommes plus forts et plus sûrs !',
           style: TextStyle(
             fontFamily: 'Arima',
             fontSize: 18,

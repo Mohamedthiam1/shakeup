@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 
-class StoryPage extends StatelessWidget {
-  const StoryPage({super.key});
+class Story4 extends StatelessWidget {
+  const Story4({super.key});
 
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
       body: SafeArea(
-        child: StoryPageContent(),
+        child: StoryPageContent4(),
       ),
     );
   }
 }
 
-class StoryPageContent extends StatelessWidget {
-  const StoryPageContent({super.key});
+class StoryPageContent4 extends StatelessWidget {
+  const StoryPageContent4({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class StoryPageContent extends StatelessWidget {
       children: [
         // Introduction à l'histoire
         Text(
-          'L\'histoire de Tiko et le tremblement de terre',
+          'La grande leçon de Sam le hérisson',
           style: TextStyle(
             fontSize: 28,
             fontFamily: 'Arima',
@@ -40,7 +40,7 @@ class StoryPageContent extends StatelessWidget {
             Expanded(
               flex: 3,
               child: Text(
-                'Tiko est un petit oiseau qui vit dans un grand arbre avec ses amis. Un jour, alors qu\'il joue dehors, il ressent une secousse sous ses pattes. "Qu\'est-ce que c\'est ?", se demande-t-il.',
+                'Sam le hérisson vivait paisiblement dans une forêt proche des montagnes. Un jour, le sol se mit à trembler sous ses pattes. Effrayé, il courut dans toutes les directions sans savoir où aller. Il se coinça sous un arbre qui menaçait de tomber.',
                 style: TextStyle(
                   fontFamily: 'Arima',
                   fontSize: 18,
@@ -54,7 +54,7 @@ class StoryPageContent extends StatelessWidget {
             Expanded(
               flex: 2,
               child: Image.asset(
-                'assets/images/an2.png',
+                'assets/images/hérisson1.png',
                 height: 150,
                 fit: BoxFit.contain,  // Utilisation de BoxFit.contain
               ),
@@ -73,7 +73,7 @@ class StoryPageContent extends StatelessWidget {
               child: AspectRatio(
                 aspectRatio: 16 / 9, // Par exemple, pour un ratio 16:9
                 child: Image.asset(
-                  'assets/images/an2.png',
+                  'assets/images/hérisson2.png',
                   height: 150,
                   fit: BoxFit.contain,  // Utilisation de BoxFit.contain
                 ),
@@ -84,7 +84,7 @@ class StoryPageContent extends StatelessWidget {
             Expanded(
               flex: 3,
               child: Text(
-                'C\'était un tremblement de terre ! Tiko a eu un peu peur, mais il se souvient de ce qu\'il a appris : "Ne panique pas, trouve un endroit sûr !"',
+                'Heureusement, sa voisine Lina la tortue lui avait montré un abri solide près de la rivière. Sam y alla en sécurité et y retrouva ses amis. Ils restèrent calmes et attendirent que les secousses s’arrêtent. Ils avaient suivi les conseils de Lina : "Un lieu sûr est la clé pour se protéger !".',
                 style: TextStyle(
                   fontFamily: 'Arima',
                   fontSize: 18,
@@ -107,7 +107,7 @@ class StoryPageContent extends StatelessWidget {
             Expanded(
               flex: 3,
               child: Text(
-                'Tiko se cache sous une grande pierre, à l\'abri des objets qui peuvent tomber. Heureusement, il se rappelle aussi de vérifier s\'il est en sécurité avec ses amis.',
+                'Après cela, Sam apprit qu’il fallait se préparer et ne jamais paniquer. Avec ses amis, il construisit des abris pour tout le village des animaux. Depuis ce jour, ils se sentaient en sécurité, même quand le sol tremblait.',
                 style: TextStyle(
                   fontFamily: 'Arima',
                   fontSize: 18,
@@ -121,7 +121,7 @@ class StoryPageContent extends StatelessWidget {
             Expanded(
               flex: 2,
               child: Image.asset(
-                'assets/images/an2.png',
+                'assets/images/hérisson3.png',
                 height: 150,
                 fit: BoxFit.contain,  // Utilisation de BoxFit.contain
               ),
@@ -133,7 +133,7 @@ class StoryPageContent extends StatelessWidget {
 
         // Conclusion
         Text(
-          'Merci d\'avoir lu cette histoire avec Tiko ! Maintenant, tu sais comment réagir en cas de tremblement de terre. Ensemble, nous sommes plus forts et plus sûrs !',
+          'Merci d\'avoir lu cette histoire avec Sam ! Maintenant, tu sais comment réagir en cas de tremblement de terre. Ensemble, nous sommes plus forts et plus sûrs !',
           style: TextStyle(
             fontFamily: 'Arima',
             fontSize: 18,

@@ -3,6 +3,8 @@ import 'package:cap/pages/formation_avant.dart';
 import 'package:cap/pages/pendant_screen.dart';
 import 'package:flutter/material.dart';
 
+import '../home_page.dart';
+
 class FicheScreen extends StatefulWidget {
   const FicheScreen({super.key});
 
@@ -15,14 +17,22 @@ class _FicheScreenState extends State<FicheScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Fiches',
-          style: TextStyle(color: Colors.black), // Texte en noir dans l'AppBar
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black), // Icône de retour
+          onPressed: () {
+            Navigator.of(context).pop(); // Action de retour
+          },
         ),
+        title: Text("Fiches",
+          style: TextStyle(
+            fontFamily: 'Arima',
+            fontSize: 22,
+            fontWeight: FontWeight.w400,
+            color: Colors.black,
+          ),
+        ),
+        backgroundColor: Colors.green[100], // Couleur de fond verte pour l'AppBar
         centerTitle: true,
-        backgroundColor: Colors.white, // Couleur de fond blanche pour l'AppBar
-        elevation: 0, // Supprime l'ombre de l'AppBar pour un look plus propre
-        iconTheme: IconThemeData(color: Colors.black), // Icônes de l'AppBar en noir, si présentes
       ),
       body: Center(
         child: Column(
@@ -37,14 +47,21 @@ class _FicheScreenState extends State<FicheScreen> {
                   Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => AvantPage()));
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orange.shade100, // Fond du bouton en orange clair
+                  backgroundColor: Color(0xFFF6DFC5), // Fond du bouton en orange clair
                   foregroundColor: Colors.black, // Texte en noir
                   padding: EdgeInsets.symmetric(vertical: 15), // Hauteur ajustée
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8), // Coins légèrement arrondis (valeur réduite)
                   ),
                 ),
-                child: Text('Avant', style: TextStyle(fontSize: 18)),
+                child: Text('Avant',
+                  style: TextStyle(
+                    fontFamily: 'Arima',
+                    fontSize: 18,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.black,
+                  ),
+                ),
               ),
             ),
             SizedBox(height: 10),
@@ -57,14 +74,21 @@ class _FicheScreenState extends State<FicheScreen> {
                   Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => PendantScreen()));
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orange.shade100,
+                  backgroundColor: Color(0xFFF6DFC5),
                   foregroundColor: Colors.black,
                   padding: EdgeInsets.symmetric(vertical: 15),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8), // Coins légèrement arrondis
                   ),
                 ),
-                child: Text('Pendant', style: TextStyle(fontSize: 18)),
+                child: Text('Pendant',
+                  style: TextStyle(
+                    fontFamily: 'Arima',
+                    fontSize: 18,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.black,
+                  ),
+                ),
               ),
             ),
             SizedBox(height: 10),
@@ -77,19 +101,27 @@ class _FicheScreenState extends State<FicheScreen> {
                   Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => After_Screen()));
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orange.shade100,
+                  backgroundColor: Color(0xFFF6DFC5),
                   foregroundColor: Colors.black,
                   padding: EdgeInsets.symmetric(vertical: 15),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8), // Coins légèrement arrondis
                   ),
                 ),
-                child: Text('Après', style: TextStyle(fontSize: 18)),
+                child: Text('Après',
+                  style: TextStyle(
+                    fontFamily: 'Arima',
+                    fontSize: 18,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.black,
+                  ),
+                ),
               ),
             ),
           ],
         ),
       ),
+      bottomNavigationBar: const Footer(), // Footer en bas
     );
   }
 }

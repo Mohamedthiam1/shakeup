@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 
-class StoryPage extends StatelessWidget {
-  const StoryPage({super.key});
+class Story5 extends StatelessWidget {
+  const Story5({super.key});
 
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
       body: SafeArea(
-        child: StoryPageContent(),
+        child: StoryPageContent5(),
       ),
     );
   }
 }
 
-class StoryPageContent extends StatelessWidget {
-  const StoryPageContent({super.key});
+class StoryPageContent5 extends StatelessWidget {
+  const StoryPageContent5({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class StoryPageContent extends StatelessWidget {
       children: [
         // Introduction à l'histoire
         Text(
-          'L\'histoire de Tiko et le tremblement de terre',
+          'L\'abri magique de Karim le kangourou ',
           style: TextStyle(
             fontSize: 28,
             fontFamily: 'Arima',
@@ -40,7 +40,7 @@ class StoryPageContent extends StatelessWidget {
             Expanded(
               flex: 3,
               child: Text(
-                'Tiko est un petit oiseau qui vit dans un grand arbre avec ses amis. Un jour, alors qu\'il joue dehors, il ressent une secousse sous ses pattes. "Qu\'est-ce que c\'est ?", se demande-t-il.',
+                'Karim le kangourou aimait jouer près des rochers, mais son grand-père lui répétait toujours : "Les rochers ne sont pas sûrs en cas de tremblement de terre ". Karim n’y prêtait pas attention, jusqu’au jour où la terre trembla fortement.',
                 style: TextStyle(
                   fontFamily: 'Arima',
                   fontSize: 18,
@@ -54,7 +54,7 @@ class StoryPageContent extends StatelessWidget {
             Expanded(
               flex: 2,
               child: Image.asset(
-                'assets/images/an2.png',
+                'assets/images/Kangourou1.png',
                 height: 150,
                 fit: BoxFit.contain,  // Utilisation de BoxFit.contain
               ),
@@ -73,7 +73,7 @@ class StoryPageContent extends StatelessWidget {
               child: AspectRatio(
                 aspectRatio: 16 / 9, // Par exemple, pour un ratio 16:9
                 child: Image.asset(
-                  'assets/images/an2.png',
+                  'assets/images/Kangourou2.png',
                   height: 150,
                   fit: BoxFit.contain,  // Utilisation de BoxFit.contain
                 ),
@@ -84,7 +84,7 @@ class StoryPageContent extends StatelessWidget {
             Expanded(
               flex: 3,
               child: Text(
-                'C\'était un tremblement de terre ! Tiko a eu un peu peur, mais il se souvient de ce qu\'il a appris : "Ne panique pas, trouve un endroit sûr !"',
+                'Se souvenant des paroles de son grand-père, Karim sauta rapidement dans une zone dégagée, loin des arbres et des rochers. Là-bas, il retrouva ses amis et attendit que tout s’arrête. Le grand-père les rejoignit et expliqua pourquoi un endroit dégagé était si important.',
                 style: TextStyle(
                   fontFamily: 'Arima',
                   fontSize: 18,
@@ -107,7 +107,7 @@ class StoryPageContent extends StatelessWidget {
             Expanded(
               flex: 3,
               child: Text(
-                'Tiko se cache sous une grande pierre, à l\'abri des objets qui peuvent tomber. Heureusement, il se rappelle aussi de vérifier s\'il est en sécurité avec ses amis.',
+                'Depuis ce jour, Karim et ses amis jouaient toujours en sécurité, et ils apprenaient aux plus jeunes où se mettre à l\'abri quand le sol se met à trembler.',
                 style: TextStyle(
                   fontFamily: 'Arima',
                   fontSize: 18,
@@ -121,7 +121,7 @@ class StoryPageContent extends StatelessWidget {
             Expanded(
               flex: 2,
               child: Image.asset(
-                'assets/images/an2.png',
+                'assets/images/Kangourou3.png',
                 height: 150,
                 fit: BoxFit.contain,  // Utilisation de BoxFit.contain
               ),
@@ -133,7 +133,7 @@ class StoryPageContent extends StatelessWidget {
 
         // Conclusion
         Text(
-          'Merci d\'avoir lu cette histoire avec Tiko ! Maintenant, tu sais comment réagir en cas de tremblement de terre. Ensemble, nous sommes plus forts et plus sûrs !',
+          'Merci d\'avoir lu cette histoire avec Karim ! Maintenant, tu sais comment réagir en cas de tremblement de terre. Ensemble, nous sommes plus forts et plus sûrs !',
           style: TextStyle(
             fontFamily: 'Arima',
             fontSize: 18,

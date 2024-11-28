@@ -1,51 +1,61 @@
 import 'package:flutter/material.dart';
 
-
-
+//page d'informations "Pendant un Séisme"
 class PendantScreen extends StatefulWidget {
   const PendantScreen({super.key});
 
   @override
-  State<PendantScreen> createState() => _PendantScreenState();
+  State<PendantScreen> createState() => _PendantScreenState(); // Récupération de la largeur de l'écran pour une mise en page réactive
 }
 
 class _PendantScreenState extends State<PendantScreen> {
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Pendant un séisme'),
-        backgroundColor: Colors.green, // Bannière verte
-        centerTitle: true, // Pour centrer le titre
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black), // Icône de retour
+          onPressed: () {
+            Navigator.of(context).pop(); // Action de retour
+          },
+        ),
+        title: const Text("Pendant un Séisme",
+          style: TextStyle(
+            fontFamily: 'Arima',
+            fontSize: 22,
+            fontWeight: FontWeight.w400,
+            color: Colors.black,
+          ),
+        ),
+        backgroundColor: Colors.green[100], // Couleur de fond verte pour l'AppBar
+        centerTitle: true,
       ),
-      body: Container(
-        width: width,
-        margin: EdgeInsets.symmetric(horizontal: width * 0.03),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
+      body: const Padding(
+        padding: EdgeInsets.all(16.0), // Marges autour du contenu pour un espacement uniforme
+        child: SingleChildScrollView(
+          // Permet le défilement si le contenu dépasse la hauteur de l'écran
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch, // Étend les children sur toute la largeur
             children: [
+              // Contenu de la page
               Text(
-                'Meuble',
+                "- Établissez un plan de secours familial et choisissez un lieu sûr où se rassembler après le séisme.\n"
+                    "- Assurez-vous que les meubles lourds sont bien fixés aux murs.\n"
+                    "- Repérez les zones sécurisées dans chaque pièce (sous des meubles solides, loin des fenêtres).\n"
+                    "- Préparez un kit de secours avec des provisions essentielles : eau, nourriture, lampe de poche, médicaments, etc.\n"
+                    "- Préparez un kit de secours avec des provisions essentielles : eau, nourriture, lampe de poche, médicaments, etc.\n"
+                    "- Préparez un kit de secours avec des provisions essentielles : eau, nourriture, lampe de poche, médicaments, etc.\n"
+                    "- Préparez un kit de secours avec des provisions essentielles : eau, nourriture, lampe de poche, médicaments, etc.\n"
+                    "- Préparez un kit de secours avec des provisions essentielles : eau, nourriture, lampe de poche, médicaments, etc.\n"
+                    "- Informez-vous des procédures d’évacuation et des numéros d’urgence.",
                 style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Arima',
+                  fontSize: 18,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.black,
                 ),
               ),
-              SizedBox(height: 8),
-              Text(
-                '- Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n'
-                    '- Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n'
-                    '- Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n'
-                    '- Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.\n'
-                    '- Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n'
-                    '- Proin eget tortor risus. Nulla porttitor accumsan tincidunt.\n'
-                    '- Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem.\n'
-                    '- Donec sollicitudin molestie malesuada.',
-                style: TextStyle(fontSize: 16),
-              ),
+              SizedBox(height: 20),
             ],
           ),
         ),

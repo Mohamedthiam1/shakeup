@@ -1,42 +1,68 @@
 import 'package:flutter/material.dart';
 
+// Page des paramètres de l'appli
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
+    double width = MediaQuery.of(context).size.width; // Largeur de l'écran pour adapter les marges et tailles
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Réglages'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black), // Icône de retour
+          onPressed: () {
+            Navigator.of(context).pop(); // Action de retour
+          },
+        ),
+        title: Text("Réglages",
+          style: TextStyle(
+            fontFamily: 'Arima',
+            fontSize: 22,
+            fontWeight: FontWeight.w400,
+            color: Colors.black,
+          ),
+        ),
+        backgroundColor: Colors.green[100], // Couleur de fond verte pour l'AppBar
+        centerTitle: true,
       ),
+
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Container(
-          width: width,
+        padding: const EdgeInsets.all(16.0), // Marges autour du contenu principal
+        child: SizedBox(
+          width: width, // Largeur du contenu alignée à l'écran
           child: SingleChildScrollView(
+            // Permet le défilement si le contenu dépasse la taille de l'écran
             child: Container(
-              alignment: Alignment.center,
-              margin: EdgeInsets.symmetric(horizontal: width * 0.03),
+              alignment: Alignment.center, // Centre tout le contenu horizontalement
+              margin: EdgeInsets.symmetric(horizontal: width * 0.03), // Marges latérales dynamiques
+
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center, // Centre tous les enfants de manière horizontale
                 children: [
-                  // Social Media Connect Section
+
+                  // Section pour la connexion via les réseaux sociaux
                   Container(
                     decoration: BoxDecoration(
-                      color: const Color(0xFFC7E4BF),
-                      borderRadius: BorderRadius.circular(15),
+                      color: const Color(0xFFC7E4BF), // Fond vert clair
+                      borderRadius: BorderRadius.circular(15), // Coins arrondis
                     ),
-                    padding: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(10), // Espacement interne
                     child: const Column(
                       children: [
                         Text(
                           'Connexion',
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontFamily: 'Arima',
+                            fontSize: 18,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.black,
+                          ),
                         ),
-                        SizedBox(height: 10),
+                        SizedBox(height: 10), // Espacement
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround, // Distribution égale des boutons
                           children: [
                             SocialButton(label: 'Google', iconPath: 'assets/images/icons8-google-48.png'),
                             SocialButton(label: 'Apple', iconPath: 'assets/images/icons8-apple-50.png'),
@@ -48,16 +74,16 @@ class SettingsPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
 
-                  // Toggle Settings
+                  // Options de réglages avec des interrupteurs
                   const SettingToggle(title: 'Son'),
                   const SettingToggle(title: 'Vibrations'),
                   const SettingToggle(title: 'Musique'),
                   const SettingToggle(title: 'Notifications'),
 
-                  // Language Dropdown
+                  // Menu déroulant pour le choix de la langue
                   const LanguageDropdown(),
 
-                  // Links and Other Options
+                  // Liens vers d'autres pages
                   const SettingLink(title: 'Politique de confidentialité', routeName: '/privacy'),
                   const SettingLink(title: 'Conditions d\'utilisation', routeName: '/terms'),
                   const SettingLink(title: 'Support'),
@@ -71,10 +97,10 @@ class SettingsPage extends StatelessWidget {
   }
 }
 
-// Widget for each social media button
+// Bouton pour les réseaux sociaux
 class SocialButton extends StatelessWidget {
-  final String label;
-  final String iconPath;
+  final String label; // Texte affiché sur le bouton
+  final String iconPath; // Chemin de l'icône
 
   const SocialButton({super.key, required this.label, required this.iconPath});
 
@@ -83,30 +109,42 @@ class SocialButton extends StatelessWidget {
     return Column(
       children: [
         Row(
-          mainAxisSize: MainAxisSize.min, // To make button fit content width
+          mainAxisSize: MainAxisSize.min, // Ajuste la taille pour correspondre au contenu
           children: [
             Image.asset(
-              iconPath, // Display the custom icon
-              width: 24, // Adjust size as needed
+              iconPath, // Affiche l'icône
+              width: 24,
               height: 24,
             ),
-            const SizedBox(width: 2), // Space between icon and text
+            const SizedBox(width: 2), // Espacement entre l'icône et le texte
             Text(
               label,
-              style: const TextStyle(fontSize: 16),
+              style: const TextStyle(
+                fontFamily: 'Arima',
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+                color: Colors.black,
+              ),
             ),
           ],
         ),
         ElevatedButton(
-          onPressed: () {},
+          onPressed: () {}, // Action à définir lors de l'appui sur le bouton
           style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF36DD0C),
+            backgroundColor: const Color(0xFF36DD0C), // Couleur verte
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(20), // Coins arrondis
             ),
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16), // Espacement interne
           ),
-          child: const Text('Se connecter'),
+          child: const Text('Se connecter',
+            style: TextStyle(
+              fontFamily: 'Arima',
+              fontSize: 18,
+              fontWeight: FontWeight.w400,
+              color: Colors.black,
+            ),
+          ),
         ),
       ],
     );
@@ -114,9 +152,9 @@ class SocialButton extends StatelessWidget {
 }
 
 
-// Widget for each toggle switch setting
+// Interrupteur pour activer/désactiver une fonctionnalité (carré où on coche)
 class SettingToggle extends StatefulWidget {
-  final String title;
+  final String title; // Titre de l'option
 
   const SettingToggle({super.key, required this.title});
 
@@ -125,54 +163,65 @@ class SettingToggle extends StatefulWidget {
 }
 
 class _SettingToggleState extends State<SettingToggle> {
-  bool isEnabled = true;
+  bool isEnabled = true; // État initial de l'interrupteur
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween, // Distribution des éléments
       children: [
-        Text(widget.title, style: const TextStyle(fontSize: 16)),
+        Text(widget.title, style: const TextStyle(
+          fontFamily: 'Arima',
+          fontSize: 18,
+          fontWeight: FontWeight.w400,
+          color: Colors.black,
+        )
+        ),
         Switch(
-          value: isEnabled,
+          value: isEnabled, // État actuel de l'interrupteur
           onChanged: (value) {
             setState(() {
-              isEnabled = value;
+              isEnabled = value; // Change l'état de l'interrupteur
             });
           },
-          activeColor: Colors.green,
+          activeColor: Colors.green, // Couleur lorsque l'interrupteur est activé
         ),
       ],
     );
   }
 }
 
-// Widget for each link-style setting
+// Liens pour accéder à d'autres pages
 class SettingLink extends StatelessWidget {
-  final String title;
-  final String? routeName;
+  final String title; // Titre du lien
+  final String? routeName; // Nom de la route pour la navigation
 
   const SettingLink({super.key, required this.title, this.routeName});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      padding: const EdgeInsets.symmetric(vertical: 4.0), // Espacement vertical
       child: InkWell(
         onTap: () {
           if (routeName != null) {
-            Navigator.pushNamed(context, routeName!);
+            Navigator.pushNamed(context, routeName!); // Navigation vers une autre page
           }
         },
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12), // Marges internes
           decoration: BoxDecoration(
-            color: Colors.green[100],
-            borderRadius: BorderRadius.circular(10),
+            color: Colors.green[100], // Couleur de fond
+            borderRadius: BorderRadius.circular(10), // Coins arrondis
           ),
           child: Text(
             title,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            style: const TextStyle(
+              fontFamily: 'Arima',
+              fontSize: 18,
+              fontWeight: FontWeight.w400,
+              color: Colors.black,
+            ),
           ),
         ),
       ),
@@ -181,7 +230,7 @@ class SettingLink extends StatelessWidget {
 }
 
 
-// Dropdown for language selection
+// Menu déroulant pour sélectionner la langue
 class LanguageDropdown extends StatefulWidget {
   const LanguageDropdown({super.key});
 
@@ -190,27 +239,35 @@ class LanguageDropdown extends StatefulWidget {
 }
 
 class _LanguageDropdownState extends State<LanguageDropdown> {
-  String selectedLanguage = 'Français';
+  String selectedLanguage = 'Français'; // Langue par défaut
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.symmetric(vertical: 8.0), // Espacement vertical
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween, // Distribution des éléments
         children: [
-          const Text('Langue', style: TextStyle(fontSize: 16)),
+          const Text('Langue',
+            style: TextStyle(
+              fontFamily: 'Arima',
+              fontSize: 18,
+              fontWeight: FontWeight.w400,
+              color: Colors.black,
+            ),
+          ),
+
           DropdownButton<String>(
-            value: selectedLanguage,
+            value: selectedLanguage, // Langue actuelle sélectionnée
             items: <String>['Français', 'English'].map((String value) {
               return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
+                value: value, // Valeur de l'élément
+                child: Text(value), // Texte affiché dans le menu déroulant
               );
             }).toList(),
             onChanged: (newValue) {
               setState(() {
-                selectedLanguage = newValue!;
+                selectedLanguage = newValue!; // Change la langue sélectionnée
               });
             },
           ),
@@ -220,7 +277,7 @@ class _LanguageDropdownState extends State<LanguageDropdown> {
   }
 }
 
-// Privacy Policy Page
+// Page politique de confidentialité
 class PrivacyPolicyPage extends StatelessWidget {
   const PrivacyPolicyPage({super.key});
 
@@ -228,15 +285,36 @@ class PrivacyPolicyPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Politique de confidentialité'),
-        backgroundColor: Colors.green[200],
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black), // Icône de retour
+          onPressed: () {
+            Navigator.of(context).pop(); // Action de retour
+          },
+        ),
+        title: Text('Politique de confidentialité',
+          style: TextStyle(
+            fontFamily: 'Arima',
+            fontSize: 22,
+            fontWeight: FontWeight.w400,
+            color: Colors.black,
+          ),
+        ),
+        backgroundColor: Colors.green[100], // Couleur de fond verte pour l'AppBar
+        centerTitle: true,
       ),
+
       body: const Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16.0), // Espacement autour du contenu principal
         child: SingleChildScrollView(
+          // Permet le défilement si le texte est trop long pour l'écran
           child: Text(
             'Contenu de la politique de confidentialité...',
-            style: TextStyle(fontSize: 16),
+            style: TextStyle(
+              fontFamily: 'Arima',
+              fontSize: 18,
+              fontWeight: FontWeight.w400,
+              color: Colors.black,
+            ),
           ),
         ),
       ),
@@ -244,7 +322,7 @@ class PrivacyPolicyPage extends StatelessWidget {
   }
 }
 
-// Terms and Conditions Page
+// Page conditions d'utilisation
 class TermsPage extends StatelessWidget {
   const TermsPage({super.key});
 
@@ -252,15 +330,35 @@ class TermsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Conditions d\'utilisation'),
-        backgroundColor: Colors.green[200],
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black), // Icône de retour
+          onPressed: () {
+            Navigator.of(context).pop(); // Action de retour
+          },
+        ),
+        title: Text('Conditions d\'utilisation',
+          style: TextStyle(
+            fontFamily: 'Arima',
+            fontSize: 22,
+            fontWeight: FontWeight.w400,
+            color: Colors.black,
+          ),
+        ),
+        backgroundColor: Colors.green[100], // Couleur de fond verte pour l'AppBar
+        centerTitle: true,
       ),
       body: const Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16.0), // Marges autour du contenu
         child: SingleChildScrollView(
+          // Permet de défiler pour voir tout le contenu
           child: Text(
             'Contenu des conditions d\'utilisation...',
-            style: TextStyle(fontSize: 16),
+            style: TextStyle(
+              fontFamily: 'Arima',
+              fontSize: 18,
+              fontWeight: FontWeight.w400,
+              color: Colors.black,
+            ),
           ),
         ),
       ),

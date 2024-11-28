@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 
-class StoryPage extends StatelessWidget {
-  const StoryPage({super.key});
+class Story6 extends StatelessWidget {
+  const Story6({super.key});
 
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
       body: SafeArea(
-        child: StoryPageContent(),
+        child: StoryPageContent6(),
       ),
     );
   }
 }
 
-class StoryPageContent extends StatelessWidget {
-  const StoryPageContent({super.key});
+class StoryPageContent6 extends StatelessWidget {
+  const StoryPageContent6({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class StoryPageContent extends StatelessWidget {
       children: [
         // Introduction à l'histoire
         Text(
-          'L\'histoire de Tiko et le tremblement de terre',
+          'La cachette de Mila la souris',
           style: TextStyle(
             fontSize: 28,
             fontFamily: 'Arima',
@@ -40,7 +40,7 @@ class StoryPageContent extends StatelessWidget {
             Expanded(
               flex: 3,
               child: Text(
-                'Tiko est un petit oiseau qui vit dans un grand arbre avec ses amis. Un jour, alors qu\'il joue dehors, il ressent une secousse sous ses pattes. "Qu\'est-ce que c\'est ?", se demande-t-il.',
+                'Mila la souris adorait sa maison sous la cuisine d’une vieille maison. Mais un jour, en plein après-midi, les murs commencèrent à vibrer et des objets tombèrent des étagères. Mila se souvint des conseils de sa maman : "Va sous la table, protège-toi !".',
                 style: TextStyle(
                   fontFamily: 'Arima',
                   fontSize: 18,
@@ -54,7 +54,7 @@ class StoryPageContent extends StatelessWidget {
             Expanded(
               flex: 2,
               child: Image.asset(
-                'assets/images/an2.png',
+                'assets/images/souris1.png',
                 height: 150,
                 fit: BoxFit.contain,  // Utilisation de BoxFit.contain
               ),
@@ -73,7 +73,7 @@ class StoryPageContent extends StatelessWidget {
               child: AspectRatio(
                 aspectRatio: 16 / 9, // Par exemple, pour un ratio 16:9
                 child: Image.asset(
-                  'assets/images/an2.png',
+                  'assets/images/souris2.png',
                   height: 150,
                   fit: BoxFit.contain,  // Utilisation de BoxFit.contain
                 ),
@@ -84,7 +84,7 @@ class StoryPageContent extends StatelessWidget {
             Expanded(
               flex: 3,
               child: Text(
-                'C\'était un tremblement de terre ! Tiko a eu un peu peur, mais il se souvient de ce qu\'il a appris : "Ne panique pas, trouve un endroit sûr !"',
+                'Elle courut sous la grande table de la cuisine et se roula en boule, les pattes sur la tête. Le bruit et les secousses étaient effrayants, mais Mila resta calme. Quand tout s’arrêta, elle sortit prudemment pour vérifier que tout le monde allait bien.',
                 style: TextStyle(
                   fontFamily: 'Arima',
                   fontSize: 18,
@@ -107,7 +107,7 @@ class StoryPageContent extends StatelessWidget {
             Expanded(
               flex: 3,
               child: Text(
-                'Tiko se cache sous une grande pierre, à l\'abri des objets qui peuvent tomber. Heureusement, il se rappelle aussi de vérifier s\'il est en sécurité avec ses amis.',
+                'Sa famille la félicita pour sa réaction rapide et responsable. Mila devint un exemple pour tous les petits animaux du quartier, leur montrant comment réagir face à un tremblement de terre.',
                 style: TextStyle(
                   fontFamily: 'Arima',
                   fontSize: 18,
@@ -121,7 +121,7 @@ class StoryPageContent extends StatelessWidget {
             Expanded(
               flex: 2,
               child: Image.asset(
-                'assets/images/an2.png',
+                'assets/images/souris3.png',
                 height: 150,
                 fit: BoxFit.contain,  // Utilisation de BoxFit.contain
               ),
@@ -133,7 +133,7 @@ class StoryPageContent extends StatelessWidget {
 
         // Conclusion
         Text(
-          'Merci d\'avoir lu cette histoire avec Tiko ! Maintenant, tu sais comment réagir en cas de tremblement de terre. Ensemble, nous sommes plus forts et plus sûrs !',
+          'Merci d\'avoir lu cette histoire avec Mila ! Maintenant, tu sais comment réagir en cas de tremblement de terre. Ensemble, nous sommes plus forts et plus sûrs !',
           style: TextStyle(
             fontFamily: 'Arima',
             fontSize: 18,

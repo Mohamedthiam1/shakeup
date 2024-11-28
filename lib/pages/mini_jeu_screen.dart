@@ -3,7 +3,7 @@ import 'package:cap/pages/KitDeSurvie.dart';
 import 'package:cap/pages/evite%20les%20danger.dart';
 import 'package:flutter/material.dart';
 
-
+import '../home_page.dart';
 
 class MiniJeuScreen extends StatefulWidget {
   const MiniJeuScreen({super.key});
@@ -18,7 +18,22 @@ class _MiniJeuScreenState extends State<MiniJeuScreen> {
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: Center(child: Text('Mini Jeux')),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black), // Icône de retour
+          onPressed: () {
+            Navigator.of(context).pop(); // Action de retour
+          },
+        ),
+        title: Text("Mini jeux",
+          style: TextStyle(
+            fontFamily: 'Arima',
+            fontSize: 22,
+            fontWeight: FontWeight.w400,
+            color: Colors.black,
+          ),
+        ),
+        backgroundColor: Colors.green[100], // Couleur de fond verte pour l'AppBar
+        centerTitle: true,
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -33,11 +48,18 @@ class _MiniJeuScreenState extends State<MiniJeuScreen> {
                       Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => TrouverAbriPage()));
                     },
                     child: SizedBox(
-                      width: screenWidth * 0.3, // 30% de la largeur de l'écran
+                      width: screenWidth * 0.25, // 30% de la largeur de l'écran
                       child: Image.asset('assets/images/img5.jpg'),
                     ),
                   ),
-                  Text('Trouver l’abri'),
+                  Text('Trouver l’abri',
+                    style: TextStyle(
+                      fontFamily: 'Arima',
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black,
+                    ),
+                  ),
                 ],
               ),
               SizedBox(width: 20),
@@ -48,11 +70,18 @@ class _MiniJeuScreenState extends State<MiniJeuScreen> {
                       Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => KitDeSurviePage()));
                     },
                     child: SizedBox(
-                      width: screenWidth * 0.3, // 30% de la largeur de l'écran
+                      width: screenWidth * 0.25, // 30% de la largeur de l'écran
                       child: Image.asset('assets/images/img4.jpg'),
                     ),
                   ),
-                  Text('Kit de survie'),
+                  Text('Kit de survie',
+                    style: TextStyle(
+                      fontFamily: 'Arima',
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black,
+                    ),
+                  ),
                 ],
               ),
               SizedBox(width: 20),
@@ -63,17 +92,25 @@ class _MiniJeuScreenState extends State<MiniJeuScreen> {
                       Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => DangerPage()));
                     },
                     child: SizedBox(
-                      width: screenWidth * 0.3, // 30% de la largeur de l'écran
+                      width: screenWidth * 0.25, // 30% de la largeur de l'écran
                       child: Image.asset('assets/images/img3.jpg'),
                     ),
                   ),
-                  Text('Éviter les dangers'),
+                  Text('Éviter les dangers',
+                    style: TextStyle(
+                      fontFamily: 'Arima',
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black,
+                    ),
+                  ),
                 ],
               ),
             ],
           ),
         ),
       ),
+      bottomNavigationBar: const Footer(), // Footer en bas
     );
   }
 }
