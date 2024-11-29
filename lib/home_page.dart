@@ -43,8 +43,17 @@ class HomePageContent extends StatelessWidget {
   }
 }
 
-class NavigationBar extends StatelessWidget {
+class NavigationBar extends StatefulWidget {
   const NavigationBar({super.key});
+
+  @override
+  State<NavigationBar> createState() => NavigationB();
+}
+
+
+class NavigationB extends State<NavigationBar> {
+  // Avatar par défaut
+  String selectedAvatar = 'assets/images/profil.png';
 
   @override
   Widget build(BuildContext context) {
@@ -60,9 +69,10 @@ class NavigationBar extends StatelessWidget {
         children: [
           // Profil Icone
           // Trois icônes sur la gauche
+          // Profil Icone
           IconButton(
             icon: Image.asset(
-              'assets/images/profil.png',
+              selectedAvatar, // Avatar dynamique
               width: 35,
               height: 35,
             ),
@@ -70,43 +80,62 @@ class NavigationBar extends StatelessWidget {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return AlertDialog(
-                    backgroundColor: const Color(0xFFE6EFE3), // Couleur de fond
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(15), // Effet de radius
-                    ),
-                    content: SizedBox(
-                      width: 300, // Largeur de la boîte de dialogue
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          // Zone pour l'icône de profil
-                          Row(
+                  String tempAvatar = selectedAvatar; // Avatar temporaire
+                  String pseudo = "Name/Pseudo"; // Valeur par défaut
+
+                  return StatefulBuilder(
+                    builder: (BuildContext context, StateSetter setDialogState) {
+                      return AlertDialog(
+                        backgroundColor: const Color(0xFFE6EFE3), // Couleur de fond
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15), // Effet de radius
+                        ),
+                        content: SizedBox(
+                          width: 300, // Largeur de la boîte de dialogue
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
                             children: [
+                              // Zone pour l'icône de profil et le pseudo
+                              Row(
+                                children: [
+                                  // Avatar sélectionné
+                                  Container(
+                                    width: 45,
+                                    height: 45,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15),
+                                      color: Colors.transparent,
+                                    ),
+                                    child: Image.asset(
+                                      tempAvatar, // Avatar temporaire
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10), // Espacement
+                                  // Champ texte pour modifier le pseudo
+                                  Expanded(
+                                    child: TextField(
+                                      onChanged: (value) {
+                                        pseudo = value; // Met à jour le pseudo
+                                      },
+                                      decoration: InputDecoration(
+                                        labelText: 'Nom/Pseudo',
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(12),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 10),
+
+                              // Grille d'avatars
                               Container(
-                                width: 45,
-                                height: 45,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15),
-                                  color: Colors.transparent,
-                                ),
-                                child: Image.asset(
-                                  'assets/images/profil.png',
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              const SizedBox(width: 10), // Espacement
-                              Container(
-                                width: 215,
-                                height: 45,
-                                decoration: const BoxDecoration(
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(15),
-                                    bottomLeft: Radius.circular(15),
-                                  ),
-                                  color: Color(0xFFC7E4BF), // Couleur de fond
-                                  boxShadow: [
+                                  color: const Color(0xFFC7E4BF),
+                                  boxShadow: const [
                                     BoxShadow(
                                       color: Color(0x40000000),
                                       blurRadius: 4,
@@ -114,242 +143,94 @@ class NavigationBar extends StatelessWidget {
                                     ),
                                   ],
                                 ),
-                                padding: const EdgeInsets.only(top: 10),
-                                child: const Text(
-                                  'Name/Pseudo',
-                                  style: TextStyle(
-                                    fontFamily: 'Arima',
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.black,
-                                    letterSpacing: -0.15,
-                                  ),
-                                  textAlign: TextAlign.center,
+                                constraints: BoxConstraints(maxHeight: 200), // Limite la hauteur
+                                child: Wrap(
+                                  spacing: 8.0, // Espacement horizontal entre les avatars
+                                  runSpacing: 8.0, // Espacement vertical entre les avatars
+                                  alignment: WrapAlignment.center,
+                                  children: [
+                                    for (var avatarPath in [
+                                      'assets/images/an1.jpg',
+                                      'assets/images/an2.png',
+                                      'assets/images/an3.jpg',
+                                      'assets/images/an4.jpg',
+                                      'assets/images/an5.jpg',
+                                      'assets/images/an6.png',
+                                    ])
+                                      GestureDetector(
+                                        onTap: () {
+                                          setDialogState(() {
+                                            tempAvatar = avatarPath; // Change avatar temporaire
+                                          });
+                                        },
+                                        child: Container(
+                                          width: 65,
+                                          height: 65,
+                                          decoration: const BoxDecoration(
+                                            shape: BoxShape.circle, // Forme circulaire
+                                            color: Colors.white, // Couleur de fond blanche
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Color(0x40000000), // Couleur de l'ombre
+                                                blurRadius: 4, // Flou de l'ombre
+                                                offset: Offset(0, 2), // Décalage de l'ombre
+                                              ),
+                                            ],
+                                          ),
+                                          child: ClipOval(
+                                            child: Image.asset(
+                                              avatarPath,
+                                              width: 70,
+                                              height: 70,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                  ],
                                 ),
                               ),
                             ],
                           ),
-                          const SizedBox(height: 10), // Espacement entre les éléments
-
-                          Container(
-                            width: 148,
-                            height: 45,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              color: const Color(0xFFABC9A4), // Couleur de fond
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: Color(0x40000000),
-                                  blurRadius: 4,
-                                  offset: Offset(0, 4),
-                                ),
-                              ],
-                            ),
-                            child: const Center(
-                              child: Text(
-                                'Name/Pseudo',
-                                style: TextStyle(
-                                  fontFamily: 'Arima',
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                  color: Colors.black,
-                                  letterSpacing: -0.15,
-                                ),
-                                textAlign: TextAlign.center,
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop(); // Ferme le dialogue
+                            },
+                            child: const Text("Annuler",
+                              style: TextStyle(
+                                fontFamily: 'Arima',
+                                fontSize: 18,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.black,
                               ),
                             ),
                           ),
-                          const SizedBox(height: 10), // Espacement entre les éléments
-
-                          // Zone pour les photos de profils
-                          Container(
-                            width: 253,
-                            height: 138,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              color: const Color(0xFFC7E4BF), // Couleur de fond
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: Color(0x40000000),
-                                  blurRadius: 4,
-                                  offset: Offset(0, 4),
-                                ),
-                              ],
-                            ),
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    // Remplacez par vos images de profil
-                                    Container(
-                                      width: 60, // Largeur du conteneur
-                                      height: 60, // Hauteur du conteneur
-                                      decoration: const BoxDecoration(
-                                        shape:
-                                            BoxShape.circle, // Forme circulaire
-                                        color: Colors.white, // Couleur de fond blanche
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Color(0x40000000), // Couleur de l'ombre
-                                            blurRadius: 4, // Flou de l'ombre
-                                            offset: Offset(0, 2), // Décalage de l'ombre
-                                          ),
-                                        ],
-                                      ),
-                                      child: ClipOval(
-                                        child: Image.asset(
-                                          'assets/images/an1.jpg',
-                                          width: 60,
-                                          height: 60,
-                                          fit: BoxFit.cover, // Ajustement de l'image
-                                        ),
-                                      ),
-                                    ),
-
-                                    Container(
-                                      width: 60, // Largeur du conteneur
-                                      height: 60, // Hauteur du conteneur
-                                      decoration: const BoxDecoration(
-                                        shape:
-                                            BoxShape.circle, // Forme circulaire
-                                        color: Colors.white, // Couleur de fond blanche
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Color(0x40000000), // Couleur de l'ombre
-                                            blurRadius: 4, // Flou de l'ombre
-                                            offset: Offset(0, 2), // Décalage de l'ombre
-                                          ),
-                                        ],
-                                      ),
-                                      child: ClipOval(
-                                        child: Image.asset(
-                                          'assets/images/an2.png',
-                                          width: 60,
-                                          height: 60,
-                                          fit: BoxFit.cover, // Ajustement de l'image
-                                        ),
-                                      ),
-                                    ),
-
-                                    Container(
-                                      width: 60, // Largeur du conteneur
-                                      height: 60, // Hauteur du conteneur
-                                      decoration: const BoxDecoration(
-                                        shape:
-                                            BoxShape.circle, // Forme circulaire
-                                        color: Colors.white, // Couleur de fond blanche
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Color(0x40000000), // Couleur de l'ombre
-                                            blurRadius: 4, // Flou de l'ombre
-                                            offset: Offset(0, 2), // Décalage de l'ombre
-                                          ),
-                                        ],
-                                      ),
-                                      child: ClipOval(
-                                        child: Image.asset(
-                                          'assets/images/an3.jpg',
-                                          width: 60,
-                                          height: 60,
-                                          fit: BoxFit.cover, // Ajustement de l'image
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 10),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Container(
-                                      width: 60, // Largeur du conteneur
-                                      height: 60, // Hauteur du conteneur
-                                      decoration: const BoxDecoration(
-                                        shape:
-                                            BoxShape.circle, // Forme circulaire
-                                        color: Colors.white, // Couleur de fond blanche
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Color(0x40000000), // Couleur de l'ombre
-                                            blurRadius: 4, // Flou de l'ombre
-                                            offset: Offset(0, 2), // Décalage de l'ombre
-                                          ),
-                                        ],
-                                      ),
-                                      child: ClipOval(
-                                        child: Image.asset(
-                                          'assets/images/an4.jpg',
-                                          width: 60,
-                                          height: 60,
-                                          fit: BoxFit.cover, // Ajustement de l'image
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      width: 60, // Largeur du conteneur
-                                      height: 60, // Hauteur du conteneur
-                                      decoration: const BoxDecoration(
-                                        shape:
-                                            BoxShape.circle, // Forme circulaire
-                                        color: Colors.white, // Couleur de fond blanche
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Color(0x40000000), // Couleur de l'ombre
-                                            blurRadius: 4, // Flou de l'ombre
-                                            offset: Offset(0, 2), // Décalage de l'ombre
-                                          ),
-                                        ],
-                                      ),
-                                      child: ClipOval(
-                                        child: Image.asset(
-                                          'assets/images/an5.jpg',
-                                          width: 60,
-                                          height: 60,
-                                          fit: BoxFit.cover, // Ajustement de l'image
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      width: 60, // Largeur du conteneur
-                                      height: 60, // Hauteur du conteneur
-                                      decoration: const BoxDecoration(
-                                        shape:
-                                            BoxShape.circle, // Forme circulaire
-                                        color: Colors.white, // Couleur de fond blanche
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Color(0x40000000), // Couleur de l'ombre
-                                            blurRadius: 4, // Flou de l'ombre
-                                            offset: Offset(0, 2), // Décalage de l'ombre
-                                          ),
-                                        ],
-                                      ),
-                                      child: ClipOval(
-                                        child: Image.asset(
-                                          'assets/images/an6.png',
-                                          width: 60,
-                                          height: 60,
-                                          fit: BoxFit.cover, // Ajustement de l'image
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                          TextButton(
+                            onPressed: () {
+                              setState(() {
+                                selectedAvatar = tempAvatar; // Sauvegarde l'avatar
+                              });
+                              Navigator.of(context).pop(); // Ferme le dialogue
+                            },
+                            child: const Text("Confirmer",
+                              style: TextStyle(
+                                fontFamily: 'Arima',
+                                fontSize: 18,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.black,
+                              ),
                             ),
                           ),
                         ],
-                      ),
-                    ),
+                      );
+                    },
                   );
                 },
               );
             },
           ),
-
 
           IconButton(
             icon: Image.asset(
