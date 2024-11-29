@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -41,6 +42,11 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
         backgroundColor: Colors.green[100], // Couleur de fond verte pour l'AppBar
         centerTitle: true,
+        actions: [
+          IconButton(onPressed: () async {
+            logoutSafely(context);
+          }, icon: Icon(Icons.logout_rounded, color: Colors.redAccent,))
+        ],
       ),
 
       body: Padding(
@@ -66,45 +72,36 @@ class _SettingsPageState extends State<SettingsPage> {
                     padding: const EdgeInsets.all(10), // Espacement interne
                     child: Column(
                       children: [
-                        Text(
-                          'Connexion',
-                          style: TextStyle(
-                            fontFamily: 'Arima',
-                            fontSize: 18,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.black,
-                          ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text(
+                              'Connexion',
+                              style: TextStyle(
+                                fontFamily: 'Arima',
+                                fontSize: 18,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.black,
+                              ),
+                            ),
+                           if(sharedPreferences!.getString("fullname") != null) Text(
+                              'Bienvenu ${sharedPreferences!.getString("fullname")},',
+                              style: TextStyle(
+                                fontFamily: 'Arima',
+                                fontSize: 18,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
                         ),
                         SizedBox(height: 10), // Espacement
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround, // Distribution égale des boutons
                           children: [
-                            InkWell(
-                                onTap: () {
-                                  print("Google signIn started");
-                                  GoogleSignIn(clientId: DefaultFirebaseOptions.currentPlatform.iosClientId).signIn().then((account) async {
-                                    print(account!.email);
-                                    print(account.photoUrl);
-                                    print(account.displayName);
-                                    print(account.id);
-                                    Fluttertoast.showToast(msg: "Redirecting...", timeInSecForIosWeb: 4);
-                                    bool userAlreadyExists = await doesUserExistWithEmail(account.email);
-                                    if (userAlreadyExists) {
-                                      String hidden = await fetchHiddenThingGoogle();
-                                      formValidation(account.email, hidden, context, setState);
-                                    }
-                                    else {
-                                      String hidden = await fetchHiddenThingGoogle();
-                                      print(hidden);
-                                      showloading(context);
-                                      authenticateUserAndSignUp(account.email, hidden, account.displayName!, account.photoUrl!, "", context, setState);
-                                    }
-                                  });
-                                  print("Google signIn ended");
-                                },
-                                child: SocialButton(label: 'Google', iconPath: 'assets/images/icons8-google-48.png')),
-                            SocialButton(label: 'Apple', iconPath: 'assets/images/icons8-apple-50.png'),
-                            SocialButton(label: 'Facebook', iconPath: 'assets/images/icons8-facebook-48.png'),
+                            SocialButton('Google', 'assets/images/icons8-google-48.png'),
+                            SocialButton('Apple', 'assets/images/icons8-apple-50.png'),
+                            SocialButton('Facebook', 'assets/images/icons8-facebook-48.png'),
                           ],
                         ),
                       ],
@@ -133,6 +130,200 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
     );
   }
+
+  void logoutSafely(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      isScrollControlled: true,
+      // showDragHandle: true,
+      builder: (BuildContext context) {
+        final double width = MediaQuery.of(context).size.width;
+        return Container(
+          width: width,
+          child: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setStater) {
+              return Container(
+                padding: EdgeInsets.all(20),
+                margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      Container(
+                        alignment: Alignment.centerLeft,
+
+                        child: RichText(
+                          text: TextSpan(
+                            text: 'Voulez-vous vous ',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.black,
+                            ),
+                            children: <TextSpan>[
+                              TextSpan(
+                                text: "déconnecter",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              TextSpan(
+                                text: " ?",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: 25),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Container(
+                              width: width * 1.7 / 5,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Color.fromRGBO(176, 191, 192, 1.0),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10)
+                                    )
+                                ),
+                                onPressed: () async {
+                                  HapticFeedback.selectionClick();
+                                  Navigator.pop(context);
+                                },
+                                child: Text("RETOURNER", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
+                              ),
+                            ),
+                            Container(
+                              width: width * 0.5 / 5,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.redAccent,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10)
+                                    )
+                                ),
+                                onPressed: () async {
+                                  HapticFeedback.selectionClick();
+                                  showloading(context);
+                                  FirebaseFirestore.instance.collection("users").doc(sharedPreferences!.getString("uid")).update({
+                                    "token": ""
+                                  }).whenComplete(() async {
+                                    await FirebaseAuth.instance.signOut().whenComplete(() {
+                                      sharedPreferences!.clear();
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext ctx) => SettingsPage()));
+                                    });
+                                  });
+                                },
+                                child: Icon(Icons.logout_rounded, color: Colors.white),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      },
+    ).then((value) {
+      if (value != null && value == true) {
+        // Proceed with the action
+        // print('Action confirmed');
+      } else {
+        // Cancelled
+        // print('Action cancelled');
+      }
+    });
+  }
+
+  Widget SocialButton(String label, String iconPath) {
+    return Column(
+      children: [
+        Row(
+          mainAxisSize: MainAxisSize.min, // Ajuste la taille pour correspondre au contenu
+          children: [
+            Image.asset(
+              iconPath, // Affiche l'icône
+              width: 24,
+              height: 24,
+            ),
+            const SizedBox(width: 2), // Espacement entre l'icône et le texte
+            Text(
+              label,
+              style: const TextStyle(
+                fontFamily: 'Arima',
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+                color: Colors.black,
+              ),
+            ),
+          ],
+        ),
+        ElevatedButton(
+          onPressed: () {
+            if(label == 'Google') {
+              print("Google signIn started");
+              GoogleSignIn(clientId: DefaultFirebaseOptions.currentPlatform.iosClientId).signIn().then((account) async {
+                print(account!.email);
+                print(account.photoUrl);
+                print(account.displayName);
+                print(account.id);
+                Fluttertoast.showToast(msg: "Redirecting...", timeInSecForIosWeb: 4);
+                bool userAlreadyExists = await doesUserExistWithEmail(account.email);
+                if (userAlreadyExists) {
+                  String hidden = await fetchHiddenThingGoogle();
+                  formValidation(account.email, hidden, context, setState);
+                }
+                else {
+                  String hidden = await fetchHiddenThingGoogle();
+                  print(hidden);
+                  showloading(context);
+                  authenticateUserAndSignUp(account.email, hidden, account.displayName!, account.photoUrl!, "", context, setState);
+                }
+              }).catchError(( err) {
+                print(err);
+              });
+              print("Google signIn ended");
+            } else if(label == "Apple") {
+
+            }
+          }, // Action à définir lors de l'appui sur le bouton
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFF36DD0C), // Couleur verte
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20), // Coins arrondis
+            ),
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16), // Espacement interne
+          ),
+          child: const Text('Se connecter',
+            style: TextStyle(
+              fontFamily: 'Arima',
+              fontSize: 18,
+              fontWeight: FontWeight.w400,
+              color: Colors.black,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+// Bouton pour les réseaux sociaux
 
   formValidation(String email, String hidden, BuildContext context, StateSetter setState) {
     print('Entered properly 1');
@@ -338,59 +529,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
 }
 
-// Bouton pour les réseaux sociaux
-class SocialButton extends StatelessWidget {
-  final String label; // Texte affiché sur le bouton
-  final String iconPath; // Chemin de l'icône
 
-  const SocialButton({super.key, required this.label, required this.iconPath});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          mainAxisSize: MainAxisSize.min, // Ajuste la taille pour correspondre au contenu
-          children: [
-            Image.asset(
-              iconPath, // Affiche l'icône
-              width: 24,
-              height: 24,
-            ),
-            const SizedBox(width: 2), // Espacement entre l'icône et le texte
-            Text(
-              label,
-              style: const TextStyle(
-                fontFamily: 'Arima',
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
-                color: Colors.black,
-              ),
-            ),
-          ],
-        ),
-        ElevatedButton(
-          onPressed: () {}, // Action à définir lors de l'appui sur le bouton
-          style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF36DD0C), // Couleur verte
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20), // Coins arrondis
-            ),
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16), // Espacement interne
-          ),
-          child: const Text('Se connecter',
-            style: TextStyle(
-              fontFamily: 'Arima',
-              fontSize: 18,
-              fontWeight: FontWeight.w400,
-              color: Colors.black,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
 
 Future<bool> doesUserExistWithEmail(String email) async {
   print('Check Email Verif!');
