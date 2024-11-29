@@ -1,6 +1,6 @@
+import 'package:cap/pages/AdminQuizPage.dart';
 import 'package:flutter/material.dart';
 import 'AdminStoryPage.dart';
-import 'AdminQuizPage.dart';
 import 'package:cap/pages/salon.dart'; // Assurez-vous que ce fichier existe
 
 class AdminPrincipalPage extends StatelessWidget {

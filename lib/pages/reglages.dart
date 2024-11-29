@@ -1,13 +1,28 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../firebase_options.dart';
+import '../global/global.dart';
+import '../widgets/error_dialog.dart';
+import '../widgets/showloading.dart';
 
 // Page des paramètres de l'appli
-class SettingsPage extends StatelessWidget {
+
+class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width; // Largeur de l'écran pour adapter les marges et tailles
+  State<SettingsPage> createState() => _SettingsPageState();
+}
 
+class _SettingsPageState extends State<SettingsPage> {
+  @override
+  Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -49,7 +64,7 @@ class SettingsPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(15), // Coins arrondis
                     ),
                     padding: const EdgeInsets.all(10), // Espacement interne
-                    child: const Column(
+                    child: Column(
                       children: [
                         Text(
                           'Connexion',
@@ -64,7 +79,30 @@ class SettingsPage extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround, // Distribution égale des boutons
                           children: [
-                            SocialButton(label: 'Google', iconPath: 'assets/images/icons8-google-48.png'),
+                            InkWell(
+                                onTap: () {
+                                  print("Google signIn started");
+                                  GoogleSignIn(clientId: DefaultFirebaseOptions.currentPlatform.iosClientId).signIn().then((account) async {
+                                    print(account!.email);
+                                    print(account.photoUrl);
+                                    print(account.displayName);
+                                    print(account.id);
+                                    Fluttertoast.showToast(msg: "Redirecting...", timeInSecForIosWeb: 4);
+                                    bool userAlreadyExists = await doesUserExistWithEmail(account.email);
+                                    if (userAlreadyExists) {
+                                      String hidden = await fetchHiddenThingGoogle();
+                                      formValidation(account.email, hidden, context, setState);
+                                    }
+                                    else {
+                                      String hidden = await fetchHiddenThingGoogle();
+                                      print(hidden);
+                                      showloading(context);
+                                      authenticateUserAndSignUp(account.email, hidden, account.displayName!, account.photoUrl!, "", context, setState);
+                                    }
+                                  });
+                                  print("Google signIn ended");
+                                },
+                                child: SocialButton(label: 'Google', iconPath: 'assets/images/icons8-google-48.png')),
                             SocialButton(label: 'Apple', iconPath: 'assets/images/icons8-apple-50.png'),
                             SocialButton(label: 'Facebook', iconPath: 'assets/images/icons8-facebook-48.png'),
                           ],
@@ -95,6 +133,209 @@ class SettingsPage extends StatelessWidget {
       ),
     );
   }
+
+  formValidation(String email, String hidden, BuildContext context, StateSetter setState) {
+    print('Entered properly 1');
+    if (email.isNotEmpty && hidden.isNotEmpty) {
+      //Login
+      // print(email);
+      // print(hidden);
+      loginNow(email, hidden, context, setState);
+    } else {
+      Fluttertoast.showToast(msg: "Veuillez entrer une adresse email et un mot de passe valides.", timeInSecForIosWeb: 3);
+    }
+  }
+
+  Future readDataAndSetDataLocally(User currentUser, BuildContext context, StateSetter setState) async {
+    print(currentUser.email! +" hello");
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(currentUser.uid)
+        .get()
+        .then((snapshot) async {
+      if(snapshot.exists)
+      {
+        print("Holaaaa");
+
+        await sharedPreferences!.setString("status", snapshot.data()!["status"]);
+
+        if(snapshot.data()!["status"] == "approved" || snapshot.data()!["status"] == "waiting") {
+          await sharedPreferences!.setString("uid", currentUser.uid);
+          await sharedPreferences!.setString("email", snapshot.data()!["email"] ?? "");
+          await sharedPreferences!.setString("bio", snapshot.data()!["bio"] ?? "");
+          print("Holaaaa --- ----- ");
+          await sharedPreferences!.setString("fullname", snapshot.data()!["fullname"] ?? "");
+          await sharedPreferences!.setString("location", snapshot.data()!["location"] ?? "");
+          await sharedPreferences!.setString("photoUrl", snapshot.data()!["photoUrl"] ?? "");
+          print("Holaaaa  111111111");
+          await sharedPreferences!.setString("cabinet", snapshot.data()!["cabinet"] ?? "");
+          await sharedPreferences!.setString("doctorTitle", snapshot.data()!["doctorTitle"] ?? "");
+          await sharedPreferences!.setString("phoneNumber", snapshot.data()!["phoneNumber"] ?? "");
+          print("Holaaaa  2222222222");
+          await sharedPreferences!.setString("indicatif", snapshot.data()!["indicatif"] ?? "");
+          await sharedPreferences!.setInt("numberofauthentications", snapshot.data()!["numberofauthentications"] ?? 0);
+          await sharedPreferences!.setInt("joinDate", snapshot.data()!["joinDate"] ?? 0);
+          print("Holaaaa  3333333333");
+          await sharedPreferences!.setInt("fareRDV", snapshot.data()!["fareRDV"] ?? 0);
+          await sharedPreferences!.setInt("fare", snapshot.data()!["fare"] ?? 0);
+          await sharedPreferences!.setInt("newFare", snapshot.data()!["newFare"] ?? 0);
+          await sharedPreferences!.setInt("passwordChanged", snapshot.data()!["passwordChanged"] ?? 0);
+          await sharedPreferences!.setBool("isDoctor", snapshot.data()!["isDoctor"] ?? false);
+          await sharedPreferences!.setBool("urgence", snapshot.data()!["urgence"] ?? false);
+          print("Holaaaa  444444444");
+          // print("${sharedPreferences!.getString("fullname")!}");
+          // print("${sharedPreferences!.getString("location")!}");
+          // print("${sharedPreferences!.getString("photoUrl")!}");
+          // print("${sharedPreferences!.getString("cabinet")!}");
+          // print("${sharedPreferences!.getString("doctorTitle")!}");
+          // print("${sharedPreferences!.getString("phoneNumber")!}");
+          // print("${sharedPreferences!.getString("indicatif")!}");
+          // print("${sharedPreferences!.getInt("numberofauthentications")!}");
+          // print("${sharedPreferences!.getInt("joinDate")!}");
+          // print("${sharedPreferences!.getInt("fareRDV")!}");
+          // print("${sharedPreferences!.getInt("newFare")!}");
+          // print("${sharedPreferences!.getInt("fare")!}");
+          // print("${sharedPreferences!.getInt("passwordChanged")!}");
+          // print("${sharedPreferences!.getBool("isDoctor")!}");
+          // print("${sharedPreferences!.getBool("urgence")!}");
+
+          FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).update({
+            "numberofauthentications": (sharedPreferences!.getInt("numberofauthentications")!) + 1,
+          });
+
+
+          setState(() {
+            sharedPreferences;
+          });
+          // Navigator.pop(context);
+          Navigator.pop(context);
+          // setState(() {
+          //   sharedPreferences;
+          // });
+          print("8888888*${sharedPreferences!.getBool("isDoctor")!}");
+
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (c) => SettingsPage(), fullscreenDialog: true));
+        }
+
+        else {
+          firebaseAuth.signOut();
+          // Navigator.pop(context);
+          Navigator.pop(context);
+          Fluttertoast.showToast(msg: "Votre comptre a été bloqué. Expliquez votre situation à: \n\nsupport@doclinkers.com", timeInSecForIosWeb: 3);
+        }
+      }
+
+      else
+      {
+        firebaseAuth.signOut();
+        Navigator.pop(context);
+        // Navigator.pop(context);
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const SettingsPage(), fullscreenDialog: true));
+
+        showDialog(
+            context: context,
+            builder: (c) {
+              return ErrorDialog(message: "Les informations ne correspondent pas. Réessayez.",);
+            });
+      }
+    });
+  }
+
+  loginNow(String email, String hidden, BuildContext context, StateSetter setState) async {
+    print('Entered login now');
+    // print(email);
+    // print(hidden);
+    showloading(context);
+
+    User? currentUser;
+    try {
+      UserCredential auth = await firebaseAuth.signInWithEmailAndPassword(
+        email: email.trim(),
+        password: hidden.trim(),
+      );
+      currentUser = auth.user;
+
+      if (currentUser != null) {
+        await readDataAndSetDataLocally(currentUser, context, setState);
+      }
+    } catch (error) {
+      // Navigator.pop(context);
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SettingsPage(), fullscreenDialog: true));
+      print(error);
+      showDialog(
+        context: context,
+        builder: (c) {
+          return ErrorDialog(message: "Une erreur est survenue. Veuillez réessayer ultérieurement!");
+        },
+      );
+    }
+  }
+
+  Future saveDataToFirestore(User currentUser, String email, String fullname, String photoUrl, String userIdentifierApple, BuildContext context, StateSetter setState) async {
+
+    String uid = currentUser.uid;
+
+    FirebaseFirestore.instance.collection("users").doc(uid).set({
+      "uid": uid,
+      "email": email,
+      "fullname": fullname,
+      "photoUrl": photoUrl,
+      "status": "approved",
+      "joinDate": DateTime.now().millisecondsSinceEpoch,
+      "token": "",
+      "admin": false,
+      "userIdentifierApple": userIdentifierApple,
+      // "birthdate": DateTime(2000, 11, 9),
+    }).whenComplete(() async{
+
+      sharedPreferences = await SharedPreferences.getInstance();
+      await sharedPreferences!.setString("uid", uid);
+      await sharedPreferences!.setString("email", email);
+      await sharedPreferences!.setString("status", "approved");
+      await sharedPreferences!.setString("fullname", fullname);
+      await sharedPreferences!.setString("photoUrl", photoUrl);
+      await sharedPreferences!.setInt("joinDate", DateTime.now().millisecondsSinceEpoch);
+      setState(() {
+        sharedPreferences;
+      });
+
+      FirebaseFirestore.instance.collection("emails").doc(email).set({
+        'email': email
+      }).then((value) {
+        print("Thereeeee");
+        //Send User to HomePage
+        // Navigator.pop(context);
+        // setState(() {
+        //   sharedPreferences;
+        // });
+        Navigator.pop(context);
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (c) => SettingsPage()));
+
+      });
+    });
+
+  }
+
+  void authenticateUserAndSignUp(String email, String hidden, String fullname, String photourl, String userIdentifierApple, BuildContext context, StateSetter setState) async{
+    User? currentUser;
+    await firebaseAuth.createUserWithEmailAndPassword(
+        email: email.trim(),
+        password: hidden.trim()).then((auth) {
+      currentUser = auth.user;
+    }).catchError((error) {
+      Navigator.pop(context);
+      showDialog(
+          context: context,
+          builder: (c) {
+            return ErrorDialog(message: "Error: ${error}");
+          });
+    });
+
+    if(currentUser != null) {
+      saveDataToFirestore(currentUser!, email, fullname, photourl, userIdentifierApple, context, setState);
+    }
+  }
+
 }
 
 // Bouton pour les réseaux sociaux
@@ -151,6 +392,66 @@ class SocialButton extends StatelessWidget {
   }
 }
 
+Future<bool> doesUserExistWithEmail(String email) async {
+  print('Check Email Verif!');
+  try {
+    final QuerySnapshot usersQuery = await FirebaseFirestore.instance
+        .collection('emails')
+        .where('email', isEqualTo: email)
+        .get();
+
+    return usersQuery.docs.isNotEmpty;
+  } catch (e) {
+    // Gérer les erreurs ici, si nécessaire
+    print("Erreur lors de la vérification de l'existence de l'utilisateur : $e");
+    return false;
+  }
+}
+
+Future<String> fetchHiddenThingGoogle() async {
+  try {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection("hidden")
+        .limit(2) // Limite la requête au premier document
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      DocumentSnapshot snapshot = querySnapshot.docs.last;
+      Map<String, dynamic> userData = snapshot.data() as Map<String, dynamic>;
+      String? google = userData['google'];
+      return google ?? "";
+    } else {
+      print('Aucun document trouvé dans la collection "hidden"');
+      return "";
+    }
+  } catch (e) {
+    print('Erreur lors de la récupération des informations : $e');
+    return "";
+  }
+}
+
+Future<String> fetchHiddenThingApple() async {
+  try {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection("hidden")
+        .limit(2)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      DocumentSnapshot snapshot = querySnapshot.docs.first;
+      Map<String, dynamic> userData = snapshot.data() as Map<String, dynamic>;
+      String? apple = userData['apple'];
+      print(apple ?? "");
+      return apple ?? "";
+    } else {
+      print('Aucun document trouvé dans la collection "hidden"');
+      return "";
+    }
+  } catch (e) {
+    print('Erreur lors de la récupération des informations : $e');
+    return "";
+  }
+}
 
 // Interrupteur pour activer/désactiver une fonctionnalité (carré où on coche)
 class SettingToggle extends StatefulWidget {

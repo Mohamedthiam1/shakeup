@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
-import '../StoryPage.dart';
 import 'package:cap/pages/story2.dart';
 import 'package:cap/pages/story3.dart';
 import 'package:cap/pages/story4.dart';
 import 'package:cap/pages/story5.dart';
 import 'package:cap/pages/story6.dart';
 
-import '../home_page.dart';
+import 'StoryPage.dart';
+import 'home_page.dart';
+
 
 class ModeHistoirePage extends StatelessWidget {
   const ModeHistoirePage({super.key});

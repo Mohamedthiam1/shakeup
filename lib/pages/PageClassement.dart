@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../home_page.dart';
+import 'home_page.dart';
 
 class ClassementPage extends StatelessWidget {
   final List<Map<String, dynamic>> enfants = [

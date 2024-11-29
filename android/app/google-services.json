@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "442107302611",
+    "project_id": "shake-up1",
+    "storage_bucket": "shake-up1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:442107302611:android:eb00f531e8f20bf1c2fa26",
+        "android_client_info": {
+          "package_name": "com.esiea409.shakeup"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJeTTkg0NCuLdl1BfiF9taxQp9a6owczE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

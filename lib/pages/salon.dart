@@ -1,7 +1,7 @@
 import 'package:cap/pages/test-quiz.dart';
 import 'package:flutter/material.dart';
 
-import '../home_page.dart';
+import 'home_page.dart';
 
 // Page pour gérer les salons : création ou connexion
 class SalonPage extends StatelessWidget {

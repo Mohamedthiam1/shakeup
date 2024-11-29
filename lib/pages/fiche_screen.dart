@@ -3,7 +3,8 @@ import 'package:cap/pages/formation_avant.dart';
 import 'package:cap/pages/pendant_screen.dart';
 import 'package:flutter/material.dart';
 
-import '../home_page.dart';
+import 'home_page.dart';
+
 
 class FicheScreen extends StatefulWidget {
   const FicheScreen({super.key});
