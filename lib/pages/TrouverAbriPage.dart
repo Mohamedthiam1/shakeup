@@ -7,11 +7,22 @@ class TrouverAbriPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Trouver l’Abri',
-          style: TextStyle(fontFamily: 'Arima', fontSize: 20),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black), // Icône de flèche
+          onPressed: () {
+            Navigator.of(context).pop(); // Action de retour
+          },
         ),
-        backgroundColor: const Color(0xFFABC9A4),
+        title: const Text("Trouver l’Abri",
+          style: TextStyle(
+            fontFamily: 'Arima',
+            fontSize: 22,
+            fontWeight: FontWeight.w400,
+            color: Colors.black,
+          ),
+        ),
+        backgroundColor: Colors.green[100], // Couleur de fond verte pour l'AppBar
+        centerTitle: true,
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -103,7 +114,8 @@ class TrouverAbriPage extends StatelessWidget {
             style: const TextStyle(
               fontFamily: 'Arima',
               fontSize: 18,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w400,
+              color: Colors.black,
             ),
           ),
         ),
@@ -123,14 +135,24 @@ class TrouverAbriPage extends StatelessWidget {
           ),
           title: Text(
             isCorrect ? 'Bonne Réponse !' : 'Mauvaise Réponse',
-            style: const TextStyle(fontFamily: 'Arima', fontSize: 20),
+            style: const TextStyle(
+              fontFamily: 'Arima',
+              fontSize: 18,
+              fontWeight: FontWeight.w400,
+              color: Colors.black,
+            ),
             textAlign: TextAlign.center,
           ),
           content: Text(
             isCorrect
                 ? 'Félicitations, vous avez trouvé le bon abri !'
                 : 'Réessayez pour trouver le bon abri.',
-            style: const TextStyle(fontFamily: 'Arima', fontSize: 16),
+            style: const TextStyle(
+              fontFamily: 'Arima',
+              fontSize: 18,
+              fontWeight: FontWeight.w400,
+              color: Colors.black,
+            ),
             textAlign: TextAlign.center,
           ),
           actions: [
@@ -138,11 +160,11 @@ class TrouverAbriPage extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).pop(); // Ferme le dialogue
               },
-              child: const Text(
-                'OK',
+              child: const Text('OK',
                 style: TextStyle(
                   fontFamily: 'Arima',
-                  fontSize: 16,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w400,
                   color: Colors.black,
                 ),
               ),

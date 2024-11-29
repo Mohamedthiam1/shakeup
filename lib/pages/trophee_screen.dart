@@ -118,15 +118,29 @@ class _TropheeScreenState extends State<TropheeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Trophées et Badges'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black), // Icône de retour
+          onPressed: () {
+            Navigator.of(context).pop(); // Action de retour
+          },
+        ),
+        title: const Text("Trophées et Badges",
+          style: TextStyle(
+            fontFamily: 'Arima',
+            fontSize: 22,
+            fontWeight: FontWeight.w400,
+            color: Colors.black,
+          ),
+        ),
+        backgroundColor: Colors.green[100], // Couleur de fond verte pour l'AppBar
         centerTitle: true,
       ),
       body: ListView(
         children: [
           _buildSectionHeader('Badges'),
-          ...badges.map((badge) => _buildBadgeTile(badge)).toList(),
+          ...badges.map((badge) => _buildBadgeTile(badge)),
           _buildSectionHeader('Trophées'),
-          ...trophies.map((trophy) => _buildTrophyTile(trophy)).toList(),
+          ...trophies.map((trophy) => _buildTrophyTile(trophy)),
         ],
       ),
     );
@@ -144,7 +158,12 @@ class _TropheeScreenState extends State<TropheeScreen> {
         child: Center(
           child: Text(
             title,
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontFamily: 'Arima',
+              fontSize: 20,
+              fontWeight: FontWeight.w400,
+              color: Colors.black,
+            ),
           ),
         ),
       ),
@@ -160,7 +179,12 @@ class _TropheeScreenState extends State<TropheeScreen> {
       ),
       title: Text(
         badge.title,
-        style: TextStyle(fontWeight: FontWeight.bold),
+        style: TextStyle(
+          fontFamily: 'Arima',
+          fontSize: 18,
+          fontWeight: FontWeight.w400,
+          color: Colors.black,
+        ),
       ),
       subtitle: Text(badge.description),
     );
@@ -176,19 +200,28 @@ class _TropheeScreenState extends State<TropheeScreen> {
       title: Text(
         trophy.title,
         style: TextStyle(
-          fontWeight: FontWeight.bold,
+          fontFamily: 'Arima',
+          fontSize: 18,
+          fontWeight: FontWeight.w400,
           color: trophy.unlocked ? Colors.black : Colors.grey,
         ),
       ),
       subtitle: Text(
         trophy.description,
         style: TextStyle(
+          fontFamily: 'Arima',
+          fontSize: 18,
+          fontWeight: FontWeight.w400,
           color: trophy.unlocked ? Colors.black54 : Colors.grey,
         ),
       ),
       trailing: Text(
         '${trophy.points} pts',
-        style: TextStyle(color: trophy.unlocked ? Colors.black : Colors.grey),
+        style: TextStyle(
+            fontFamily: 'Arima',
+            fontSize: 18,
+            fontWeight: FontWeight.w400,
+            color: trophy.unlocked ? Colors.black : Colors.grey),
       ),
     );
   }

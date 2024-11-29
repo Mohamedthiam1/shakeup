@@ -1,104 +1,6 @@
 import 'package:flutter/material.dart';
 
-class FormationAvant extends StatelessWidget {
-  const FormationAvant({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[200],
-      appBar: AppBar(
-        title: const Text('Fiches'),
-        backgroundColor: Colors.green[200],
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          // Tab section
-          Container(
-            color: Colors.grey[300],
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            child: const Center(
-              child: Text(
-                "Fiches",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 10),
-
-          // Card buttons
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Column(
-              children: [
-                InfoCard(
-                  title: "Avant",
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const AvantPage()),
-                    );
-                  },
-                ),
-                const SizedBox(height: 10),
-                const InfoCard(title: "Pendant"),
-                const SizedBox(height: 10),
-                const InfoCard(title: "Après"),
-              ],
-            ),
-          ),
-          const Spacer(),
-
-          // Bottom navigation
-          //const BottomNavigationBarWidget(),
-        ],
-      ),
-    );
-  }
-}
-
-
-// Card widget for "Avant", "Pendant", "Après"
-class InfoCard extends StatelessWidget {
-  final String title;
-  final VoidCallback? onTap;
-
-  const InfoCard({super.key, required this.title, this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          color: const Color(0xFFF6DFC5),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 18,
-                color: Colors.black87,
-              ),
-            ),
-            const Icon(Icons.chevron_right),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-
-// New page for "Avant"
+//page d'informations "Avant un Séisme"
 class AvantPage extends StatelessWidget {
   const AvantPage({super.key});
 
@@ -106,24 +8,32 @@ class AvantPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Précautions Avant un Séisme"),
-        backgroundColor: Colors.green[300],
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black), // Icône de retour
+          onPressed: () {
+            Navigator.of(context).pop(); // Action de retour
+          },
+        ),
+        title: const Text("Avant un Séisme",
+          style: TextStyle(
+            fontFamily: 'Arima',
+            fontSize: 22,
+            fontWeight: FontWeight.w400,
+            color: Colors.black,
+          ),
+        ),
+        backgroundColor: Colors.green[100], // Couleur de fond verte pour l'AppBar
+        centerTitle: true,
       ),
+
       body: const Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16.0), // Marges autour du contenu pour un espacement uniforme
         child: SingleChildScrollView(
+          // Permet le défilement si le contenu dépasse la hauteur de l'écran
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.stretch, // Étend les children sur toute la largeur
             children: [
-              Text(
-                "Précautions à prendre avant un séisme",
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 20),
+              // Contenu de la page
               Text(
                 "- Établissez un plan de secours familial et choisissez un lieu sûr où se rassembler après le séisme.\n"
                     "- Assurez-vous que les meubles lourds sont bien fixés aux murs.\n"
@@ -134,7 +44,12 @@ class AvantPage extends StatelessWidget {
                     "- Préparez un kit de secours avec des provisions essentielles : eau, nourriture, lampe de poche, médicaments, etc.\n"
                     "- Préparez un kit de secours avec des provisions essentielles : eau, nourriture, lampe de poche, médicaments, etc.\n"
                     "- Informez-vous des procédures d’évacuation et des numéros d’urgence.",
-                style: TextStyle(fontSize: 18, color: Colors.black87),
+                style: TextStyle(
+                  fontFamily: 'Arima',
+                  fontSize: 18,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.black,
+                ),
               ),
               SizedBox(height: 20),
             ],

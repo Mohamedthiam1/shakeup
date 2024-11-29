@@ -1,5 +1,4 @@
 import 'package:cap/pages/reglages.dart';
-import 'package:cap/pages/salon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -25,6 +24,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: const HomePage(),
+      routes: {
+        '/settings': (context) => const SettingsPage(),
+        '/privacy': (context) => const PrivacyPolicyPage(),
+        '/terms': (context) => const TermsPage(),
+      },
     );
   }
 }

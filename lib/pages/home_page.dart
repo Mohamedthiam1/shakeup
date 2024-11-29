@@ -2,14 +2,12 @@ import 'package:cap/pages/PageAccueilHistoires.dart';
 import 'package:cap/pages/PageClassement.dart';
 import 'package:cap/pages/fiche_screen.dart';
 import 'package:cap/pages/mini_jeu_screen.dart';
-import 'package:cap/pages/trophee_screen.dart';
 import 'package:cap/pages/reglages.dart';
 import 'package:cap/pages/salon.dart';
 import 'package:cap/pages/test-quiz.dart';
+import 'package:cap/pages/trophee_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'StoryPage.dart';
-import 'TrouverAbriPage.dart';
+
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -17,7 +15,9 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: HomePageContent(),
+      body: SafeArea(
+        child: HomePageContent(),
+      ),
     );
   }
 }
@@ -52,7 +52,7 @@ class NavigationBar extends StatelessWidget {
     return Container(
       width: width, // Largeur de l'écran
       height: 66, // hauteur selon ton modèle
-      padding: const EdgeInsets.symmetric(horizontal: 25),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       color:
           const Color(0xFFE6EFE3), // couleur de fond de la barre de navigation
       child: Row(
@@ -62,7 +62,7 @@ class NavigationBar extends StatelessWidget {
           // Trois icônes sur la gauche
           IconButton(
             icon: Image.asset(
-              'assets/images/profil.png', // Remplacez par le chemin de votre image
+              'assets/images/profil.png',
               width: 35,
               height: 35,
             ),
@@ -92,7 +92,7 @@ class NavigationBar extends StatelessWidget {
                                   color: Colors.transparent,
                                 ),
                                 child: Image.asset(
-                                  'assets/images/profil.png', // Remplacez par le chemin de votre image
+                                  'assets/images/profil.png',
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -129,10 +129,8 @@ class NavigationBar extends StatelessWidget {
                               ),
                             ],
                           ),
-                          const SizedBox(
-                              height: 10), // Espacement entre les éléments
+                          const SizedBox(height: 10), // Espacement entre les éléments
 
-                          // Zone de texte plus petite
                           Container(
                             width: 148,
                             height: 45,
@@ -161,8 +159,7 @@ class NavigationBar extends StatelessWidget {
                               ),
                             ),
                           ),
-                          const SizedBox(
-                              height: 10), // Espacement entre les éléments
+                          const SizedBox(height: 10), // Espacement entre les éléments
 
                           // Zone pour les photos de profils
                           Container(
@@ -192,82 +189,71 @@ class NavigationBar extends StatelessWidget {
                                       decoration: const BoxDecoration(
                                         shape:
                                             BoxShape.circle, // Forme circulaire
-                                        color: Colors
-                                            .white, // Couleur de fond blanche
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Color(
-                                                0x40000000), // Couleur de l'ombre
-                                            blurRadius: 4, // Flou de l'ombre
-                                            offset: Offset(
-                                                0, 2), // Décalage de l'ombre
-                                          ),
-                                        ],
-                                      ),
-                                      child: ClipOval(
-                                        child: Image.asset(
-                                          'assets/images/an1.jpg', // Chemin de votre image
-                                          width: 60,
-                                          height: 60,
-                                          fit: BoxFit
-                                              .cover, // Ajustement de l'image
-                                        ),
-                                      ),
-                                    ),
-
-                                    Container(
-                                      width: 60, // Largeur du conteneur
-                                      height: 60, // Hauteur du conteneur
-                                      decoration: const BoxDecoration(
-                                        shape:
-                                            BoxShape.circle, // Forme circulaire
-                                        color: Colors
-                                            .white, // Couleur de fond blanche
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Color(
-                                                0x40000000), // Couleur de l'ombre
-                                            blurRadius: 4, // Flou de l'ombre
-                                            offset: Offset(
-                                                0, 2), // Décalage de l'ombre
-                                          ),
-                                        ],
-                                      ),
-                                      child: ClipOval(
-                                        child: Image.asset(
-                                          'assets/images/an2.png', // Chemin de votre image
-                                          width: 60,
-                                          height: 60,
-                                          fit: BoxFit
-                                              .cover, // Ajustement de l'image
-                                        ),
-                                      ),
-                                    ),
-
-                                    Container(
-                                      width: 60, // Largeur du conteneur
-                                      height: 60, // Hauteur du conteneur
-                                      decoration: const BoxDecoration(
-                                        shape:
-                                            BoxShape.circle, // Forme circulaire
-                                        color: Colors
-                                            .white, // Couleur de fond blanche
+                                        color: Colors.white, // Couleur de fond blanche
                                         boxShadow: [
                                           BoxShadow(
                                             color: Color(0x40000000), // Couleur de l'ombre
                                             blurRadius: 4, // Flou de l'ombre
-                                            offset: Offset(
-                                                0, 2), // Décalage de l'ombre
+                                            offset: Offset(0, 2), // Décalage de l'ombre
                                           ),
                                         ],
                                       ),
                                       child: ClipOval(
                                         child: Image.asset(
-                                          'assets/images/an3.jpg', // Chemin de votre image
+                                          'assets/images/an1.jpg',
                                           width: 60,
                                           height: 60,
-                                          fit: BoxFit
-                                              .cover, // Ajustement de l'image
+                                          fit: BoxFit.cover, // Ajustement de l'image
+                                        ),
+                                      ),
+                                    ),
+
+                                    Container(
+                                      width: 60, // Largeur du conteneur
+                                      height: 60, // Hauteur du conteneur
+                                      decoration: const BoxDecoration(
+                                        shape:
+                                            BoxShape.circle, // Forme circulaire
+                                        color: Colors.white, // Couleur de fond blanche
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Color(0x40000000), // Couleur de l'ombre
+                                            blurRadius: 4, // Flou de l'ombre
+                                            offset: Offset(0, 2), // Décalage de l'ombre
+                                          ),
+                                        ],
+                                      ),
+                                      child: ClipOval(
+                                        child: Image.asset(
+                                          'assets/images/an2.png',
+                                          width: 60,
+                                          height: 60,
+                                          fit: BoxFit.cover, // Ajustement de l'image
+                                        ),
+                                      ),
+                                    ),
+
+                                    Container(
+                                      width: 60, // Largeur du conteneur
+                                      height: 60, // Hauteur du conteneur
+                                      decoration: const BoxDecoration(
+                                        shape:
+                                            BoxShape.circle, // Forme circulaire
+                                        color: Colors.white, // Couleur de fond blanche
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Color(0x40000000), // Couleur de l'ombre
+                                            blurRadius: 4, // Flou de l'ombre
+                                            offset: Offset(0, 2), // Décalage de l'ombre
+                                          ),
+                                        ],
+                                      ),
+                                      child: ClipOval(
+                                        child: Image.asset(
+                                          'assets/images/an3.jpg',
+                                          width: 60,
+                                          height: 60,
+                                          fit: BoxFit.cover, // Ajustement de l'image
                                         ),
                                       ),
                                     ),
@@ -284,25 +270,21 @@ class NavigationBar extends StatelessWidget {
                                       decoration: const BoxDecoration(
                                         shape:
                                             BoxShape.circle, // Forme circulaire
-                                        color: Colors
-                                            .white, // Couleur de fond blanche
+                                        color: Colors.white, // Couleur de fond blanche
                                         boxShadow: [
                                           BoxShadow(
-                                            color: Color(
-                                                0x40000000), // Couleur de l'ombre
+                                            color: Color(0x40000000), // Couleur de l'ombre
                                             blurRadius: 4, // Flou de l'ombre
-                                            offset: Offset(
-                                                0, 2), // Décalage de l'ombre
+                                            offset: Offset(0, 2), // Décalage de l'ombre
                                           ),
                                         ],
                                       ),
                                       child: ClipOval(
                                         child: Image.asset(
-                                          'assets/images/an4.jpg', // Chemin de votre image
+                                          'assets/images/an4.jpg',
                                           width: 60,
                                           height: 60,
-                                          fit: BoxFit
-                                              .cover, // Ajustement de l'image
+                                          fit: BoxFit.cover, // Ajustement de l'image
                                         ),
                                       ),
                                     ),
@@ -312,25 +294,21 @@ class NavigationBar extends StatelessWidget {
                                       decoration: const BoxDecoration(
                                         shape:
                                             BoxShape.circle, // Forme circulaire
-                                        color: Colors
-                                            .white, // Couleur de fond blanche
+                                        color: Colors.white, // Couleur de fond blanche
                                         boxShadow: [
                                           BoxShadow(
-                                            color: Color(
-                                                0x40000000), // Couleur de l'ombre
+                                            color: Color(0x40000000), // Couleur de l'ombre
                                             blurRadius: 4, // Flou de l'ombre
-                                            offset: Offset(
-                                                0, 2), // Décalage de l'ombre
+                                            offset: Offset(0, 2), // Décalage de l'ombre
                                           ),
                                         ],
                                       ),
                                       child: ClipOval(
                                         child: Image.asset(
-                                          'assets/images/an5.jpg', // Chemin de votre image
+                                          'assets/images/an5.jpg',
                                           width: 60,
                                           height: 60,
-                                          fit: BoxFit
-                                              .cover, // Ajustement de l'image
+                                          fit: BoxFit.cover, // Ajustement de l'image
                                         ),
                                       ),
                                     ),
@@ -340,25 +318,21 @@ class NavigationBar extends StatelessWidget {
                                       decoration: const BoxDecoration(
                                         shape:
                                             BoxShape.circle, // Forme circulaire
-                                        color: Colors
-                                            .white, // Couleur de fond blanche
+                                        color: Colors.white, // Couleur de fond blanche
                                         boxShadow: [
                                           BoxShadow(
-                                            color: Color(
-                                                0x40000000), // Couleur de l'ombre
+                                            color: Color(0x40000000), // Couleur de l'ombre
                                             blurRadius: 4, // Flou de l'ombre
-                                            offset: Offset(
-                                                0, 2), // Décalage de l'ombre
+                                            offset: Offset(0, 2), // Décalage de l'ombre
                                           ),
                                         ],
                                       ),
                                       child: ClipOval(
                                         child: Image.asset(
-                                          'assets/images/an6.png', // Chemin de votre image
+                                          'assets/images/an6.png',
                                           width: 60,
                                           height: 60,
-                                          fit: BoxFit
-                                              .cover, // Ajustement de l'image
+                                          fit: BoxFit.cover, // Ajustement de l'image
                                         ),
                                       ),
                                     ),
@@ -385,338 +359,6 @@ class NavigationBar extends StatelessWidget {
             ),
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => TropheeScreen()));
-              // showDialog(
-              //   context: context,
-              //   builder: (BuildContext context) {
-              //     return Dialog(
-              //       shape: RoundedRectangleBorder(
-              //         borderRadius: BorderRadius.circular(8.0),
-              //       ),
-              //       backgroundColor: Colors.white,
-              //       child: SizedBox(
-              //         width: 402,
-              //         child: Padding(
-              //           padding: const EdgeInsets.all(16.0),
-              //           child: SingleChildScrollView( // Ajout de SingleChildScrollView pour le défilement automatique
-              //             child: Column(
-              //               crossAxisAlignment: CrossAxisAlignment.start,
-              //               children: [
-              //                 Center(
-              //                   child: Text(
-              //                     'Trophées et badges',
-              //                     style: GoogleFonts.arima(
-              //                       fontSize: 18,
-              //                       fontWeight: FontWeight.w400,
-              //                       letterSpacing: -0.15,
-              //                       color: Colors.black,
-              //                     ),
-              //                   ),
-              //                 ),
-              //                 const SizedBox(height: 10),
-              //                 // Zone pour Badges avec un Container stylisé
-              //                 Container(
-              //                   width: 359,
-              //                   height: 37,
-              //                   decoration: const BoxDecoration(
-              //                     color: Color(0xFFC7E4BF),
-              //                     borderRadius: BorderRadius.only(
-              //                       topLeft: Radius.circular(15),
-              //                       topRight: Radius.circular(15),
-              //                       bottomLeft: Radius.circular(15),
-              //                       bottomRight: Radius.circular(15),
-              //                     ),
-              //                   ),
-              //                   alignment: Alignment.center,
-              //                   child:Text(
-              //                     'Badges',
-              //                     style: GoogleFonts.arima(
-              //                       fontSize: 18, // Taille du texte
-              //                       fontWeight: FontWeight.w400,
-              //                       letterSpacing: -0.15,
-              //                       color: Colors.black,
-              //                     ),
-              //                   ),
-              //
-              //                 ),
-              //                 const SizedBox(height: 8),
-              //
-              //                 // Badge 1
-              //                 Row(
-              //                   crossAxisAlignment: CrossAxisAlignment.start,
-              //                   children: [
-              //                     Image.asset(
-              //                       'assets/images/im1.png',
-              //                       width: 30,
-              //                       height: 30,
-              //                     ),
-              //                     const SizedBox(width: 8),
-              //                     const Expanded(
-              //                       child: Column(
-              //                         crossAxisAlignment: CrossAxisAlignment.start,
-              //                         children: [
-              //                           Text(
-              //                             'Expert en sécurité',
-              //                             style: TextStyle(
-              //                               fontFamily: 'Arima',
-              //                               fontSize: 16,
-              //                               fontWeight: FontWeight.w400,
-              //                               color: Colors.black,
-              //                               letterSpacing: -0.15,
-              //                             ),
-              //                           ),
-              //                           Text(
-              //                             'Description du badge pour illustrer les compétences de sécurité.',
-              //                             style: TextStyle(
-              //                               fontFamily: 'Arima',
-              //                               fontSize: 14,
-              //                               fontWeight: FontWeight.w400,
-              //                               color: Colors.blue,
-              //                               letterSpacing: -0.15,
-              //                             ),
-              //                           ),
-              //                         ],
-              //                       ),
-              //                     ),
-              //                   ],
-              //                 ),
-              //                 const SizedBox(height: 20),
-              //
-              //                 // Badge 2
-              //                 Row(
-              //                   crossAxisAlignment: CrossAxisAlignment.start,
-              //                   children: [
-              //                     Image.asset(
-              //                       'assets/images/2.png',
-              //                       width: 30,
-              //                       height: 30,
-              //                     ),
-              //                     const SizedBox(width: 8),
-              //                     const Expanded(
-              //                       child: Column(
-              //                         crossAxisAlignment: CrossAxisAlignment.start,
-              //                         children: [
-              //                           Text(
-              //                             'Défenseur de la nature',
-              //                             style: TextStyle(
-              //                               fontFamily: 'Arima',
-              //                               fontSize: 16,
-              //                               fontWeight: FontWeight.w400,
-              //                               color: Colors.black,
-              //                               letterSpacing: -0.15,
-              //                             ),
-              //                           ),
-              //                           Text(
-              //                             'Récompense pour les actions en faveur de la nature.',
-              //                             style: TextStyle(
-              //                               fontFamily: 'Arima',
-              //                               fontSize: 14,
-              //                               fontWeight: FontWeight.w400,
-              //                               color: Colors.blue,
-              //                               letterSpacing: -0.15,
-              //                             ),
-              //                           ),
-              //                         ],
-              //                       ),
-              //                     ),
-              //                   ],
-              //                 ),
-              //                 const SizedBox(height: 20),
-              //
-              //                 // Badge 3
-              //                 Row(
-              //                   crossAxisAlignment: CrossAxisAlignment.start,
-              //                   children: [
-              //                     Image.asset(
-              //                       'assets/images/3.png',
-              //                       width: 30,
-              //                       height: 30,
-              //                     ),
-              //                     const SizedBox(width: 8),
-              //                     const Expanded(
-              //                       child: Column(
-              //                         crossAxisAlignment: CrossAxisAlignment.start,
-              //                         children: [
-              //                           Text(
-              //                             'Maître de la résilience',
-              //                             style: TextStyle(
-              //                               fontFamily: 'Arima',
-              //                               fontSize: 16,
-              //                               fontWeight: FontWeight.w400,
-              //                               color: Colors.black,
-              //                               letterSpacing: -0.15,
-              //                             ),
-              //                           ),
-              //                           Text(
-              //                             'Atteint pour surmonter des défis difficiles.',
-              //                             style: TextStyle(
-              //                               fontFamily: 'Arima',
-              //                               fontSize: 14,
-              //                               fontWeight: FontWeight.w400,
-              //                               color: Colors.blue,
-              //                               letterSpacing: -0.15,
-              //                             ),
-              //                           ),
-              //                         ],
-              //                       ),
-              //                     ),
-              //                   ],
-              //                 ),
-              //                 const SizedBox(height: 20),
-              //
-              //                 // Badge 4
-              //                 Row(
-              //                   crossAxisAlignment: CrossAxisAlignment.start,
-              //                   children: [
-              //                     Image.asset(
-              //                       'assets/images/4.png',
-              //                       width: 30,
-              //                       height: 30,
-              //                     ),
-              //                     const SizedBox(width: 8),
-              //                     const Expanded(
-              //                       child: Column(
-              //                         crossAxisAlignment: CrossAxisAlignment.start,
-              //                         children: [
-              //                           Text(
-              //                             'Ambassadeur de la paix',
-              //                             style: TextStyle(
-              //                               fontFamily: 'Arima',
-              //                               fontSize: 16,
-              //                               fontWeight: FontWeight.w400,
-              //                               color: Colors.black,
-              //                               letterSpacing: -0.15,
-              //                             ),
-              //                           ),
-              //                           Text(
-              //                             'Remis pour les contributions à la paix.',
-              //                             style: TextStyle(
-              //                               fontFamily: 'Arima',
-              //                               fontSize: 14,
-              //                               fontWeight: FontWeight.w400,
-              //                               color: Colors.blue,
-              //                               letterSpacing: -0.15,
-              //                             ),
-              //                           ),
-              //                         ],
-              //                       ),
-              //                     ),
-              //                   ],
-              //                 ),
-              //                 const SizedBox(height: 45),
-              //
-              //                 // Zone pour Badges avec un Container stylisé
-              //                 Container(
-              //                   width: 359,
-              //                   height: 37,
-              //                   decoration: const BoxDecoration(
-              //                     color: Color(0xFFC7E4BF),
-              //                     borderRadius: BorderRadius.only(
-              //                       topLeft: Radius.circular(15),
-              //                       topRight: Radius.circular(15),
-              //                       bottomLeft: Radius.circular(15),
-              //                       bottomRight: Radius.circular(15),
-              //                     ),
-              //                   ),
-              //                   alignment: Alignment.center,
-              //                   child:Text( 'Trophées',
-              //                     style: GoogleFonts.arima(
-              //                       fontSize: 18,
-              //                       fontWeight: FontWeight.w400,
-              //                       letterSpacing: -0.15,
-              //                       color: Colors.black,
-              //                     ),
-              //                   ),
-              //                 ),
-              //                 const SizedBox(height: 20),
-              //
-              //                 // Trophée 1
-              //                 Row(
-              //                   crossAxisAlignment: CrossAxisAlignment.start,
-              //                   children: [
-              //                     Image.asset(
-              //                       'assets/images/5.png',
-              //                       width: 30,
-              //                       height: 30,
-              //                     ),
-              //                     const SizedBox(width: 8),
-              //                     const Expanded(
-              //                       child: Column(
-              //                         crossAxisAlignment: CrossAxisAlignment.start,
-              //                         children: [
-              //                           Text(
-              //                             'Champion de la survie',
-              //                             style: TextStyle(
-              //                               fontFamily: 'Arima',
-              //                               fontSize: 16,
-              //                               fontWeight: FontWeight.w400,
-              //                               color: Colors.black,
-              //                               letterSpacing: -0.15,
-              //                             ),
-              //                           ),
-              //                           Text(
-              //                             'Gagné pour avoir terminé toutes les étapes de préparation.',
-              //                             style: TextStyle(
-              //                               fontFamily: 'Arima',
-              //                               fontSize: 14,
-              //                               fontWeight: FontWeight.w400,
-              //                               color: Colors.blue,
-              //                               letterSpacing: -0.15,
-              //                             ),
-              //                           ),
-              //                         ],
-              //                       ),
-              //                     ),
-              //                   ],
-              //                 ),
-              //                 const SizedBox(height: 20),
-              //
-              //                 // Trophée 2
-              //                 Row(
-              //                   crossAxisAlignment: CrossAxisAlignment.start,
-              //                   children: [
-              //                     Image.asset(
-              //                       'assets/images/6.png',
-              //                       width: 30,
-              //                       height: 30,
-              //                     ),
-              //                     const SizedBox(width: 8),
-              //                     const Expanded(
-              //                       child: Column(
-              //                         crossAxisAlignment: CrossAxisAlignment.start,
-              //                         children: [
-              //                           Text(
-              //                             'Maître des premiers soins',
-              //                             style: TextStyle(
-              //                               fontFamily: 'Arima',
-              //                               fontSize: 16,
-              //                               fontWeight: FontWeight.w400,
-              //                               color: Colors.black,
-              //                               letterSpacing: -0.15,
-              //                             ),
-              //                           ),
-              //                           Text(
-              //                             'Récompensé pour avoir appris les bases des premiers secours.',
-              //                             style: TextStyle(
-              //                               fontFamily: 'Arima',
-              //                               fontSize: 14,
-              //                               fontWeight: FontWeight.w400,
-              //                               color: Colors.blue,
-              //                               letterSpacing: -0.15,
-              //                             ),
-              //                           ),
-              //                         ],
-              //                       ),
-              //                     ),
-              //                   ],
-              //                 ),
-              //               ],
-              //             ),
-              //           ),
-              //         ),
-              //       ),
-              //     );
-              //   },
-              // );
             },
           ),
 
@@ -732,8 +374,22 @@ class NavigationBar extends StatelessWidget {
                 context: context,
                 builder: (BuildContext context) {
                   return const AlertDialog(
-                    title: Text('Nb points'),
-                    content: Text('Options de points'),
+                    title: Text('Nb points',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontFamily: 'Arima',
+                        fontWeight: FontWeight.w400,
+                        color: Colors.black,
+                      ),
+                    ),
+                    content: Text('Options de points',
+                      style: TextStyle(
+                        fontFamily: 'Arima',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.black,
+                      ),
+                    ),
                   );
                 },
               );
@@ -743,11 +399,12 @@ class NavigationBar extends StatelessWidget {
           // Titre de l'application "ShakeUp"
           Text(
             'ShakeUp',
-            style: GoogleFonts.arima(
+            style: TextStyle(
               fontSize: 30,
               fontWeight: FontWeight.w400,
               letterSpacing: -0.15,
               color: Colors.black,
+              fontFamily: 'Arima',
             ),
           ),
 
@@ -786,8 +443,9 @@ class NavigationBar extends StatelessWidget {
                               children: [
                                 Text(
                                   'Niveau 1',
-                                  style: GoogleFonts.arima(
+                                  style: TextStyle(
                                     fontSize: 18,
+                                    fontFamily: 'Arima',
                                     fontWeight: FontWeight.w700,
                                     color: Colors.black,
                                     letterSpacing: -0.15,
@@ -798,8 +456,9 @@ class NavigationBar extends StatelessWidget {
                                   child: Text(
                                     'Apprendre les bases de la préparation avant un séisme',
                                     textAlign: TextAlign.center, // Aligner le texte au centre
-                                    style: GoogleFonts.arima(
+                                    style: TextStyle(
                                       fontSize: 16,
+                                      fontFamily: 'Arima',
                                       fontWeight: FontWeight.w400,
                                       color: Colors.black,
                                       letterSpacing: -0.15,
@@ -823,8 +482,9 @@ class NavigationBar extends StatelessWidget {
                               children: [
                                 Text(
                                   'Niveau 2',
-                                  style: GoogleFonts.arima(
+                                  style: TextStyle(
                                     fontSize: 18,
+                                    fontFamily: 'Arima',
                                     fontWeight: FontWeight.w700,
                                     color: Colors.black,
                                     letterSpacing: -0.15,
@@ -835,8 +495,9 @@ class NavigationBar extends StatelessWidget {
                                   child: Text(
                                     'Réagir rapidement et efficacement pendant un tremblement de terre',
                                     textAlign: TextAlign.center, // Aligner le texte au centre
-                                    style: GoogleFonts.arima(
+                                    style: TextStyle(
                                       fontSize: 16,
+                                      fontFamily: 'Arima',
                                       fontWeight: FontWeight.w400,
                                       color: Colors.black,
                                       letterSpacing: -0.15,
@@ -859,8 +520,9 @@ class NavigationBar extends StatelessWidget {
                               children: [
                                 Text(
                                   'Niveau 3',
-                                  style: GoogleFonts.arima(
+                                  style: TextStyle(
                                     fontSize: 18,
+                                    fontFamily: 'Arima',
                                     fontWeight: FontWeight.w700,
                                     color: Colors.black,
                                     letterSpacing: -0.15,
@@ -871,8 +533,9 @@ class NavigationBar extends StatelessWidget {
                                   child: Text(
                                     'Sécuriser l\'environnement et éviter les dangers après un séisme.',
                                     textAlign: TextAlign.center, // Aligner le texte au centre
-                                    style: GoogleFonts.arima(
+                                    style: TextStyle(
                                       fontSize: 16,
+                                      fontFamily: 'Arima',
                                       fontWeight: FontWeight.w400,
                                       color: Colors.black,
                                       letterSpacing: -0.15,
@@ -901,15 +564,6 @@ class NavigationBar extends StatelessWidget {
             ),
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => SalonPage()));
-              // showDialog(
-              //   context: context,
-              //   builder: (BuildContext context) {
-              //     return const AlertDialog(
-              //       title: Text('groupe'),
-              //       content: Text('Options de groupe'),
-              //     );
-              //   },
-              // );
             },
           ),
           IconButton(
@@ -920,15 +574,6 @@ class NavigationBar extends StatelessWidget {
             ),
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => SettingsPage()));
-              // showDialog(
-              //   context: context,
-              //   builder: (BuildContext context) {
-              //     return const AlertDialog(
-              //       title: Text('Paramètres'),
-              //       content: Text('Options de réglage'),
-              //     );
-              //   },
-              // );
             },
           ),
         ],
@@ -969,8 +614,9 @@ class CenterContent extends StatelessWidget {
           ),
           child: Text(
             'Start',
-            style: GoogleFonts.arima(
+            style: TextStyle(
               fontSize: 25,
+              fontFamily: 'Arima',
               fontWeight: FontWeight.w400,
               letterSpacing: -0.15,
               color: Colors.black,
@@ -1003,7 +649,6 @@ class Footer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 78,
-      padding: EdgeInsets.only(bottom: 10),
       color: const Color(0xFFEBEBEB),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -1014,8 +659,8 @@ class Footer extends StatelessWidget {
               borderRadius: BorderRadius.circular(5),
               child: Image.asset(
                 'assets/images/fichiers.png',
-                width: 40, // Ajustez la taille
-                height: 40,
+                width: 50, // Ajustez la taille
+                height: 50,
               ),
             ),
             onPressed: () {
@@ -1027,14 +672,14 @@ class Footer extends StatelessWidget {
             },
           ),
 
-// Image pour "Histoire"
+      // Image pour "Histoire"
           IconButton(
             icon: ClipRRect(
               borderRadius: BorderRadius.circular(5),
               child: Image.asset(
                 'assets/images/livres.png',
-                width: 40,
-                height: 40,
+                width: 50,
+                height: 50,
               ),
             ),
             onPressed: () {
@@ -1050,18 +695,22 @@ class Footer extends StatelessWidget {
           // Conteneur pour l'image de "Accueil" avec un arrière-plan plus foncé
           Container(
             decoration: BoxDecoration(
-              color: const Color(0xFFD0D0D0), // Couleur de fond plus foncée
+              color: const Color(0xFFD9D9D9), // Couleur de fond plus foncée
               borderRadius: BorderRadius.circular(10), // Effet de bord arrondi
             ),
-            padding: const EdgeInsets.all(8), // Espace autour de l'image
+            padding: const EdgeInsets.all(12), // Espace autour de l'image
             child: IconButton(
               icon: Image.asset(
                 'assets/images/home.png',
-                width: 35,
-                height: 35,
+                width: 45,
+                height: 45,
               ),
               onPressed: () {
                 // Rester dans la page d'accueil
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePage()), // Lien vers la page d'histoire
+                );
               },
             ),
           ),
@@ -1072,8 +721,8 @@ class Footer extends StatelessWidget {
               borderRadius: BorderRadius.circular(5),
               child: Image.asset(
                 'assets/images/jeux.png',
-                width: 40,
-                height: 40,
+                width: 50,
+                height: 50,
               ),
             ),
             onPressed: () {
@@ -1091,8 +740,8 @@ class Footer extends StatelessWidget {
               borderRadius: BorderRadius.circular(5),
               child: Image.asset(
                 'assets/images/classement.png',
-                width: 40,
-                height: 40,
+                width: 50,
+                height: 50,
               ),
             ),
             onPressed: () {
@@ -1102,7 +751,6 @@ class Footer extends StatelessWidget {
               );
             },
           ),
-
         ],
       ),
     );

@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 
-class StoryPage extends StatelessWidget {
-  const StoryPage({super.key});
+class Story3 extends StatelessWidget {
+  const Story3({super.key});
 
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
       body: SafeArea(
-        child: StoryPageContent(),
+        child: StoryPageContent3(),
       ),
     );
   }
 }
 
-class StoryPageContent extends StatelessWidget {
-  const StoryPageContent({super.key});
+class StoryPageContent3 extends StatelessWidget {
+  const StoryPageContent3({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class StoryPageContent extends StatelessWidget {
       children: [
         // Introduction à l'histoire
         Text(
-          'L\'histoire de Tiko et le tremblement de terre',
+          'Le plan malin de Zina la zèbre',
           style: TextStyle(
             fontSize: 28,
             fontFamily: 'Arima',
@@ -40,7 +40,7 @@ class StoryPageContent extends StatelessWidget {
             Expanded(
               flex: 3,
               child: Text(
-                'Tiko est un petit oiseau qui vit dans un grand arbre avec ses amis. Un jour, alors qu\'il joue dehors, il ressent une secousse sous ses pattes. "Qu\'est-ce que c\'est ?", se demande-t-il.',
+                'Zina la zèbre vivait dans une savane magnifique où le sol était parfois secoué par de grands tremblements. Un jour, alors qu’elle jouait près des arbres, elle sentit une forte secousse. Les branches se balançaient dangereusement, et des fruits tombaient à terre.',
                 style: TextStyle(
                   fontFamily: 'Arima',
                   fontSize: 18,
@@ -54,7 +54,7 @@ class StoryPageContent extends StatelessWidget {
             Expanded(
               flex: 2,
               child: Image.asset(
-                'assets/images/an2.png',
+                'assets/images/zebre1.png',
                 height: 150,
                 fit: BoxFit.contain,  // Utilisation de BoxFit.contain
               ),
@@ -73,7 +73,7 @@ class StoryPageContent extends StatelessWidget {
               child: AspectRatio(
                 aspectRatio: 16 / 9, // Par exemple, pour un ratio 16:9
                 child: Image.asset(
-                  'assets/images/an2.png',
+                  'assets/images/zebre2.png',
                   height: 150,
                   fit: BoxFit.contain,  // Utilisation de BoxFit.contain
                 ),
@@ -84,7 +84,7 @@ class StoryPageContent extends StatelessWidget {
             Expanded(
               flex: 3,
               child: Text(
-                'C\'était un tremblement de terre ! Tiko a eu un peu peur, mais il se souvient de ce qu\'il a appris : "Ne panique pas, trouve un endroit sûr !"',
+                'Zina se rappela du plan que sa maman lui avait enseigné : "Si le sol tremble, reste loin des arbres et trouve un endroit dégagé." Elle galopa rapidement jusqu’à une grande plaine sans obstacle et attendit que les secousses s’arrêtent. Elle vit d’autres animaux courir dans tous les sens, mais elle leur cria de venir la rejoindre dans la plaine.',
                 style: TextStyle(
                   fontFamily: 'Arima',
                   fontSize: 18,
@@ -107,7 +107,7 @@ class StoryPageContent extends StatelessWidget {
             Expanded(
               flex: 3,
               child: Text(
-                'Tiko se cache sous une grande pierre, à l\'abri des objets qui peuvent tomber. Heureusement, il se rappelle aussi de vérifier s\'il est en sécurité avec ses amis.',
+                'Quand tout redevint calme, les animaux la remercièrent pour son sang-froid et son plan intelligent. Depuis ce jour, Zina enseigna à tous les habitants de la savane les bons gestes pour rester en sécurité, même lorsque la terre devenait capricieuse.',
                 style: TextStyle(
                   fontFamily: 'Arima',
                   fontSize: 18,
@@ -121,7 +121,7 @@ class StoryPageContent extends StatelessWidget {
             Expanded(
               flex: 2,
               child: Image.asset(
-                'assets/images/an2.png',
+                'assets/images/zebre3.png',
                 height: 150,
                 fit: BoxFit.contain,  // Utilisation de BoxFit.contain
               ),
@@ -133,7 +133,7 @@ class StoryPageContent extends StatelessWidget {
 
         // Conclusion
         Text(
-          'Merci d\'avoir lu cette histoire avec Tiko ! Maintenant, tu sais comment réagir en cas de tremblement de terre. Ensemble, nous sommes plus forts et plus sûrs !',
+          'Merci d\'avoir lu cette histoire avec Zina ! Maintenant, tu sais comment réagir en cas de tremblement de terre. Ensemble, nous sommes plus forts et plus sûrs !',
           style: TextStyle(
             fontFamily: 'Arima',
             fontSize: 18,
