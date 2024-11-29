@@ -1,8 +1,9 @@
-import 'package:cap/home_page.dart';
 import 'package:cap/pages/reglages.dart';
 import 'package:cap/pages/salon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import 'pages/home_page.dart';
 
 Future<void> main() async{
   WidgetsFlutterBinding.ensureInitialized();

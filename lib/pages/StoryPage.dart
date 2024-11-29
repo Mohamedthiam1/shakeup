@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'home_page.dart';
+import 'KitDeSurvie.dart';
+
 
 class StoryPage extends StatelessWidget {
   const StoryPage({super.key});

@@ -8,8 +8,6 @@ import 'package:cap/pages/salon.dart';
 import 'package:cap/pages/test-quiz.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import 'AdminQuizPage.dart';
 import 'StoryPage.dart';
 import 'TrouverAbriPage.dart';
 
@@ -19,9 +17,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: SafeArea(
-        child: HomePageContent(),
-      ),
+      body: HomePageContent(),
     );
   }
 }
@@ -56,7 +52,7 @@ class NavigationBar extends StatelessWidget {
     return Container(
       width: width, // Largeur de l'écran
       height: 66, // hauteur selon ton modèle
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 25),
       color:
           const Color(0xFFE6EFE3), // couleur de fond de la barre de navigation
       child: Row(
@@ -1007,6 +1003,7 @@ class Footer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 78,
+      padding: EdgeInsets.only(bottom: 10),
       color: const Color(0xFFEBEBEB),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
