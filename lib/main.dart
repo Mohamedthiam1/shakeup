@@ -22,6 +22,10 @@ Future<void> main() async{
   await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform
   );
+
+  if(sharedPreferences!.getInt("points") == null) {
+    sharedPreferences!.setInt("points", 0);
+  }
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   FirebaseMessaging.instance.requestPermission();
   await [Permission.microphone, Permission.camera].request();

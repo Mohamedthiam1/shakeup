@@ -26,6 +26,10 @@
 	<true/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
+	<key>NSCameraUsageDescription</key>
+	<string>ShakeUp utilise votre caméra pour prendre des images.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Charger des images pour votre photo de profil.</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>CFBundleURLTypes</key>

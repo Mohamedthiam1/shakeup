@@ -1,3 +1,5 @@
+import 'package:cap/admin/add_quizz_screen.dart';
+import 'package:cap/admin/manage_quizz_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -108,6 +110,26 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                   ),
                   const SizedBox(height: 20),
+
+                  if(sharedPreferences!.getString("uid") != null)
+                  ElevatedButton(
+                      onPressed: (){
+                        setState(() {
+                          setPortrait = true;
+                        });
+                        SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+                            .then((_) {
+                          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => ManageQuizzScreen()));
+                          // Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => AddQuizzScreen()));
+                        });
+                      }, style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFC7E4BF),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7))
+                  ), child: Row(
+                    children: [
+                      Text("Gérer Quizz", style: TextStyle(color: Colors.black),),
+                    ],
+                  )),
 
                   // Options de réglages avec des interrupteurs
                   const SettingToggle(title: 'Son'),
@@ -275,7 +297,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ],
         ),
         ElevatedButton(
-          onPressed: () {
+          onPressed: sharedPreferences!.getString("uid") != null ? null : () {
             if(label == 'Google') {
               print("Google signIn started");
               GoogleSignIn(clientId: DefaultFirebaseOptions.currentPlatform.iosClientId).signIn().then((account) async {
@@ -353,42 +375,11 @@ class _SettingsPageState extends State<SettingsPage> {
         if(snapshot.data()!["status"] == "approved" || snapshot.data()!["status"] == "waiting") {
           await sharedPreferences!.setString("uid", currentUser.uid);
           await sharedPreferences!.setString("email", snapshot.data()!["email"] ?? "");
-          await sharedPreferences!.setString("bio", snapshot.data()!["bio"] ?? "");
           print("Holaaaa --- ----- ");
           await sharedPreferences!.setString("fullname", snapshot.data()!["fullname"] ?? "");
-          await sharedPreferences!.setString("location", snapshot.data()!["location"] ?? "");
           await sharedPreferences!.setString("photoUrl", snapshot.data()!["photoUrl"] ?? "");
-          print("Holaaaa  111111111");
-          await sharedPreferences!.setString("cabinet", snapshot.data()!["cabinet"] ?? "");
-          await sharedPreferences!.setString("doctorTitle", snapshot.data()!["doctorTitle"] ?? "");
-          await sharedPreferences!.setString("phoneNumber", snapshot.data()!["phoneNumber"] ?? "");
-          print("Holaaaa  2222222222");
-          await sharedPreferences!.setString("indicatif", snapshot.data()!["indicatif"] ?? "");
-          await sharedPreferences!.setInt("numberofauthentications", snapshot.data()!["numberofauthentications"] ?? 0);
           await sharedPreferences!.setInt("joinDate", snapshot.data()!["joinDate"] ?? 0);
           print("Holaaaa  3333333333");
-          await sharedPreferences!.setInt("fareRDV", snapshot.data()!["fareRDV"] ?? 0);
-          await sharedPreferences!.setInt("fare", snapshot.data()!["fare"] ?? 0);
-          await sharedPreferences!.setInt("newFare", snapshot.data()!["newFare"] ?? 0);
-          await sharedPreferences!.setInt("passwordChanged", snapshot.data()!["passwordChanged"] ?? 0);
-          await sharedPreferences!.setBool("isDoctor", snapshot.data()!["isDoctor"] ?? false);
-          await sharedPreferences!.setBool("urgence", snapshot.data()!["urgence"] ?? false);
-          print("Holaaaa  444444444");
-          // print("${sharedPreferences!.getString("fullname")!}");
-          // print("${sharedPreferences!.getString("location")!}");
-          // print("${sharedPreferences!.getString("photoUrl")!}");
-          // print("${sharedPreferences!.getString("cabinet")!}");
-          // print("${sharedPreferences!.getString("doctorTitle")!}");
-          // print("${sharedPreferences!.getString("phoneNumber")!}");
-          // print("${sharedPreferences!.getString("indicatif")!}");
-          // print("${sharedPreferences!.getInt("numberofauthentications")!}");
-          // print("${sharedPreferences!.getInt("joinDate")!}");
-          // print("${sharedPreferences!.getInt("fareRDV")!}");
-          // print("${sharedPreferences!.getInt("newFare")!}");
-          // print("${sharedPreferences!.getInt("fare")!}");
-          // print("${sharedPreferences!.getInt("passwordChanged")!}");
-          // print("${sharedPreferences!.getBool("isDoctor")!}");
-          // print("${sharedPreferences!.getBool("urgence")!}");
 
           FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).update({
             "numberofauthentications": (sharedPreferences!.getInt("numberofauthentications")!) + 1,
@@ -412,12 +403,11 @@ class _SettingsPageState extends State<SettingsPage> {
           firebaseAuth.signOut();
           // Navigator.pop(context);
           Navigator.pop(context);
-          Fluttertoast.showToast(msg: "Votre comptre a été bloqué. Expliquez votre situation à: \n\nsupport@doclinkers.com", timeInSecForIosWeb: 3);
+          Fluttertoast.showToast(msg: "Votre comptre a été bloqué. Expliquez votre situation à: \n\nsupport@shakeup.com", timeInSecForIosWeb: 3);
         }
       }
 
-      else
-      {
+      else {
         firebaseAuth.signOut();
         Navigator.pop(context);
         // Navigator.pop(context);
@@ -475,6 +465,7 @@ class _SettingsPageState extends State<SettingsPage> {
       "joinDate": DateTime.now().millisecondsSinceEpoch,
       "token": "",
       "admin": false,
+      "points": 0,
       "userIdentifierApple": userIdentifierApple,
       // "birthdate": DateTime(2000, 11, 9),
     }).whenComplete(() async{
@@ -485,6 +476,7 @@ class _SettingsPageState extends State<SettingsPage> {
       await sharedPreferences!.setString("status", "approved");
       await sharedPreferences!.setString("fullname", fullname);
       await sharedPreferences!.setString("photoUrl", photoUrl);
+      await sharedPreferences!.setInt("points", 0);
       await sharedPreferences!.setInt("joinDate", DateTime.now().millisecondsSinceEpoch);
       setState(() {
         sharedPreferences;

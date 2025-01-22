@@ -15,6 +15,8 @@ int indexDocx = 1;
 bool authenticated = false;
 bool canAuth = true;
 
+bool setPortrait = false;
+
 enum DrugFrequency {once, twice, onceADay, twiceADay, threeTimesADay, oncePer2Days, oncePer3Days, oncePerWeek, twicePerWeek, afterEachMeal, afterBreakfast, afterLunch, afterDinner, beforeBreakfast, beforeLunch, beforeDinner}
 
 bool hasInternet = false;
