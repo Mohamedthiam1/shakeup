@@ -54,7 +54,7 @@ class StoryPageContent5 extends StatelessWidget {
             Expanded(
               flex: 2,
               child: Image.asset(
-                'assets/images/Kangourou1.png',
+                'assets/images/Kangourou1.jpg',
                 height: 150,
                 fit: BoxFit.contain,  // Utilisation de BoxFit.contain
               ),
@@ -73,7 +73,7 @@ class StoryPageContent5 extends StatelessWidget {
               child: AspectRatio(
                 aspectRatio: 16 / 9, // Par exemple, pour un ratio 16:9
                 child: Image.asset(
-                  'assets/images/Kangourou2.png',
+                  'assets/images/Kangourou2.jpg',
                   height: 150,
                   fit: BoxFit.contain,  // Utilisation de BoxFit.contain
                 ),

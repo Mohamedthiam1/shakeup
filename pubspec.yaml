@@ -69,7 +69,6 @@ dependencies:
   showcaseview: ^3.0.0
   googleapis_auth: ^1.6.0
 
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
