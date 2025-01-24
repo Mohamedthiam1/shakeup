@@ -34,7 +34,7 @@ class _SettingsPageState extends State<SettingsPage> {
             Navigator.of(context).pop(); // Action de retour
           },
         ),
-        title: Text("Réglages",
+        title: const Text("Réglages",
           style: TextStyle(
             fontFamily: 'Arima',
             fontSize: 22,
@@ -47,7 +47,7 @@ class _SettingsPageState extends State<SettingsPage> {
         actions: [
           IconButton(onPressed: () async {
             logoutSafely(context);
-          }, icon: Icon(Icons.logout_rounded, color: Colors.redAccent,))
+          }, icon: const Icon(Icons.logout_rounded, color: Colors.redAccent,))
         ],
       ),
 
@@ -77,7 +77,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Text(
+                            const Text(
                               'Connexion',
                               style: TextStyle(
                                 fontFamily: 'Arima',
@@ -88,7 +88,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             ),
                            if(sharedPreferences!.getString("fullname") != null) Text(
                               'Bienvenu ${sharedPreferences!.getString("fullname")},',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontFamily: 'Arima',
                                 fontSize: 18,
                                 fontWeight: FontWeight.w400,
@@ -97,7 +97,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 10), // Espacement
+                        const SizedBox(height: 10), // Espacement
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround, // Distribution égale des boutons
                           children: [
@@ -119,13 +119,13 @@ class _SettingsPageState extends State<SettingsPage> {
                         });
                         SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
                             .then((_) {
-                          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => ManageQuizzScreen()));
+                          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const ManageQuizzScreen()));
                           // Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => AddQuizzScreen()));
                         });
                       }, style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFC7E4BF),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7))
-                  ), child: Row(
+                  ), child: const Row(
                     children: [
                       Text("Gérer Quizz", style: TextStyle(color: Colors.black),),
                     ],
@@ -166,7 +166,7 @@ class _SettingsPageState extends State<SettingsPage> {
           child: StatefulBuilder(
             builder: (BuildContext context, StateSetter setStater) {
               return Container(
-                padding: EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20),
                 margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                 child: SingleChildScrollView(
                   child: Column(
@@ -177,7 +177,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         alignment: Alignment.centerLeft,
 
                         child: RichText(
-                          text: TextSpan(
+                          text: const TextSpan(
                             text: 'Voulez-vous vous ',
                             style: TextStyle(
                               fontSize: 18,
@@ -204,7 +204,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.only(top: 25),
+                        margin: const EdgeInsets.only(top: 25),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
@@ -212,7 +212,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               width: width * 1.7 / 5,
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                    backgroundColor: Color.fromRGBO(176, 191, 192, 1.0),
+                                    backgroundColor: const Color.fromRGBO(176, 191, 192, 1.0),
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(10)
                                     )
@@ -221,7 +221,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                   HapticFeedback.selectionClick();
                                   Navigator.pop(context);
                                 },
-                                child: Text("RETOURNER", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
+                                child: const Text("RETOURNER", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
                               ),
                             ),
                             Container(
@@ -243,17 +243,17 @@ class _SettingsPageState extends State<SettingsPage> {
                                       sharedPreferences!.clear();
                                       Navigator.pop(context);
                                       Navigator.pop(context);
-                                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext ctx) => SettingsPage()));
+                                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext ctx) => const SettingsPage()));
                                     });
                                   });
                                 },
-                                child: Icon(Icons.logout_rounded, color: Colors.white),
+                                child: const Icon(Icons.logout_rounded, color: Colors.white),
                               ),
                             ),
                           ],
                         ),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                     ],
                   ),
                 ),
@@ -396,7 +396,7 @@ class _SettingsPageState extends State<SettingsPage> {
           // });
           print("8888888*${sharedPreferences!.getBool("isDoctor")!}");
 
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (c) => SettingsPage(), fullscreenDialog: true));
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (c) => const SettingsPage(), fullscreenDialog: true));
         }
 
         else {
@@ -441,7 +441,7 @@ class _SettingsPageState extends State<SettingsPage> {
       }
     } catch (error) {
       // Navigator.pop(context);
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SettingsPage(), fullscreenDialog: true));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const SettingsPage(), fullscreenDialog: true));
       print(error);
       showDialog(
         context: context,
@@ -492,7 +492,7 @@ class _SettingsPageState extends State<SettingsPage> {
         //   sharedPreferences;
         // });
         Navigator.pop(context);
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (c) => SettingsPage()));
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (c) => const SettingsPage()));
 
       });
     });
@@ -723,7 +723,7 @@ class PrivacyPolicyPage extends StatelessWidget {
             Navigator.of(context).pop(); // Action de retour
           },
         ),
-        title: Text('Politique de confidentialité',
+        title: const Text('Politique de confidentialité',
           style: TextStyle(
             fontFamily: 'Arima',
             fontSize: 22,
@@ -768,7 +768,7 @@ class TermsPage extends StatelessWidget {
             Navigator.of(context).pop(); // Action de retour
           },
         ),
-        title: Text('Conditions d\'utilisation',
+        title: const Text('Conditions d\'utilisation',
           style: TextStyle(
             fontFamily: 'Arima',
             fontSize: 22,

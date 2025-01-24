@@ -8,6 +8,7 @@ import 'package:cap/pages/test-quiz.dart';
 import 'package:cap/pages/trophee_screen.dart';
 import 'package:flutter/material.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -164,8 +165,8 @@ class NavigationB extends State<NavigationBar> {
                                           });
                                         },
                                         child: Container(
-                                          width: 65,
-                                          height: 65,
+                                          width: 60,
+                                          height: 60,
                                           decoration: const BoxDecoration(
                                             shape: BoxShape.circle, // Forme circulaire
                                             color: Colors.white, // Couleur de fond blanche
@@ -180,8 +181,8 @@ class NavigationB extends State<NavigationBar> {
                                           child: ClipOval(
                                             child: Image.asset(
                                               avatarPath,
-                                              width: 70,
-                                              height: 70,
+                                              width: 75,
+                                              height: 75,
                                               fit: BoxFit.cover,
                                             ),
                                           ),
@@ -250,11 +251,21 @@ class NavigationB extends State<NavigationBar> {
               width: 35,
               height: 35,
             ),
-            onPressed: () {
+            onPressed: () async {
+              // Récupérer les points à partir de Firebase
+              int userPoints = await getUserPoints();
+
+              // Stocker les points dans SharedPreferences
+              final prefs = await SharedPreferences.getInstance();
+              await prefs.setInt('user_points', userPoints); // Stocke les points localement
+
+              // Récupérer les points stockés
+              int storedPoints = prefs.getInt('user_points') ?? 0;
+
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return const AlertDialog(
+                  return AlertDialog(
                     title: Text('Nb points',
                       style: TextStyle(
                         fontSize: 18,
@@ -263,7 +274,7 @@ class NavigationB extends State<NavigationBar> {
                         color: Colors.black,
                       ),
                     ),
-                    content: Text('Options de points',
+                    content: Text('Points: $storedPoints', // Utilise les points stockés
                       style: TextStyle(
                         fontFamily: 'Arima',
                         fontSize: 16,
@@ -276,6 +287,7 @@ class NavigationB extends State<NavigationBar> {
               );
             },
           ),
+
 
           // Titre de l'application "ShakeUp"
           Text(
@@ -635,5 +647,20 @@ class Footer extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+Future<int> getUserPoints() async {
+  try {
+    // Obtenir une instance des SharedPreferences
+    final prefs = await SharedPreferences.getInstance();
+
+    // Lire les points stockés dans SharedPreferences
+    int userPoints = prefs.getInt('points') ?? 0; // 0 est la valeur par défaut si aucune donnée n'est trouvée
+
+    return userPoints;  // Retourne les points récupérés
+  } catch (e) {
+    print("0");
+    return 0;
   }
 }
