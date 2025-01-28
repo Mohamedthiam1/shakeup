@@ -56,7 +56,7 @@ class StoryPageContent4 extends StatelessWidget {
               child: Image.asset(
                 'assets/images/hérisson1.webp',
                 height: 150,
-                fit: BoxFit.contain,  // Utilisation de BoxFit.contain
+                fit: BoxFit.contain,  //  Utilisation de BoxFit.contain
               ),
             ),
           ],
