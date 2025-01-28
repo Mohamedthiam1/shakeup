@@ -637,7 +637,10 @@ class SettingLink extends StatelessWidget {
       child: InkWell(
         onTap: () {
           if (routeName != null) {
-            Navigator.pushNamed(context, routeName!); // Navigation vers une autre page
+            SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+                .then((_) {
+              Navigator.pushNamed(context, routeName!);
+            });
           }
         },
         child: Container(
@@ -709,28 +712,21 @@ class _LanguageDropdownState extends State<LanguageDropdown> {
   }
 }
 
-// Page politique de confidentialité
-class PrivacyPolicyPage extends StatelessWidget {
+class PrivacyPolicyPage extends StatefulWidget {
   const PrivacyPolicyPage({super.key});
 
-  // Fonction pour styliser les titres
-  TextStyle titleStyle() {
-    return const TextStyle(
-      fontFamily: 'Arima',
-      fontSize: 20,
-      fontWeight: FontWeight.bold,
-      color: Colors.black,
-    );
-  }
+  @override
+  State<PrivacyPolicyPage> createState() => _PrivacyPolicyPageState();
+}
 
-  // Fonction pour styliser le corps du texte
-  TextStyle bodyStyle() {
-    return const TextStyle(
-      fontFamily: 'Arima',
-      fontSize: 18,
-      fontWeight: FontWeight.w400,
-      color: Colors.black,
-    );
+class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeRight, DeviceOrientation.landscapeLeft])
+        .then((_) {});
+    super.dispose();
   }
 
   @override
@@ -937,11 +933,6 @@ class PrivacyPolicyPage extends StatelessWidget {
       ),
     );
   }
-}
-
-// Page des Conditions Générales d'Utilisation (CGU)
-class TermsPage extends StatelessWidget {
-  const TermsPage({super.key});
 
   // Fonction pour styliser les titres
   TextStyle titleStyle() {
@@ -961,6 +952,24 @@ class TermsPage extends StatelessWidget {
       fontWeight: FontWeight.w400,
       color: Colors.black,
     );
+  }
+}
+
+class TermsPage extends StatefulWidget {
+  const TermsPage({super.key});
+
+  @override
+  State<TermsPage> createState() => _TermsPageState();
+}
+
+class _TermsPageState extends State<TermsPage> {
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeRight, DeviceOrientation.landscapeLeft])
+        .then((_) {});
+    super.dispose();
   }
 
   @override
@@ -1129,6 +1138,25 @@ class TermsPage extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  TextStyle titleStyle() {
+    return const TextStyle(
+      fontFamily: 'Arima',
+      fontSize: 20,
+      fontWeight: FontWeight.bold,
+      color: Colors.black,
+    );
+  }
+
+  // Fonction pour styliser le corps du texte
+  TextStyle bodyStyle() {
+    return const TextStyle(
+      fontFamily: 'Arima',
+      fontSize: 18,
+      fontWeight: FontWeight.w400,
+      color: Colors.black,
     );
   }
 }
