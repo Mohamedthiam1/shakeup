@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'package:cap/pages/story2.dart';
-import 'package:cap/pages/story3.dart';
-import 'package:cap/pages/story4.dart';
-import 'package:cap/pages/story5.dart';
-import 'package:cap/pages/story6.dart';
+import 'package:cap/pages/Story2.dart';
+import 'package:cap/pages/Story3.dart';
+import 'package:cap/pages/Story4.dart';
+import 'package:cap/pages/Story5.dart';
+import 'package:cap/pages/Story6.dart';
 
 import 'StoryPage.dart';
 import 'home_page.dart';

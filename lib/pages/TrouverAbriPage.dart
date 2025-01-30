@@ -1,177 +1,313 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class TrouverAbriPage extends StatelessWidget {
+class TrouverAbriPage extends StatefulWidget {
   const TrouverAbriPage({super.key});
+
+  @override
+  State<TrouverAbriPage> createState() => _TrouverAbriPageState();
+}
+
+class _TrouverAbriPageState extends State<TrouverAbriPage> {
+  int currentIndex = 0;
+  bool isCorrect = false;
+  String? selectedAnswer;
+  bool showCelebration = false; // Pour afficher l'animation de célébration
+
+  final Map<String, Color> defaultColors = {
+    '1': Colors.purple[200]!,
+    '2': Colors.blue[200]!,
+    '3': Colors.orange[200]!,
+    '4': Colors.green[200]!,
+  };
+
+  final Map<String, Color> selectedColors = {
+    'correct': Colors.green[400]!,
+    'wrong': Colors.red[400]!,
+  };
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black), // Icône de flèche
-          onPressed: () {
-            Navigator.of(context).pop(); // Action de retour
-          },
-        ),
-        title: const Text("Trouver l’Abri",
+        title: const Text(
+          "Trouver l’Abri",
           style: TextStyle(
-            fontFamily: 'Arima',
             fontSize: 22,
             fontWeight: FontWeight.w400,
             color: Colors.black,
           ),
         ),
-        backgroundColor: Colors.green[100], // Couleur de fond verte pour l'AppBar
+        backgroundColor: Colors.green[100],
         centerTitle: true,
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                // Image contenant les chiffres avec bordure
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    border: Border.all(color: Colors.teal, width: 3),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.teal.withOpacity(0.2),
-                        spreadRadius: 2,
-                        blurRadius: 5,
+        child: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance.collection("trouver_abri").snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+              return const Center(child: Text("Aucune donnée disponible pour le moment."));
+            }
+
+            final data = snapshot.data!.docs;
+            if (currentIndex >= data.length) {
+              return SingleChildScrollView( // Ajout d'un défilement
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        "🎊 Félicitations ! Vous avez trouvé tous les abris ! 🎊",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.green),
                       ),
+                      const SizedBox(height: 10),
+                      const Text(
+                        "🏆 Vous êtes un expert en survie ! 👏",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      const SizedBox(height: 20),
+                      AnimatedCelebration(), // Animation de célébration
                     ],
                   ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(15),
-                    child: Image.asset(
-                      'assets/images/numabri.jpg',
-                      height: 150,
-                      width: double.infinity,
-                      fit: BoxFit.cover,  // Utilisation de BoxFit.cover pour couvrir le cadre
+                ),
+              );
+            }
+
+            final currentDocument = data[currentIndex];
+            final imageUrl = currentDocument["imageUrl"];
+            final correctAnswer = currentDocument["correctAnswer"];
+
+            return Stack(
+              children: [
+                SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(15),
+                          child: Image.network(
+                            imageUrl,
+                            height: 200,
+                            width: double.infinity,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: Colors.blue[50],
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Text(
+                            "🏠 Cliquez sur le numéro de l'abri 🏠",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blue,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        LayoutBuilder(
+                          builder: (context, constraints) {
+                            double boxWidth = constraints.maxWidth * 0.4;
+                            return Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    _buildOptionBox(context, '1', correctAnswer, boxWidth),
+                                    _buildOptionBox(context, '2', correctAnswer, boxWidth),
+                                  ],
+                                ),
+                                const SizedBox(height: 15),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    _buildOptionBox(context, '3', correctAnswer, boxWidth),
+                                    _buildOptionBox(context, '4', correctAnswer, boxWidth),
+                                  ],
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                      ],
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
-                // Propositions de réponse avec "boxes"
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    // Première ligne de réponses
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        _buildOptionBox(context, '12'),
-                        _buildOptionBox(context, '34'),
-                      ],
-                    ),
-                    const SizedBox(height: 15),
-                    // Deuxième ligne de réponses
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        _buildOptionBox(context, '56'),
-                        _buildOptionBox(context, '78'),
-                      ],
-                    ),
-                  ],
-                ),
+                if (showCelebration) AnimatedCelebration(), // Animation de célébration
               ],
-            ),
-          ),
+            );
+          },
         ),
       ),
     );
   }
 
-  // Widget pour une boîte de réponse (option avec bordure)
-  Widget _buildOptionBox(BuildContext context, String text) {
+  Widget _buildOptionBox(BuildContext context, String text, String correctAnswer, double width) {
+    Color boxColor = defaultColors[text]!;
+
+    if (selectedAnswer == text) {
+      boxColor = isCorrect ? selectedColors['correct']! : selectedColors['wrong']!;
+    }
+
     return GestureDetector(
       onTap: () {
-        // Logique pour vérifier la réponse
-        bool isCorrect = text == '34'; // Exemple : '34' est la bonne réponse
-        _showResultDialog(context, isCorrect);
+        setState(() {
+          selectedAnswer = text;
+          isCorrect = text == correctAnswer;
+          showCelebration = isCorrect; // Afficher l'animation si la réponse est correcte
+        });
+        _showResultDialog(context);
       },
-      child: Container(
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 500),
+        width: width,
         decoration: BoxDecoration(
-          color: Colors.teal[50], // Changer la couleur de fond en teal clair
+          color: boxColor,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.teal, width: 2),
           boxShadow: [
             BoxShadow(
-              color: Colors.teal.withOpacity(0.2),
-              spreadRadius: 1,
-              blurRadius: 3,
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 10,
+              offset: const Offset(0, 5),
             ),
           ],
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20), // Augmenter le padding pour rendre les boutons plus larges
+        padding: const EdgeInsets.symmetric(vertical: 20),
         child: Center(
           child: Text(
             text,
-            style: const TextStyle(
-              fontFamily: 'Arima',
-              fontSize: 18,
-              fontWeight: FontWeight.w400,
-              color: Colors.black,
-            ),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
           ),
         ),
       ),
     );
   }
 
-  // Dialog pour afficher le résultat
-  void _showResultDialog(BuildContext context, bool isCorrect) {
+  void _showResultDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: const Color(0xFFE6EFE3),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-          ),
-          title: Text(
-            isCorrect ? 'Bonne Réponse !' : 'Mauvaise Réponse',
-            style: const TextStyle(
-              fontFamily: 'Arima',
-              fontSize: 18,
-              fontWeight: FontWeight.w400,
-              color: Colors.black,
-            ),
-            textAlign: TextAlign.center,
+          backgroundColor: isCorrect ? Colors.green[100] : Colors.red[100],
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              AnimatedEmoji(isCorrect: isCorrect), // Animation d'emoji
+            ],
           ),
           content: Text(
             isCorrect
-                ? 'Félicitations, vous avez trouvé le bon abri !'
-                : 'Réessayez pour trouver le bon abri.',
-            style: const TextStyle(
-              fontFamily: 'Arima',
-              fontSize: 18,
-              fontWeight: FontWeight.w400,
-              color: Colors.black,
-            ),
+                ? "Félicitations, vous avez trouvé le bon abri ! 🏆👏"
+                : "Réessayez pour trouver le bon abri. 😔💪",
             textAlign: TextAlign.center,
+            style: TextStyle(color: isCorrect ? Colors.green[800] : Colors.red[800]),
           ),
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Ferme le dialogue
+                Navigator.of(context).pop();
+                if (isCorrect) {
+                  setState(() {
+                    currentIndex++;
+                    selectedAnswer = null;
+                    showCelebration = false; // Réinitialiser l'animation
+                  });
+                } else {
+                  setState(() {
+                    selectedAnswer = null;
+                  });
+                }
               },
-              child: const Text('OK',
-                style: TextStyle(
-                  fontFamily: 'Arima',
-                  fontSize: 18,
-                  fontWeight: FontWeight.w400,
-                  color: Colors.black,
-                ),
+              child: const Text(
+                'OK',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
           ],
         );
       },
+    );
+  }
+}
+
+// Widget pour l'animation d'emoji
+class AnimatedEmoji extends StatefulWidget {
+  final bool isCorrect;
+
+  const AnimatedEmoji({super.key, required this.isCorrect});
+
+  @override
+  State<AnimatedEmoji> createState() => _AnimatedEmojiState();
+}
+
+class _AnimatedEmojiState extends State<AnimatedEmoji> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 1000),
+      vsync: this,
+    )..repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ScaleTransition(
+      scale: Tween(begin: 1.0, end: 1.5).animate(
+        CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+      ),
+      child: Text(
+        widget.isCorrect ? "🎉" : "😞",
+        style: const TextStyle(fontSize: 40),
+      ),
+    );
+  }
+}
+
+// Widget pour l'animation de célébration
+class AnimatedCelebration extends StatelessWidget {
+  const AnimatedCelebration({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text(
+            "🎊",
+            style: TextStyle(fontSize: 40), // Taille réduite des emojis
+          ),
+          const SizedBox(height: 10),
+          const Text(
+            "🏆",
+            style: TextStyle(fontSize: 40), // Taille réduite des emojis
+          ),
+          const SizedBox(height: 10),
+          const Text(
+            "🎯",
+            style: TextStyle(fontSize: 40), // Taille réduite des emojis
+          ),
+        ],
+      ),
     );
   }
 }
