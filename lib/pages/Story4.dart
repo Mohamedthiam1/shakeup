@@ -22,7 +22,7 @@ class StoryPageContent4 extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       children: [
         // Introduction à l'histoire
-        Text(
+        const Text(
           'La grande leçon de Sam le hérisson',
           style: TextStyle(
             fontSize: 28,
@@ -37,7 +37,7 @@ class StoryPageContent4 extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
+            const Expanded(
               flex: 3,
               child: Text(
                 'Sam le hérisson vivait paisiblement dans une forêt proche des montagnes. Un jour, le sol se mit à trembler sous ses pattes. Effrayé, il courut dans toutes les directions sans savoir où aller. Il se coinça sous un arbre qui menaçait de tomber.',
@@ -81,7 +81,7 @@ class StoryPageContent4 extends StatelessWidget {
             ),
             const SizedBox(width: 16),
             // Texte après l'image
-            Expanded(
+            const Expanded(
               flex: 3,
               child: Text(
                 'Heureusement, sa voisine Lina la tortue lui avait montré un abri solide près de la rivière. Sam y alla en sécurité et y retrouva ses amis. Ils restèrent calmes et attendirent que les secousses s’arrêtent. Ils avaient suivi les conseils de Lina : "Un lieu sûr est la clé pour se protéger !".',
@@ -104,7 +104,7 @@ class StoryPageContent4 extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
+            const Expanded(
               flex: 3,
               child: Text(
                 'Après cela, Sam apprit qu’il fallait se préparer et ne jamais paniquer. Avec ses amis, il construisit des abris pour tout le village des animaux. Depuis ce jour, ils se sentaient en sécurité, même quand le sol tremblait.',
@@ -132,7 +132,7 @@ class StoryPageContent4 extends StatelessWidget {
         const SizedBox(height: 20),
 
         // Conclusion
-        Text(
+        const Text(
           'Merci d\'avoir lu cette histoire avec Sam ! Maintenant, tu sais comment réagir en cas de tremblement de terre. Ensemble, nous sommes plus forts et plus sûrs !',
           style: TextStyle(
             fontFamily: 'Arima',
@@ -155,7 +155,7 @@ class StoryPageContent4 extends StatelessWidget {
             ),
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 40),
           ),
-          child: Text(
+          child: const Text(
             'J\'ai compris !',
             style: TextStyle(
               fontFamily: 'Arima',

@@ -22,7 +22,7 @@ class StoryPageContent6 extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       children: [
         // Introduction à l'histoire
-        Text(
+        const Text(
           'La cachette de Mila la souris',
           style: TextStyle(
             fontSize: 28,
@@ -37,7 +37,7 @@ class StoryPageContent6 extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
+            const Expanded(
               flex: 3,
               child: Text(
                 'Mila la souris adorait sa maison sous la cuisine d’une vieille maison. Mais un jour, en plein après-midi, les murs commencèrent à vibrer et des objets tombèrent des étagères. Mila se souvint des conseils de sa maman : "Va sous la table, protège-toi !".',
@@ -81,7 +81,7 @@ class StoryPageContent6 extends StatelessWidget {
             ),
             const SizedBox(width: 16),
             // Texte après l'image
-            Expanded(
+            const Expanded(
               flex: 3,
               child: Text(
                 'Elle courut sous la grande table de la cuisine et se roula en boule, les pattes sur la tête. Le bruit et les secousses étaient effrayants, mais Mila resta calme. Quand tout s’arrêta, elle sortit prudemment pour vérifier que tout le monde allait bien.',
@@ -104,7 +104,7 @@ class StoryPageContent6 extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
+            const Expanded(
               flex: 3,
               child: Text(
                 'Sa famille la félicita pour sa réaction rapide et responsable. Mila devint un exemple pour tous les petits animaux du quartier, leur montrant comment réagir face à un tremblement de terre.',
@@ -132,7 +132,7 @@ class StoryPageContent6 extends StatelessWidget {
         const SizedBox(height: 20),
 
         // Conclusion
-        Text(
+        const Text(
           'Merci d\'avoir lu cette histoire avec Mila ! Maintenant, tu sais comment réagir en cas de tremblement de terre. Ensemble, nous sommes plus forts et plus sûrs !',
           style: TextStyle(
             fontFamily: 'Arima',
@@ -155,7 +155,7 @@ class StoryPageContent6 extends StatelessWidget {
             ),
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 40),
           ),
-          child: Text(
+          child: const Text(
             'J\'ai compris !',
             style: TextStyle(
               fontFamily: 'Arima',

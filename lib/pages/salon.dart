@@ -17,7 +17,7 @@ class SalonPage extends StatelessWidget {
             Navigator.of(context).pop(); // Action de retour
           },
         ),
-        title: Text('Salons', // Titre affiché dans la barre d'application
+        title: const Text('Salons', // Titre affiché dans la barre d'application
           style: TextStyle(
             fontFamily: 'Arima',
             fontSize: 22,
@@ -41,7 +41,7 @@ class SalonPage extends StatelessWidget {
               ),
             ),
 
-            SizedBox(height: 10), // Espacement entre les deux cadres
+            const SizedBox(height: 10), // Espacement entre les deux cadres
 
             // Bouton "Rejoindre un salon"
             SizedBox(
@@ -315,7 +315,7 @@ class ParticipantsPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'Participants :',
                       style: TextStyle(
                         fontFamily: 'Arima',
@@ -324,11 +324,11 @@ class ParticipantsPage extends StatelessWidget {
                         color: Colors.black,
                       ),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
 
-                    Text("Aucun participant trouvé pour cette salle."),
+                    const Text("Aucun participant trouvé pour cette salle."),
 
-                    SizedBox(height: 70),
+                    const SizedBox(height: 70),
 
                     // Bouton "Start" pour démarrer le quiz
                     Align(
@@ -338,7 +338,7 @@ class ParticipantsPage extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (BuildContext context) => QuizPage(),
+                              builder: (BuildContext context) => const QuizPage(),
                             ),
                           );
                         },

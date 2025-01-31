@@ -46,9 +46,9 @@ class ModeHistoirePage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Espacement uniforme
               children: [
-                _buildImageCard(context, 'assets/images/histoire1.jpg', StoryPage()),
-                _buildImageCard(context, 'assets/images/etoile1.png', Story2()),
-                _buildImageCard(context, 'assets/images/zebre1.png', Story3()),
+                _buildImageCard(context, 'assets/images/histoire1.jpg', const StoryPage()),
+                _buildImageCard(context, 'assets/images/etoile1.png', const Story2()),
+                _buildImageCard(context, 'assets/images/zebre1.png', const Story3()),
               ],
             ),
 
@@ -58,9 +58,9 @@ class ModeHistoirePage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Espacement uniforme
               children: [
-                _buildImageCard(context, 'assets/images/hérisson1.webp', Story4()),
-                _buildImageCard(context, 'assets/images/Kangourou1.jpg', Story5()),
-                _buildImageCard(context, 'assets/images/souris1.png', Story6()),
+                _buildImageCard(context, 'assets/images/hérisson1.webp', const Story4()),
+                _buildImageCard(context, 'assets/images/Kangourou1.jpg', const Story5()),
+                _buildImageCard(context, 'assets/images/souris1.png', const Story6()),
               ],
             ),
           ],

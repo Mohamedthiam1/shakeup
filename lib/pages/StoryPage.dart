@@ -22,7 +22,7 @@ class StoryPageContent extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       children: [
         // Introduction à l'histoire
-        Text(
+        const Text(
           'L\'histoire de Tiko et le tremblement de terre',
           style: TextStyle(
             fontSize: 28,
@@ -37,7 +37,7 @@ class StoryPageContent extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
+            const Expanded(
               flex: 3,
               child: Text(
                 'Tiko est un petit oiseau qui vit dans un grand arbre avec ses amis. Un jour, alors qu\'il joue dehors, il ressent une secousse sous ses pattes. "Qu\'est-ce que c\'est ?", se demande-t-il.',
@@ -81,7 +81,7 @@ class StoryPageContent extends StatelessWidget {
             ),
             const SizedBox(width: 16),
             // Texte après l'image
-            Expanded(
+            const Expanded(
               flex: 3,
               child: Text(
                 'C\'était un tremblement de terre ! Tiko a eu un peu peur, mais il se souvient de ce qu\'il a appris : "Ne panique pas, trouve un endroit sûr !"',
@@ -104,7 +104,7 @@ class StoryPageContent extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
+            const Expanded(
               flex: 3,
               child: Text(
                 'Tiko se cache sous une grande pierre, à l\'abri des objets qui peuvent tomber. Heureusement, il se rappelle aussi de vérifier s\'il est en sécurité avec ses amis.',
@@ -132,7 +132,7 @@ class StoryPageContent extends StatelessWidget {
         const SizedBox(height: 20),
 
         // Conclusion
-        Text(
+        const Text(
           'Merci d\'avoir lu cette histoire avec Tiko ! Maintenant, tu sais comment réagir en cas de tremblement de terre. Ensemble, nous sommes plus forts et plus sûrs !',
           style: TextStyle(
             fontFamily: 'Arima',
@@ -155,7 +155,7 @@ class StoryPageContent extends StatelessWidget {
             ),
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 40),
           ),
-          child: Text(
+          child: const Text(
             'J\'ai compris !',
             style: TextStyle(
               fontFamily: 'Arima',

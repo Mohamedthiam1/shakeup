@@ -42,7 +42,7 @@ class DangerPage extends StatelessWidget {
                         BorderRadius.circular(12), // Coins arrondis pour l'image
                     border: Border.all(color: Colors.black, width: 2),
                     boxShadow: [
-                      BoxShadow(
+                      const BoxShadow(
                         color: Colors.black26,
                         offset: Offset(4, 4),
                         blurRadius: 5,

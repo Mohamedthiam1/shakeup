@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 import 'dart:math';
 
@@ -17,12 +18,22 @@ class _QuizPageState extends State<QuizPage> {
   Timer? _timer;
   List<Quizz> quizzes = [];
   int score = 0;
+  DateTime? questionStartTime; // Enregistrer l'heure de début de la question
+  bool hasReceivedFastAnswerTrophy = false; // Pour vérifier si le joueur a déjà gagné ce trophée
 
   @override
   void initState() {
     super.initState();
     fetchRandomQuizzes();
     startTimer();
+    _checkFastAnswerTrophy();
+  }
+
+  Future<void> _checkFastAnswerTrophy() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      hasReceivedFastAnswerTrophy = prefs.getBool('fast_answer_trophy') ?? false;
+    });
   }
 
   @override
@@ -56,26 +67,46 @@ class _QuizPageState extends State<QuizPage> {
       allQuizzes.shuffle(Random());
       setState(() {
         quizzes = allQuizzes.take(2).toList();
+        questionStartTime = DateTime.now(); // Initialiser l'heure de début de la question
       });
     }
   }
 
-  void checkAnswer(int questionIndex, int selectedAnswer) {
+  void checkAnswer(int questionIndex, int selectedAnswer) async {
     if (quizzes[questionIndex].correctOne == selectedAnswer) {
       setState(() {
         score += 5; // +5 points si la réponse est correcte
       });
     }
 
+    // Vérifiez si la réponse est donnée en moins de 15 secondes
+    if (remainingTime >= 15 && !hasReceivedFastAnswerTrophy) {
+      setState(() {
+        hasReceivedFastAnswerTrophy = true;
+      });
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('fast_answer_trophy', true); // Enregistrez le trophée débloqué
+
+      // Récompense rapide
+      setState(() {
+        score += 30; // +30 points pour un trophée rapide
+      });
+
+      _showTrophyPopup(); // Affiche le pop-up de trophée
+    }
+
     // Passer à la question suivante
     if (questionIndex + 1 < quizzes.length) {
-      setState(() {});
+      setState(() {
+        questionStartTime = DateTime.now(); // Réinitialiser le temps de la prochaine question
+      });
     } else {
-      // Afficher un message de fin
+      // Afficher un message de fin du quiz
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text("Quiz terminé !"),
+          title: const Text("Quiz terminé !"),
           content: Text("Votre score final est : $score points"),
           actions: [
             TextButton(
@@ -83,12 +114,42 @@ class _QuizPageState extends State<QuizPage> {
                 Navigator.pop(context);
                 Navigator.pop(context);
               },
-              child: Text("OK"),
+              child: const Text("OK"),
             ),
           ],
         ),
       );
     }
+  }
+
+  void _showTrophyPopup() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          title: const Row(
+            children: [
+              Icon(Icons.emoji_events, color: Colors.blue, size: 40),
+              SizedBox(width: 10),
+              Text("Trophée Débloqué !"),
+            ],
+          ),
+          content: const Text(
+            "Félicitations ! Tu as débloqué le trophée \"Répondant Rapide\".",
+            style: TextStyle(fontSize: 16),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Fermer le pop-up
+              },
+              child: const Text("OK", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -103,7 +164,7 @@ class _QuizPageState extends State<QuizPage> {
             Navigator.of(context).pop();
           },
         ),
-        title: Text("Quiz",
+        title: const Text("Quiz",
             style: TextStyle(fontFamily: 'Arima', fontSize: 22, color: Colors.black)),
         backgroundColor: Colors.green[100],
         centerTitle: true,
@@ -117,19 +178,19 @@ class _QuizPageState extends State<QuizPage> {
               ),
               const SizedBox(width: 4),
               Text("$remainingTime s",
-                  style: TextStyle(fontFamily: 'Arima', fontSize: 16, color: Colors.black)),
+                  style: const TextStyle(fontFamily: 'Arima', fontSize: 16, color: Colors.black)),
             ],
           ),
         ],
       ),
       body: quizzes.isEmpty
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
           children: [
             Text("Score: $score",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
 
             const SizedBox(height: 20),
 
@@ -140,7 +201,7 @@ class _QuizPageState extends State<QuizPage> {
                   return Column(
                     children: [
                       Container(
-                        margin: EdgeInsets.only(bottom: 10),
+                        margin: const EdgeInsets.only(bottom: 10),
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           border: Border.all(color: Colors.black),
@@ -149,7 +210,7 @@ class _QuizPageState extends State<QuizPage> {
                         child: Text(
                           quizzes[index].question ?? "Question introuvable",
                           textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
                         ),
                       ),
                       const SizedBox(height: 10),
@@ -194,7 +255,7 @@ class AnswerButton extends StatelessWidget {
     return Container(
       height: 50,
       width: double.infinity,
-      margin: EdgeInsets.symmetric(vertical: 5),
+      margin: const EdgeInsets.symmetric(vertical: 5),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: color,
@@ -205,7 +266,7 @@ class AnswerButton extends StatelessWidget {
         onPressed: onPressed,
         child: Text(
           text,
-          style: TextStyle(fontSize: 18, color: Colors.white),
+          style: const TextStyle(fontSize: 18, color: Colors.white),
           textAlign: TextAlign.center,
         ),
       ),

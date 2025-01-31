@@ -57,6 +57,62 @@ class NavigationB extends State<NavigationBar> {
   String selectedAvatar = 'assets/images/profil.png';
 
   @override
+  void initState() {
+    super.initState();
+    _checkTrophyUnlock();
+  }
+
+  Future<void> _checkTrophyUnlock() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int userPoints = prefs.getInt('user_points') ?? 0;
+    bool hasUnlockedTrophy = prefs.getBool('unlocked_recolteur_points') ?? false;
+
+    if (userPoints >= 15 && !hasUnlockedTrophy) {
+      // Marquer le trophée comme débloqué
+      await prefs.setBool('unlocked_recolteur_points', true);
+
+      // Ajouter 20 points lors du déblocage du trophée
+      userPoints += 20;  // Ajouter 20 points
+      await prefs.setInt('user_points', userPoints); // Mettre à jour le score du joueur
+
+      // Afficher un pop-up pour annoncer le trophée débloqué
+      _showTrophyPopup(userPoints); // Passer le nouveau nombre de points pour l'afficher dans le pop-up
+    }
+  }
+
+  void _showTrophyPopup(int points) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          title: const Row(
+            children: [
+              Icon(Icons.emoji_events, color: Colors.amber, size: 40),
+              SizedBox(width: 10),
+              Text("Trophée Débloqué !"),
+            ],
+          ),
+          content: Text(
+            "Bravo ! Vous avez obtenu le trophée \"Récolteur de points\" en atteignant plus de 15 points et vous avez reçu 20 points supplémentaires !\nTotal: $points points",
+            style: const TextStyle(fontSize: 16),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Fermer le pop-up
+              },
+              child: const Text("OK", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
+
+  @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return Container(
@@ -144,7 +200,7 @@ class NavigationB extends State<NavigationBar> {
                                     ),
                                   ],
                                 ),
-                                constraints: BoxConstraints(maxHeight: 200), // Limite la hauteur
+                                constraints: const BoxConstraints(maxHeight: 200), // Limite la hauteur
                                 child: Wrap(
                                   spacing: 8.0, // Espacement horizontal entre les avatars
                                   runSpacing: 8.0, // Espacement vertical entre les avatars
@@ -240,7 +296,7 @@ class NavigationB extends State<NavigationBar> {
               height: 35,
             ),
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => TropheeScreen()));
+              Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const TropheeScreen()));
             },
           ),
 
@@ -266,7 +322,7 @@ class NavigationB extends State<NavigationBar> {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: Text('Nb points',
+                    title: const Text('Nb points',
                       style: TextStyle(
                         fontSize: 18,
                         fontFamily: 'Arima',
@@ -275,7 +331,7 @@ class NavigationB extends State<NavigationBar> {
                       ),
                     ),
                     content: Text('Points: $storedPoints', // Utilise les points stockés
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Arima',
                         fontSize: 16,
                         fontWeight: FontWeight.w400,
@@ -290,7 +346,7 @@ class NavigationB extends State<NavigationBar> {
 
 
           // Titre de l'application "ShakeUp"
-          Text(
+          const Text(
             'ShakeUp',
             style: TextStyle(
               fontSize: 30,
@@ -331,7 +387,7 @@ class NavigationB extends State<NavigationBar> {
                               color: Color(0xFFC7E4BF), // Couleur de fond pour chaque niveau
                               borderRadius: BorderRadius.all(Radius.circular(15)),
                             ),
-                            child: Column(
+                            child: const Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
@@ -345,7 +401,7 @@ class NavigationB extends State<NavigationBar> {
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 16), // Margin left et right
+                                  padding: EdgeInsets.symmetric(horizontal: 16), // Margin left et right
                                   child: Text(
                                     'Apprendre les bases de la préparation avant un séisme',
                                     textAlign: TextAlign.center, // Aligner le texte au centre
@@ -370,7 +426,7 @@ class NavigationB extends State<NavigationBar> {
                               color: Color(0xFFC7E4BF), // Couleur de fond pour chaque niveau
                               borderRadius: BorderRadius.all(Radius.circular(15)),
                             ),
-                            child: Column(
+                            child: const Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
@@ -384,7 +440,7 @@ class NavigationB extends State<NavigationBar> {
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 16), // Margin left et right
+                                  padding: EdgeInsets.symmetric(horizontal: 16), // Margin left et right
                                   child: Text(
                                     'Réagir rapidement et efficacement pendant un tremblement de terre',
                                     textAlign: TextAlign.center, // Aligner le texte au centre
@@ -408,7 +464,7 @@ class NavigationB extends State<NavigationBar> {
                               color: Color(0xFFC7E4BF), // Couleur de fond pour chaque niveau
                               borderRadius: BorderRadius.all(Radius.circular(15)),
                             ),
-                            child: Column(
+                            child: const Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
@@ -422,7 +478,7 @@ class NavigationB extends State<NavigationBar> {
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 16), // Margin left et right
+                                  padding: EdgeInsets.symmetric(horizontal: 16), // Margin left et right
                                   child: Text(
                                     'Sécuriser l\'environnement et éviter les dangers après un séisme.',
                                     textAlign: TextAlign.center, // Aligner le texte au centre
@@ -456,7 +512,7 @@ class NavigationB extends State<NavigationBar> {
               height: 35,
             ),
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => SalonPage()));
+              Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const SalonPage()));
             },
           ),
           IconButton(
@@ -466,7 +522,7 @@ class NavigationB extends State<NavigationBar> {
               height: 35,
             ),
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => SettingsPage()));
+              Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const SettingsPage()));
             },
           ),
         ],
@@ -488,7 +544,7 @@ class CenterContent extends StatelessWidget {
         ),
         ElevatedButton(
           onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => QuizPage()));
+            Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const QuizPage()));
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFFF6DFC5), // Couleur de fond
@@ -505,7 +561,7 @@ class CenterContent extends StatelessWidget {
             ),
             minimumSize: const Size(88, 46), // Taille du bouton
           ),
-          child: Text(
+          child: const Text(
             'Start',
             style: TextStyle(
               fontSize: 25,
@@ -579,7 +635,7 @@ class Footer extends StatelessWidget {
               // Naviguer vers la page d'histoire
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ModeHistoirePage()), // Lien vers la page d'histoire
+                MaterialPageRoute(builder: (context) => const ModeHistoirePage()), // Lien vers la page d'histoire
               );
             },
           ),
@@ -602,7 +658,7 @@ class Footer extends StatelessWidget {
                 // Rester dans la page d'accueil
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => HomePage()), // Lien vers la page d'histoire
+                  MaterialPageRoute(builder: (context) => const HomePage()), // Lien vers la page d'histoire
                 );
               },
             ),

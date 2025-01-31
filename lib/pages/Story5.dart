@@ -22,7 +22,7 @@ class StoryPageContent5 extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       children: [
         // Introduction à l'histoire
-        Text(
+        const Text(
           'L\'abri magique de Karim le kangourou ',
           style: TextStyle(
             fontSize: 28,
@@ -37,7 +37,7 @@ class StoryPageContent5 extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
+            const Expanded(
               flex: 3,
               child: Text(
                 'Karim le kangourou aimait jouer près des rochers, mais son grand-père lui répétait toujours : "Les rochers ne sont pas sûrs en cas de tremblement de terre ". Karim n’y prêtait pas attention, jusqu’au jour où la terre trembla fortement.',
@@ -81,7 +81,7 @@ class StoryPageContent5 extends StatelessWidget {
             ),
             const SizedBox(width: 16),
             // Texte après l'image
-            Expanded(
+            const Expanded(
               flex: 3,
               child: Text(
                 'Se souvenant des paroles de son grand-père, Karim sauta rapidement dans une zone dégagée, loin des arbres et des rochers. Là-bas, il retrouva ses amis et attendit que tout s’arrête. Le grand-père les rejoignit et expliqua pourquoi un endroit dégagé était si important.',
@@ -104,7 +104,7 @@ class StoryPageContent5 extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
+            const Expanded(
               flex: 3,
               child: Text(
                 'Depuis ce jour, Karim et ses amis jouaient toujours en sécurité, et ils apprenaient aux plus jeunes où se mettre à l\'abri quand le sol se met à trembler.',
@@ -132,7 +132,7 @@ class StoryPageContent5 extends StatelessWidget {
         const SizedBox(height: 20),
 
         // Conclusion
-        Text(
+        const Text(
           'Merci d\'avoir lu cette histoire avec Karim ! Maintenant, tu sais comment réagir en cas de tremblement de terre. Ensemble, nous sommes plus forts et plus sûrs !',
           style: TextStyle(
             fontFamily: 'Arima',
@@ -155,7 +155,7 @@ class StoryPageContent5 extends StatelessWidget {
             ),
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 40),
           ),
-          child: Text(
+          child: const Text(
             'J\'ai compris !',
             style: TextStyle(
               fontFamily: 'Arima',

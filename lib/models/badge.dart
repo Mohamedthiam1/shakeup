@@ -6,6 +6,7 @@ class BadgeModel {
   final IconData icon;
   final Color iconColor;
   final String criteria; // Critères de déblocage
+  bool unlocked;
 
   BadgeModel({
     required this.title,
@@ -13,5 +14,6 @@ class BadgeModel {
     required this.icon,
     required this.iconColor,
     required this.criteria, // Nouveau champ
+    this.unlocked = false,
   });
 }

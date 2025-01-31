@@ -18,7 +18,7 @@ class AdminPrincipalPage extends StatelessWidget {
             Navigator.of(context).pop(); // Action de retour
           },
         ),
-        title: Text("Tableau de Bord Administrateur",
+        title: const Text("Tableau de Bord Administrateur",
           style: TextStyle(
             fontFamily: 'Arima',
             fontSize: 22,
@@ -41,9 +41,9 @@ class AdminPrincipalPage extends StatelessWidget {
                 },
                 child: Column(
                   children: [
-                    CircleAvatar(
+                    const CircleAvatar(
                       radius: 50,
-                      backgroundImage: const AssetImage('assets/images/profil.png'),
+                      backgroundImage: AssetImage('assets/images/profil.png'),
                     ),
                     const SizedBox(height: 8),
                     Text(

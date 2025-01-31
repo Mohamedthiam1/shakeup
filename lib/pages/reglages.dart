@@ -23,6 +23,25 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  String selectedLanguage = 'Français'; // Langue par défaut
+
+  @override
+  void initState() {
+    super.initState();
+    _loadLanguage(); // Charger la langue au démarrage
+  }
+
+  // Charger la langue depuis SharedPreferences
+  Future<void> _loadLanguage() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? language = prefs.getString('selected_language');
+    if (language != null) {
+      setState(() {
+        selectedLanguage = language;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -34,8 +53,8 @@ class _SettingsPageState extends State<SettingsPage> {
             Navigator.of(context).pop(); // Action de retour
           },
         ),
-        title: const Text("Réglages",
-          style: TextStyle(
+        title: Text(selectedLanguage == 'Français' ? 'Réglages' : 'Settings',
+          style: const TextStyle(
             fontFamily: 'Arima',
             fontSize: 22,
             fontWeight: FontWeight.w400,
@@ -77,17 +96,8 @@ class _SettingsPageState extends State<SettingsPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            const Text(
-                              'Connexion',
-                              style: TextStyle(
-                                fontFamily: 'Arima',
-                                fontSize: 18,
-                                fontWeight: FontWeight.w400,
-                                color: Colors.black,
-                              ),
-                            ),
-                           if(sharedPreferences!.getString("fullname") != null) Text(
-                              'Bienvenu ${sharedPreferences!.getString("fullname")},',
+                            Text(
+                              selectedLanguage == 'Français' ? 'Connexion' : 'Login',
                               style: const TextStyle(
                                 fontFamily: 'Arima',
                                 fontSize: 18,
@@ -95,6 +105,18 @@ class _SettingsPageState extends State<SettingsPage> {
                                 color: Colors.black,
                               ),
                             ),
+                            if (sharedPreferences!.getString("fullname") != null)
+                              Text(
+                                selectedLanguage == 'Français'
+                                    ? 'Bienvenu ${sharedPreferences!.getString("fullname")},'
+                                    : 'Welcome ${sharedPreferences!.getString("fullname")},',
+                                style: const TextStyle(
+                                  fontFamily: 'Arima',
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.black,
+                                ),
+                              ),
                           ],
                         ),
                         const SizedBox(height: 10), // Espacement
@@ -125,25 +147,25 @@ class _SettingsPageState extends State<SettingsPage> {
                       }, style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFC7E4BF),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7))
-                  ), child: const Row(
+                  ), child: Row(
                     children: [
-                      Text("Gérer Quizz", style: TextStyle(color: Colors.black),),
+                      Text(selectedLanguage == 'Français' ? 'Gérer Quizz' : 'Manage Quizzes', style: const TextStyle(color: Colors.black),),
                     ],
                   )),
 
                   // Options de réglages avec des interrupteurs
-                  const SettingToggle(title: 'Son'),
-                  const SettingToggle(title: 'Vibrations'),
-                  const SettingToggle(title: 'Musique'),
-                  const SettingToggle(title: 'Notifications'),
+                  SettingToggle(title: selectedLanguage == 'Français' ? 'Son' : 'Sound'),
+                  SettingToggle(title: selectedLanguage == 'Français' ? 'Vibrations' : 'Vibrations'),
+                  SettingToggle(title: selectedLanguage == 'Français' ? 'Musique' : 'Music'),
+                  SettingToggle(title: selectedLanguage == 'Français' ? 'Notifications' : 'Notifications'),
 
                   // Menu déroulant pour le choix de la langue
                   const LanguageDropdown(),
 
                   // Liens vers d'autres pages
-                  const SettingLink(title: 'Politique de confidentialité', routeName: '/privacy'),
-                  const SettingLink(title: 'Conditions d\'utilisation', routeName: '/terms'),
-                  const SettingLink(title: 'Support'),
+                  SettingLink(title: selectedLanguage == 'Français' ? 'Politique de confidentialité' : 'Privacy Policy', routeName: '/privacy'),
+                  SettingLink(title: selectedLanguage == 'Français' ? 'Conditions d\'utilisation' : 'Terms of Use', routeName: '/terms'),
+                  SettingLink(title: selectedLanguage == 'Français' ? 'Support' : 'Support'),
                 ],
               ),
             ),
@@ -332,8 +354,8 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16), // Espacement interne
           ),
-          child: const Text('Se connecter',
-            style: TextStyle(
+          child: Text(selectedLanguage == 'Français' ? 'Se connecter' : 'Login',
+            style: const TextStyle(
               fontFamily: 'Arima',
               fontSize: 18,
               fontWeight: FontWeight.w400,
@@ -676,6 +698,23 @@ class LanguageDropdown extends StatefulWidget {
 class _LanguageDropdownState extends State<LanguageDropdown> {
   String selectedLanguage = 'Français'; // Langue par défaut
 
+  // Charger la langue depuis SharedPreferences
+  Future<void> _loadLanguage() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? language = prefs.getString('selected_language');
+    if (language != null) {
+      setState(() {
+        selectedLanguage = language;
+      });
+    }
+  }
+
+  // Sauvegarder la langue choisie dans SharedPreferences
+  Future<void> _saveLanguage(String language) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('selected_language', language);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -683,8 +722,8 @@ class _LanguageDropdownState extends State<LanguageDropdown> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween, // Distribution des éléments
         children: [
-          const Text('Langue',
-            style: TextStyle(
+          Text(selectedLanguage == 'Français' ? 'Langue' : 'Language',
+            style: const TextStyle(
               fontFamily: 'Arima',
               fontSize: 18,
               fontWeight: FontWeight.w400,
@@ -703,7 +742,10 @@ class _LanguageDropdownState extends State<LanguageDropdown> {
             onChanged: (newValue) {
               setState(() {
                 selectedLanguage = newValue!; // Change la langue sélectionnée
+                _saveLanguage(newValue); // Sauvegarder la langue sélectionnée
               });
+              // 🔄 Mettre à jour toute la page
+              setState(() {});
             },
           ),
         ],
@@ -721,13 +763,13 @@ class PrivacyPolicyPage extends StatefulWidget {
 
 class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
 
-  @override
-  void dispose() {
+  //@override
+  //void dispose() {
     // TODO: implement dispose
-    SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeRight, DeviceOrientation.landscapeLeft])
-        .then((_) {});
-    super.dispose();
-  }
+  //  SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeRight, DeviceOrientation.landscapeLeft])
+  //      .then((_) {});
+ //   super.dispose();
+  //}
 
   @override
   Widget build(BuildContext context) {
@@ -964,13 +1006,13 @@ class TermsPage extends StatefulWidget {
 
 class _TermsPageState extends State<TermsPage> {
 
-  @override
-  void dispose() {
+  //@override
+  //void dispose() {
     // TODO: implement dispose
-    SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeRight, DeviceOrientation.landscapeLeft])
-        .then((_) {});
-    super.dispose();
-  }
+   // SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeRight, DeviceOrientation.landscapeLeft])
+   //     .then((_) {});
+  //  super.dispose();
+ // }
 
   @override
   Widget build(BuildContext context) {

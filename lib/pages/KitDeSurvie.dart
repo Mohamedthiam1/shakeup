@@ -32,57 +32,57 @@ class KitDeSurviePage extends StatelessWidget {
             child: ListView(
               padding: const EdgeInsets.all(16.0),
               children: [
-                ListTile(
-                  leading: const Icon(Icons.local_drink, color: Colors.blue, size: 40),
-                  title: const Text(
+                const ListTile(
+                  leading: Icon(Icons.local_drink, color: Colors.blue, size: 40),
+                  title: Text(
                     'Eau potable',
                     style: TextStyle(fontSize: 18),
                   ),
-                  subtitle: const Text(
+                  subtitle: Text(
                     'Glou glou ! Reste hydraté comme un super-héros avec au moins 3 litres d’eau !',
                   ),
                 ),
                 const Divider(),
-                ListTile(
-                  leading: const Icon(Icons.healing, color: Colors.red, size: 40),
-                  title: const Text(
+                const ListTile(
+                  leading: Icon(Icons.healing, color: Colors.red, size: 40),
+                  title: Text(
                     'Trousse de secours',
                     style: TextStyle(fontSize: 18),
                   ),
-                  subtitle: const Text(
+                  subtitle: Text(
                     'Des pansements magiques et des potions (désinfectant) pour soigner les bobos !',
                   ),
                 ),
                 const Divider(),
-                ListTile(
-                  leading: const Icon(Icons.flashlight_on, color: Colors.yellow, size: 40),
-                  title: const Text(
+                const ListTile(
+                  leading: Icon(Icons.flashlight_on, color: Colors.yellow, size: 40),
+                  title: Text(
                     'Lampe de poche',
                     style: TextStyle(fontSize: 18),
                   ),
-                  subtitle: const Text(
+                  subtitle: Text(
                     'Pour explorer les ombres comme un aventurier... avec des piles de rechange bien sûr !',
                   ),
                 ),
                 const Divider(),
-                ListTile(
-                  leading: const Icon(Icons.fastfood, color: Colors.orange, size: 40),
-                  title: const Text(
+                const ListTile(
+                  leading: Icon(Icons.fastfood, color: Colors.orange, size: 40),
+                  title: Text(
                     'Nourriture magique',
                     style: TextStyle(fontSize: 18),
                   ),
-                  subtitle: const Text(
+                  subtitle: Text(
                     'Des barres énergétiques et des conserves pour devenir fort comme un lion !',
                   ),
                 ),
                 const Divider(),
-                ListTile(
-                  leading: const Icon(Icons.bed, color: Colors.purple, size: 40),
-                  title: const Text(
+                const ListTile(
+                  leading: Icon(Icons.bed, color: Colors.purple, size: 40),
+                  title: Text(
                     'Couverture câline',
                     style: TextStyle(fontSize: 18),
                   ),
-                  subtitle: const Text(
+                  subtitle: Text(
                     'Un manteau de chaleur pour rester bien au chaud comme un ours en hiver !',
                   ),
                 ),

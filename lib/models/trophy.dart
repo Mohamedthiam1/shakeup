@@ -1,13 +1,14 @@
 class Trophy {
   final String title;
   final String description;
-  final bool unlocked;
-  final int points; // Points attribués
+  bool unlocked;
+  int points; // Points attribués
 
   Trophy({
     required this.title,
     required this.description,
     required this.unlocked,
-    required this.points, // Nouveau champ
+    this.points=0, // Nouveau champ
   });
 }
+

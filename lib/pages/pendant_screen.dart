@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 //page d'informations "Pendant un Séisme"
 class PendantScreen extends StatefulWidget {
@@ -9,6 +10,52 @@ class PendantScreen extends StatefulWidget {
 }
 
 class _PendantScreenState extends State<PendantScreen> {
+  @override
+  void initState() {
+    super.initState();
+    _checkFirstTimeOpening();
+  }
+
+  Future<void> _checkFirstTimeOpening() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool hasOpenedBefore = prefs.getBool('opened_educational_file') ?? false;
+
+    if (!hasOpenedBefore) {
+      await prefs.setBool('opened_educational_file', true); // Enregistre l'ouverture
+      _showBadgePopup(); // Affiche le pop-up immédiatement
+    }
+  }
+
+  void _showBadgePopup() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          title: const Row(
+            children: [
+              Icon(Icons.search, color: Colors.blue, size: 40),
+              SizedBox(width: 10),
+              Text("Badge Débloqué !"),
+            ],
+          ),
+          content: const Text(
+            "Félicitations ! Tu as obtenu le badge \"Chercheur débutant\".",
+            style: TextStyle(fontSize: 16),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Fermer le pop-up
+              },
+              child: const Text("OK", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +78,7 @@ class _PendantScreenState extends State<PendantScreen> {
         centerTitle: true,
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0), // Marges autour du contenu pour un espacement uniforme
+        padding: const EdgeInsets.all(16.0), // Marges autour du contenu pour un espacement uniforme
         child: SingleChildScrollView(
           // Permet le défilement si le contenu dépasse la hauteur de l'écran
           child: Column(

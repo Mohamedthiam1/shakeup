@@ -22,7 +22,7 @@ class StoryPageContent2 extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       children: [
         // Introduction à l'histoire
-        Text(
+        const Text(
           'L\'histoire de Luna la petite étoile',
           style: TextStyle(
             fontSize: 28,
@@ -37,7 +37,7 @@ class StoryPageContent2 extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
+            const Expanded(
               flex: 3,
               child: Text(
                 'Luna est une petite étoile qui brille dans le ciel. Une nuit, alors qu\'elle danse avec ses amies, elle ressent une vibration dans l\'espace. "Qu\'est-ce que c\'est ?", se demande-t-elle.',
@@ -81,7 +81,7 @@ class StoryPageContent2 extends StatelessWidget {
             ),
             const SizedBox(width: 16),
             // Texte après l'image
-            Expanded(
+            const Expanded(
               flex: 3,
               child: Text(
                 'C\'était un tremblement de terre sur Terre ! Luna se rappelle que les humains doivent rester calmes. "Je dois les aider à se souvenir des conseils !"',
@@ -104,7 +104,7 @@ class StoryPageContent2 extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
+            const Expanded(
               flex: 3,
               child: Text(
                 'Elle commence à scintiller plus fort pour attirer l\'attention des enfants. "Cherchez un endroit sûr, restez près de vos amis !", chante-t-elle dans le ciel.',
@@ -132,7 +132,7 @@ class StoryPageContent2 extends StatelessWidget {
         const SizedBox(height: 20),
 
         // Conclusion
-        Text(
+        const Text(
           'Merci d\'avoir lu cette histoire avec Luna ! Maintenant, tu sais comment réagir en cas de tremblement de terre. Ensemble, nous sommes plus forts et plus sûrs !',
           style: TextStyle(
             fontFamily: 'Arima',
@@ -155,7 +155,7 @@ class StoryPageContent2 extends StatelessWidget {
             ),
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 40),
           ),
-          child: Text(
+          child: const Text(
             'J\'ai compris !',
             style: TextStyle(
               fontFamily: 'Arima',

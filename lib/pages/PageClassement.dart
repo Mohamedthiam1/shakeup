@@ -65,10 +65,10 @@ class ClassementPage extends StatelessWidget {
                     child: Container(
                       width: 380,  // Largeur fixe pour chaque boîte (taille petite)
                       decoration: BoxDecoration(
-                        color: Color(0xFFF6DFC5), // Couleur crevette pour la boîte
+                        color: const Color(0xFFF6DFC5), // Couleur crevette pour la boîte
                         borderRadius: BorderRadius.circular(12), // Coins arrondis
                         boxShadow: [
-                          BoxShadow(
+                          const BoxShadow(
                             color: Colors.black26,
                             blurRadius: 6,
                             offset: Offset(0, 2),

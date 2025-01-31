@@ -2,6 +2,7 @@ import 'package:cap/pages/after_screen.dart';
 import 'package:cap/pages/formation_avant.dart';
 import 'package:cap/pages/pendant_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'home_page.dart';
 
@@ -14,6 +15,25 @@ class FicheScreen extends StatefulWidget {
 }
 
 class _FicheScreenState extends State<FicheScreen> {
+  String selectedLanguage = 'Français'; // Langue par défaut
+
+  @override
+  void initState() {
+    super.initState();
+    _loadLanguage(); // Charger la langue au démarrage
+  }
+
+  // Charger la langue depuis SharedPreferences
+  Future<void> _loadLanguage() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? language = prefs.getString('selected_language');
+    if (language != null) {
+      setState(() {
+        selectedLanguage = language;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +44,7 @@ class _FicheScreenState extends State<FicheScreen> {
             Navigator.of(context).pop(); // Action de retour
           },
         ),
-        title: Text("Fiches",
+        title: Text(selectedLanguage == 'Français' ? 'Fiches' : 'Cards',
           style: TextStyle(
             fontFamily: 'Arima',
             fontSize: 22,
@@ -55,7 +75,7 @@ class _FicheScreenState extends State<FicheScreen> {
                     borderRadius: BorderRadius.circular(8), // Coins légèrement arrondis (valeur réduite)
                   ),
                 ),
-                child: Text('Avant',
+                child: Text(selectedLanguage == 'Français' ? 'Avant' : 'Before',
                   style: TextStyle(
                     fontFamily: 'Arima',
                     fontSize: 18,
@@ -82,7 +102,7 @@ class _FicheScreenState extends State<FicheScreen> {
                     borderRadius: BorderRadius.circular(8), // Coins légèrement arrondis
                   ),
                 ),
-                child: Text('Pendant',
+                child: Text(selectedLanguage == 'Français' ? 'Pendant' : 'During',
                   style: TextStyle(
                     fontFamily: 'Arima',
                     fontSize: 18,
@@ -109,7 +129,7 @@ class _FicheScreenState extends State<FicheScreen> {
                     borderRadius: BorderRadius.circular(8), // Coins légèrement arrondis
                   ),
                 ),
-                child: Text('Après',
+                child: Text(selectedLanguage == 'Français' ? 'Après' : 'After',
                   style: TextStyle(
                     fontFamily: 'Arima',
                     fontSize: 18,

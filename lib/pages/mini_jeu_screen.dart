@@ -25,7 +25,7 @@ class _MiniJeuScreenState extends State<MiniJeuScreen> {
             Navigator.of(context).pop(); // Action de retour
           },
         ),
-        title: Text("Mini jeux",
+        title: const Text("Mini jeux",
           style: TextStyle(
             fontFamily: 'Arima',
             fontSize: 22,
@@ -46,14 +46,14 @@ class _MiniJeuScreenState extends State<MiniJeuScreen> {
                 children: [
                   InkWell(
                     onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => TrouverAbriPage()));
+                      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const TrouverAbriPage()));
                     },
                     child: SizedBox(
                       width: screenWidth * 0.22, // 30% de la largeur de l'écran
                       child: Image.asset('assets/images/img5.jpg'),
                     ),
                   ),
-                  Text('Trouver l’abri',
+                  const Text('Trouver l’abri',
                     style: TextStyle(
                       fontFamily: 'Arima',
                       fontSize: 18,
@@ -63,19 +63,19 @@ class _MiniJeuScreenState extends State<MiniJeuScreen> {
                   ),
                 ],
               ),
-              SizedBox(width: 20),
+              const SizedBox(width: 20),
               Column(
                 children: [
                   InkWell(
                     onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => KitDeSurviePage()));
+                      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const KitDeSurviePage()));
                     },
                     child: SizedBox(
                       width: screenWidth * 0.22, // 30% de la largeur de l'écran
                       child: Image.asset('assets/images/img4.jpg'),
                     ),
                   ),
-                  Text('Kit de survie',
+                  const Text('Kit de survie',
                     style: TextStyle(
                       fontFamily: 'Arima',
                       fontSize: 18,
@@ -85,19 +85,19 @@ class _MiniJeuScreenState extends State<MiniJeuScreen> {
                   ),
                 ],
               ),
-              SizedBox(width: 20),
+              const SizedBox(width: 20),
               Column(
                 children: [
                   InkWell(
                     onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => DangerPage()));
+                      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const DangerPage()));
                     },
                     child: SizedBox(
                       width: screenWidth * 0.22, // 30% de la largeur de l'écran
                       child: Image.asset('assets/images/img3.jpg'),
                     ),
                   ),
-                  Text('Éviter les dangers',
+                  const Text('Éviter les dangers',
                     style: TextStyle(
                       fontFamily: 'Arima',
                       fontSize: 18,
