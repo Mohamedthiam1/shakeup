@@ -1,3 +1,4 @@
+import 'package:cap/global/global.dart';
 import 'package:cap/pages/PageAccueilHistoires.dart';
 import 'package:cap/pages/PageClassement.dart';
 import 'package:cap/pages/fiche_screen.dart';
@@ -63,17 +64,16 @@ class NavigationB extends State<NavigationBar> {
   }
 
   Future<void> _checkTrophyUnlock() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    int userPoints = prefs.getInt('user_points') ?? 0;
-    bool hasUnlockedTrophy = prefs.getBool('unlocked_recolteur_points') ?? false;
+    int userPoints = sharedPreferences!.getInt('points') ?? 0;
+    bool hasUnlockedTrophy = sharedPreferences!.getBool('unlocked_recolteur_points') ?? false;
 
     if (userPoints >= 15 && !hasUnlockedTrophy) {
       // Marquer le trophée comme débloqué
-      await prefs.setBool('unlocked_recolteur_points', true);
+      await sharedPreferences!.setBool('unlocked_recolteur_points', true);
 
       // Ajouter 20 points lors du déblocage du trophée
       userPoints += 20;  // Ajouter 20 points
-      await prefs.setInt('user_points', userPoints); // Mettre à jour le score du joueur
+      await sharedPreferences!.setInt('points', userPoints); // Mettre à jour le score du joueur
 
       // Afficher un pop-up pour annoncer le trophée débloqué
       _showTrophyPopup(userPoints); // Passer le nouveau nombre de points pour l'afficher dans le pop-up
@@ -312,11 +312,10 @@ class NavigationB extends State<NavigationBar> {
               int userPoints = await getUserPoints();
 
               // Stocker les points dans SharedPreferences
-              final prefs = await SharedPreferences.getInstance();
-              await prefs.setInt('user_points', userPoints); // Stocke les points localement
+              await sharedPreferences!.setInt('points', userPoints); // Stocke les points localement
 
               // Récupérer les points stockés
-              int storedPoints = prefs.getInt('user_points') ?? 0;
+              int storedPoints = sharedPreferences!.getInt('points') ?? 0;
 
               showDialog(
                 context: context,

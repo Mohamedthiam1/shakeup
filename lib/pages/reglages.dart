@@ -1,5 +1,6 @@
 import 'package:cap/admin/add_quizz_screen.dart';
 import 'package:cap/admin/manage_quizz_screen.dart';
+import 'package:cap/widgets/progress_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../firebase_options.dart';
 import '../global/global.dart';
+import '../widgets/custom_text_field.dart';
 import '../widgets/error_dialog.dart';
 import '../widgets/showloading.dart';
 
@@ -24,10 +26,22 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   String selectedLanguage = 'Français'; // Langue par défaut
+  late TextEditingController emailController = TextEditingController();
+  late TextEditingController passwordController = TextEditingController();
+  late TextEditingController confirmPasswordController = TextEditingController();
+  late TextEditingController fullNameController = TextEditingController();
+  bool seePassword = true;
+  bool seeConfirmationPassword = true;
+  bool isLogin = true;
+  bool loading = false;
 
   @override
   void initState() {
     super.initState();
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
+    confirmPasswordController = TextEditingController();
+    fullNameController = TextEditingController();
     _loadLanguage(); // Charger la langue au démarrage
   }
 
@@ -64,9 +78,9 @@ class _SettingsPageState extends State<SettingsPage> {
         backgroundColor: Colors.green[100], // Couleur de fond verte pour l'AppBar
         centerTitle: true,
         actions: [
-          IconButton(onPressed: () async {
+          IconButton(onPressed: sharedPreferences!.getString("uid") == null ? null : () async {
             logoutSafely(context);
-          }, icon: const Icon(Icons.logout_rounded, color: Colors.redAccent,))
+          }, icon: Icon(Icons.logout_rounded, color: sharedPreferences!.getString("uid") == null ? null : Colors.redAccent,))
         ],
       ),
 
@@ -125,7 +139,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           children: [
                             SocialButton('Google', 'assets/images/icons8-google-48.png'),
                             SocialButton('Apple', 'assets/images/icons8-apple-50.png'),
-                            SocialButton('Facebook', 'assets/images/icons8-facebook-48.png'),
+                            SocialButton('Email', ''),
                           ],
                         ),
                       ],
@@ -301,7 +315,7 @@ class _SettingsPageState extends State<SettingsPage> {
         Row(
           mainAxisSize: MainAxisSize.min, // Ajuste la taille pour correspondre au contenu
           children: [
-            Image.asset(
+            if(iconPath.isNotEmpty) Image.asset(
               iconPath, // Affiche l'icône
               width: 24,
               height: 24,
@@ -318,6 +332,7 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
           ],
         ),
+        SizedBox(height: 5),
         ElevatedButton(
           onPressed: sharedPreferences!.getString("uid") != null ? null : () {
             if(label == 'Google') {
@@ -345,6 +360,8 @@ class _SettingsPageState extends State<SettingsPage> {
               print("Google signIn ended");
             } else if(label == "Apple") {
 
+            } else if(label == "Email") {
+              showAuthModal(context);
             }
           }, // Action à définir lors de l'appui sur le bouton
           style: ElevatedButton.styleFrom(
@@ -367,7 +384,178 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-// Bouton pour les réseaux sociaux
+  void showAuthModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        // bool isLogin = true; // Tracks login vs. registration
+
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+                left: 20,
+                right: 20,
+                top: 20,
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      isLogin ? "Connexion" : "Inscription",
+                      style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 15),
+
+                    if (!isLogin) // Full name field only for registration
+                      Container(
+                        margin: EdgeInsets.only(top: 10),
+                        child: CustomTextField(
+                          autofillHints: AutofillHints.name,
+                          controller: fullNameController,
+                          textCapitalization: TextCapitalization.words,
+                          enabled: true,
+                          maxLines: 1,
+                          backgroundColor: Colors.grey.withOpacity(0.4),
+                          isObscure: false,
+                          hintText: "Entrez votre nom complet...",
+                          marginleft: 10,
+                          marginright: 10,
+                        ),
+                      ),
+
+                    Container(
+                      margin: const EdgeInsets.only(top: 10),
+                      child: CustomTextField(
+                        autofillHints: AutofillHints.email,
+                        controller: emailController,
+                        textCapitalization: TextCapitalization.none,
+                        enabled: true,
+                        maxLines: 1,
+                        keyboardType: TextInputType.emailAddress,
+                        backgroundColor: Colors.grey.withOpacity(0.4),
+                        isObscure: false,
+                        hintText: "Entrez votre adresse mail...",
+                        marginleft: 10,
+                        marginright: 10,
+                      ),
+                    ),
+
+                    Container(
+                      // margin: EdgeInsets.only(top: width > 425 ? 10 : 5),
+                      child: CustomTextField(
+                        autofillHints: AutofillHints.password,
+                        controller: passwordController,
+                        textCapitalization: TextCapitalization.none,
+                        enabled: true,
+                        maxLines: 1,
+                        keyboardType: TextInputType.text,
+                        backgroundColor: Colors.grey.withOpacity(0.4),
+                        isObscure: seePassword,
+                        suffixIcon: IconButton(onPressed: (){
+                          setState(() {
+                            seePassword = !seePassword;
+                          });
+                        }, icon: Icon(seePassword ? Icons.visibility_off_rounded : Icons.visibility_rounded)),
+                        hintText: "Entrez votre mot de passe...",
+                        marginleft: 10,
+                        marginright: 10,
+                      ),
+                    ),
+
+                    if (!isLogin) // Password confirmation only for registration
+                      Container(
+                        // margin: EdgeInsets.only(top: width > 425 ? 10 : 5),
+                        child: CustomTextField(
+                          controller: confirmPasswordController,
+                          textCapitalization: TextCapitalization.none,
+                          enabled: true,
+                          maxLines: 1,
+                          suffixIcon: IconButton(onPressed: (){
+                            setState(() {
+                              seeConfirmationPassword = !seeConfirmationPassword;
+                            });
+                          }, icon: Icon(seeConfirmationPassword ? Icons.visibility_off_rounded : Icons.visibility_rounded)),
+                          keyboardType: TextInputType.text,
+                          backgroundColor: Colors.grey.withOpacity(0.4),
+                          isObscure: seeConfirmationPassword,
+                          hintText: "Confirmez le mot de passe...",
+                          marginleft: 10,
+                          marginright: 10,
+                        ),
+                      ),
+
+                    const SizedBox(height: 20),
+
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(7),
+                          )
+                        ),
+                        onPressed: () async {
+                          String email = emailController.text.trim();
+                          String password = passwordController.text.trim();
+                          String confirmPassword = confirmPasswordController.text.trim();
+                          String fullName = fullNameController.text.trim();
+                          setState(() {
+                            loading = true;
+                          });
+
+                          if (isLogin) {
+                            // showloading(context);
+                            await formValidation(email, password, context, setState);
+                            setState(() {
+                              loading = false;
+                            });
+                          } else {
+                            if (email.isEmpty || password.isEmpty || fullName.isEmpty || confirmPassword.isEmpty) {
+                              Fluttertoast.showToast(msg: "Tous les champs sont requis.");
+                              setState(() {
+                                loading = false;
+                              });
+                              return;
+                            }
+                            if (password != confirmPassword) {
+                              Fluttertoast.showToast(msg: "Les mots de passe ne correspondent pas.");
+                              setState(() {
+                                loading = false;
+                              });
+                              return;
+                            }
+                            authenticateUserAndSignUp(email, password, fullName, "", "", context, setState);
+                          }
+                        },
+                        child: loading ? circularProgress() : Text(isLogin ? "Se connecter" : "S'inscrire", style: TextStyle(color: Colors.white),),
+                      ),
+                    ),
+
+                    TextButton(
+                      onPressed: () => setState(() => isLogin = !isLogin),
+                      child: Text(
+                        isLogin ? "Créer un compte" : "Déjà inscrit ? Connectez-vous",
+                        style: const TextStyle(color: Colors.blue),
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
 
   formValidation(String email, String hidden, BuildContext context, StateSetter setState) {
     print('Entered properly 1');
@@ -401,24 +589,25 @@ class _SettingsPageState extends State<SettingsPage> {
           await sharedPreferences!.setString("fullname", snapshot.data()!["fullname"] ?? "");
           await sharedPreferences!.setString("photoUrl", snapshot.data()!["photoUrl"] ?? "");
           await sharedPreferences!.setInt("joinDate", snapshot.data()!["joinDate"] ?? 0);
+          await sharedPreferences!.setInt("points", snapshot.data()!["points"] ?? 0);
           print("Holaaaa  3333333333");
 
-          FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).update({
-            "numberofauthentications": (sharedPreferences!.getInt("numberofauthentications")!) + 1,
-          });
+          // FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).update({
+          //   "numberofauthentications": (sharedPreferences!.getInt("numberofauthentications")!) + 1,
+          // });
 
 
           setState(() {
             sharedPreferences;
           });
-          // Navigator.pop(context);
+          Navigator.pop(context);
           Navigator.pop(context);
           // setState(() {
           //   sharedPreferences;
           // });
-          print("8888888*${sharedPreferences!.getBool("isDoctor")!}");
+          // print("8888888*${sharedPreferences!.getBool("isDoctor")!}");
 
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (c) => const SettingsPage(), fullscreenDialog: true));
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (c) => const SettingsPage()));
         }
 
         else {
@@ -750,455 +939,6 @@ class _LanguageDropdownState extends State<LanguageDropdown> {
           ),
         ],
       ),
-    );
-  }
-}
-
-class PrivacyPolicyPage extends StatefulWidget {
-  const PrivacyPolicyPage({super.key});
-
-  @override
-  State<PrivacyPolicyPage> createState() => _PrivacyPolicyPageState();
-}
-
-class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
-
-  //@override
-  //void dispose() {
-    // TODO: implement dispose
-  //  SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeRight, DeviceOrientation.landscapeLeft])
-  //      .then((_) {});
- //   super.dispose();
-  //}
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
-            Navigator.of(context).pop(); // Action de retour
-          },
-        ),
-        title: const Text(
-          'Politique de confidentialité',
-          style: TextStyle(
-            fontFamily: 'Arima',
-            fontSize: 22,
-            fontWeight: FontWeight.w400,
-            color: Colors.black,
-          ),
-        ),
-        backgroundColor: Colors.green[100], // Couleur de fond verte pour l'AppBar
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0), // Espacement autour du contenu principal
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Politique de Confidentialité',
-                style: titleStyle(),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Dernière mise à jour : 27 Janvier 2024',
-                style: bodyStyle(),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                'Bienvenue sur ShakeUp, une application conçue pour sensibiliser et informer les enfants et les jeunes sur les tremblements de terre. Votre vie privée est une priorité pour nous. Cette politique de confidentialité explique comment nous collectons, utilisons, protégeons et partageons vos informations lorsque vous utilisez notre application.',
-                style: bodyStyle(),
-              ),
-              const SizedBox(height: 24),
-              Text(
-                '1. Informations que nous collectons',
-                style: titleStyle(),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Nous nous engageons à limiter la collecte d’informations personnelles. Voici les types de données que nous pouvons recueillir :',
-                style: bodyStyle(),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                '- Informations non personnelles : Données anonymes telles que l’âge, le pays ou la langue, utilisées pour améliorer l’expérience utilisateur.',
-                style: bodyStyle(),
-              ),
-              Text(
-                '- Données de jeu : Progression dans le jeu, scores et préférences, uniquement pour personnaliser l’expérience.',
-                style: bodyStyle(),
-              ),
-              Text(
-                '- Données techniques : Informations sur l’appareil (modèle, système d’exploitation) pour assurer la compatibilité et la performance.',
-                style: bodyStyle(),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Nous ne collectons aucune information personnelle identifiable (comme le nom, l’adresse ou l’e-mail) sans le consentement explicite des parents ou tuteurs légaux.',
-                style: bodyStyle(),
-              ),
-              const SizedBox(height: 24),
-              Text(
-                '2. Utilisation des informations',
-                style: titleStyle(),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Les informations collectées sont utilisées pour :',
-                style: bodyStyle(),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                '- Fournir une expérience de jeu personnalisée et éducative.',
-                style: bodyStyle(),
-              ),
-              Text(
-                '- Améliorer les fonctionnalités de l’application.',
-                style: bodyStyle(),
-              ),
-              Text(
-                '- Analyser l’utilisation de l’application pour optimiser son contenu.',
-                style: bodyStyle(),
-              ),
-              Text(
-                '- Respecter les obligations légales.',
-                style: bodyStyle(),
-              ),
-              const SizedBox(height: 24),
-              Text(
-                '3. Protection des données',
-                style: titleStyle(),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Nous mettons en œuvre des mesures de sécurité techniques et organisationnelles pour protéger vos données contre tout accès non autorisé, modification ou destruction.',
-                style: bodyStyle(),
-              ),
-              const SizedBox(height: 24),
-              Text(
-                '4. Partage des informations',
-                style: titleStyle(),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Nous ne partageons pas vos informations avec des tiers, sauf dans les cas suivants :',
-                style: bodyStyle(),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                '- Avec votre consentement explicite.',
-                style: bodyStyle(),
-              ),
-              Text(
-                '- Pour répondre à une obligation légale ou réglementaire.',
-                style: bodyStyle(),
-              ),
-              Text(
-                '- Pour protéger les droits, la sécurité ou la propriété de l’application.',
-                style: bodyStyle(),
-              ),
-              const SizedBox(height: 24),
-              Text(
-                '5. Consentement des parents',
-                style: titleStyle(),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Conformément aux réglementations comme le COPPA (Children’s Online Privacy Protection Act) et le RGPD (Règlement Général sur la Protection des Données), nous obtenons le consentement vérifiable des parents ou tuteurs légaux avant de collecter des informations personnelles auprès des enfants de moins de 13 ans.',
-                style: bodyStyle(),
-              ),
-              const SizedBox(height: 24),
-              Text(
-                '6. Vos droits',
-                style: titleStyle(),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Vous avez le droit de :',
-                style: bodyStyle(),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                '- Accéder aux informations que nous détenons sur vous.',
-                style: bodyStyle(),
-              ),
-              Text(
-                '- Demander la correction ou la suppression de vos données.',
-                style: bodyStyle(),
-              ),
-              Text(
-                '- Retirer votre consentement à tout moment.',
-                style: bodyStyle(),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Pour exercer ces droits, contactez-nous à l’adresse suivante : contact@shakeup.com.',
-                style: bodyStyle(),
-              ),
-              const SizedBox(height: 24),
-              Text(
-                '7. Modifications de la politique de confidentialité',
-                style: titleStyle(),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Nous pouvons mettre à jour cette politique de temps à autre. Toute modification sera publiée sur cette page avec une date de mise à jour révisée.',
-                style: bodyStyle(),
-              ),
-              const SizedBox(height: 24),
-              Text(
-                '8. Nous contacter',
-                style: titleStyle(),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Si vous avez des questions concernant cette politique de confidentialité ou nos pratiques, veuillez nous contacter à :',
-                style: bodyStyle(),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'ShakeUp\ncontact@shakeup.com',
-                style: bodyStyle(),
-              ),
-              const SizedBox(height: 24),
-              Text(
-                'Merci de faire confiance à ShakeUp pour sensibiliser les jeunes aux tremblements de terre tout en protégeant leur vie privée.',
-                style: bodyStyle(),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  // Fonction pour styliser les titres
-  TextStyle titleStyle() {
-    return const TextStyle(
-      fontFamily: 'Arima',
-      fontSize: 20,
-      fontWeight: FontWeight.bold,
-      color: Colors.black,
-    );
-  }
-
-  // Fonction pour styliser le corps du texte
-  TextStyle bodyStyle() {
-    return const TextStyle(
-      fontFamily: 'Arima',
-      fontSize: 18,
-      fontWeight: FontWeight.w400,
-      color: Colors.black,
-    );
-  }
-}
-
-class TermsPage extends StatefulWidget {
-  const TermsPage({super.key});
-
-  @override
-  State<TermsPage> createState() => _TermsPageState();
-}
-
-class _TermsPageState extends State<TermsPage> {
-
-  //@override
-  //void dispose() {
-    // TODO: implement dispose
-   // SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeRight, DeviceOrientation.landscapeLeft])
-   //     .then((_) {});
-  //  super.dispose();
- // }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-        title: const Text(
-          'Conditions d\'utilisation',
-          style: TextStyle(
-            fontFamily: 'Arima',
-            fontSize: 22,
-            fontWeight: FontWeight.w400,
-            color: Colors.black,
-          ),
-        ),
-        backgroundColor: Colors.green[100],
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Conditions Générales d\'Utilisation (CGU)',
-                style: titleStyle(),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Dernière mise à jour : 27 Janvier 2024',
-                style: bodyStyle(),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                'Bienvenue sur ShakeUp, une application éducative conçue pour sensibiliser et informer les enfants et les jeunes sur les tremblements de terre. En utilisant cette application, vous acceptez les conditions générales d\'utilisation décrites ci-dessous.',
-                style: bodyStyle(),
-              ),
-              const SizedBox(height: 24),
-              Text(
-                '1. Acceptation des conditions',
-                style: titleStyle(),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'En téléchargeant, accédant ou utilisant ShakeUp, vous acceptez d\'être lié par ces Conditions Générales d\'Utilisation. Si vous n\'acceptez pas ces conditions, veuillez ne pas utiliser l\'application.',
-                style: bodyStyle(),
-              ),
-              const SizedBox(height: 24),
-              Text(
-                '2. Utilisation de l\'application',
-                style: titleStyle(),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                '- Âge minimum : L\'application est destinée aux enfants et aux jeunes, mais son utilisation par des enfants de moins de 13 ans nécessite le consentement préalable d\'un parent ou tuteur légal.',
-                style: bodyStyle(),
-              ),
-              Text(
-                '- Objectif éducatif : L\'application est conçue pour informer et sensibiliser sur les tremblements de terre. Elle ne remplace pas les conseils de professionnels ou les mesures de sécurité officielles.',
-                style: bodyStyle(),
-              ),
-              Text(
-                '- Utilisation responsable : Vous vous engagez à utiliser l\'application de manière légale et à ne pas perturber son fonctionnement ou son accès pour les autres utilisateurs.',
-                style: bodyStyle(),
-              ),
-              const SizedBox(height: 24),
-              Text(
-                '3. Comptes utilisateurs',
-                style: titleStyle(),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                '- Création de compte : Certaines fonctionnalités peuvent nécessiter la création d\'un compte. Vous devez fournir des informations exactes et à jour.',
-                style: bodyStyle(),
-              ),
-              Text(
-                '- Sécurité du compte : Vous êtes responsable de la confidentialité de vos identifiants et de toutes les activités réalisées sous votre compte.',
-                style: bodyStyle(),
-              ),
-              const SizedBox(height: 24),
-              Text(
-                '4. Propriété intellectuelle',
-                style: titleStyle(),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                '- Droits d\'auteur : Tout le contenu de l\'application (textes, images, sons, vidéos) est protégé par des droits d\'auteur et appartient à ShakeUp ou à ses partenaires.',
-                style: bodyStyle(),
-              ),
-              Text(
-                '- Utilisation limitée : Vous n\'êtes pas autorisé à copier, modifier, distribuer ou exploiter le contenu de l\'application sans autorisation écrite préalable.',
-                style: bodyStyle(),
-              ),
-              const SizedBox(height: 24),
-              Text(
-                '5. Limitation de responsabilité',
-                style: titleStyle(),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                '- Utilisation à vos risques : L\'application est fournie "telle quelle". Nous ne garantissons pas qu\'elle sera exempte d\'erreurs ou de bugs.',
-                style: bodyStyle(),
-              ),
-              Text(
-                '- Dommages indirects : Nous ne serons pas responsables des dommages indirects (pertes de données, interruptions de service, etc.) résultant de l\'utilisation de l\'application.',
-                style: bodyStyle(),
-              ),
-              const SizedBox(height: 24),
-              Text(
-                '6. Modifications des CGU',
-                style: titleStyle(),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Nous nous réservons le droit de modifier ces Conditions Générales d\'Utilisation à tout moment. Les modifications seront publiées sur cette page avec une date de mise à jour révisée. Votre utilisation continue de l\'application après ces modifications constitue votre acceptation des nouvelles conditions.',
-                style: bodyStyle(),
-              ),
-              const SizedBox(height: 24),
-              Text(
-                '7. Résiliation',
-                style: titleStyle(),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Nous nous réservons le droit de résilier ou de suspendre votre accès à l\'application en cas de non-respect de ces CGU ou de comportement inapproprié.',
-                style: bodyStyle(),
-              ),
-              const SizedBox(height: 24),
-              Text(
-                '8. Loi applicable',
-                style: titleStyle(),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Ces Conditions Générales d\'Utilisation sont régies par les lois de [Pays/Région]. Tout litige relatif à l\'utilisation de l\'application sera soumis à la juridiction compétente de [Ville/Pays].',
-                style: bodyStyle(),
-              ),
-              const SizedBox(height: 24),
-              Text(
-                '9. Nous contacter',
-                style: titleStyle(),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Si vous avez des questions concernant ces Conditions Générales d\'Utilisation, veuillez nous contacter à :',
-                style: bodyStyle(),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'ShakeUp\ncontact@shakeup.com',
-                style: bodyStyle(),
-              ),
-              const SizedBox(height: 24),
-              Text(
-                'Merci d\'utiliser ShakeUp pour sensibiliser les jeunes aux tremblements de terre tout en respectant ces conditions.',
-                style: bodyStyle(),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  TextStyle titleStyle() {
-    return const TextStyle(
-      fontFamily: 'Arima',
-      fontSize: 20,
-      fontWeight: FontWeight.bold,
-      color: Colors.black,
-    );
-  }
-
-  // Fonction pour styliser le corps du texte
-  TextStyle bodyStyle() {
-    return const TextStyle(
-      fontFamily: 'Arima',
-      fontSize: 18,
-      fontWeight: FontWeight.w400,
-      color: Colors.black,
     );
   }
 }

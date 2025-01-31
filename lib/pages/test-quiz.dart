@@ -1,3 +1,4 @@
+import 'package:cap/global/global.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,8 +19,10 @@ class _QuizPageState extends State<QuizPage> {
   Timer? _timer;
   List<Quizz> quizzes = [];
   int score = 0;
-  DateTime? questionStartTime; // Enregistrer l'heure de début de la question
-  bool hasReceivedFastAnswerTrophy = false; // Pour vérifier si le joueur a déjà gagné ce trophée
+  bool hasReceivedFastAnswerTrophy = false;
+  int currentQuestionIndex = 0;
+  bool hasAnswered = false;
+  PageController _pageController = PageController();
 
   @override
   void initState() {
@@ -29,17 +32,18 @@ class _QuizPageState extends State<QuizPage> {
     _checkFastAnswerTrophy();
   }
 
+  @override
+  void dispose() {
+    _timer?.cancel();
+    _pageController.dispose();
+    super.dispose();
+  }
+
   Future<void> _checkFastAnswerTrophy() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       hasReceivedFastAnswerTrophy = prefs.getBool('fast_answer_trophy') ?? false;
     });
-  }
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
   }
 
   void startTimer() {
@@ -50,184 +54,222 @@ class _QuizPageState extends State<QuizPage> {
         });
       } else {
         timer.cancel();
+        _showQuizEndDialog();
       }
     });
   }
 
-  // Fonction pour récupérer 2 quizz aléatoires
   Future<void> fetchRandomQuizzes() async {
-    final QuerySnapshot snapshot =
-    await FirebaseFirestore.instance.collection("quizzes").get();
-
+    final snapshot = await FirebaseFirestore.instance.collection("quizzes").get();
     if (snapshot.docs.isNotEmpty) {
       List<Quizz> allQuizzes = snapshot.docs
-          .map((doc) => Quizz.fromJson(doc.data() as Map<String, dynamic>))
+          .map((doc) => Quizz.fromJson(doc.data()))
           .toList();
-
       allQuizzes.shuffle(Random());
-      setState(() {
-        quizzes = allQuizzes.take(2).toList();
-        questionStartTime = DateTime.now(); // Initialiser l'heure de début de la question
-      });
+      setState(() => quizzes = allQuizzes.take(5).toList()); // Fetch 5 questions
     }
   }
 
-  void checkAnswer(int questionIndex, int selectedAnswer) async {
-    if (quizzes[questionIndex].correctOne == selectedAnswer) {
+  void checkAnswer(int selectedAnswer) async {
+    if (hasAnswered) return; // One attempt per question
+
+    setState(() {
+      hasAnswered = true;
+    });
+
+    bool isCorrect = quizzes[currentQuestionIndex].correctOne == selectedAnswer;
+
+    if (isCorrect) {
       setState(() {
-        score += 5; // +5 points si la réponse est correcte
+        score += 5;
       });
+
+      if (remainingTime >= 15 && !hasReceivedFastAnswerTrophy) {
+        setState(() {
+          hasReceivedFastAnswerTrophy = true;
+          score += 30; // Fast answer bonus
+        });
+
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setBool('fast_answer_trophy', true);
+        _showTrophyPopup();
+      }
     }
 
-    // Vérifiez si la réponse est donnée en moins de 15 secondes
-    if (remainingTime >= 15 && !hasReceivedFastAnswerTrophy) {
-      setState(() {
-        hasReceivedFastAnswerTrophy = true;
-      });
+    _showAnswerFeedback(isCorrect);
+  }
 
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('fast_answer_trophy', true); // Enregistrez le trophée débloqué
-
-      // Récompense rapide
-      setState(() {
-        score += 30; // +30 points pour un trophée rapide
-      });
-
-      _showTrophyPopup(); // Affiche le pop-up de trophée
-    }
-
-    // Passer à la question suivante
-    if (questionIndex + 1 < quizzes.length) {
-      setState(() {
-        questionStartTime = DateTime.now(); // Réinitialiser le temps de la prochaine question
-      });
-    } else {
-      // Afficher un message de fin du quiz
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text("Quiz terminé !"),
-          content: Text("Votre score final est : $score points"),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-                Navigator.pop(context);
-              },
-              child: const Text("OK"),
-            ),
-          ],
+  void _showAnswerFeedback(bool isCorrect) {
+    showDialog(
+      context: context,
+      barrierDismissible: false, // Prevent closing
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Icon(isCorrect ? Icons.check_circle : Icons.cancel,
+            color: isCorrect ? Colors.green : Colors.red, size: 60),
+        content: Text(
+          isCorrect ? "Bonne réponse !" : "Mauvaise réponse...",
+          textAlign: TextAlign.center,
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
+      ),
+    );
+
+    Future.delayed(const Duration(seconds: 1), () {
+      Navigator.pop(context); // Close feedback popup
+      _nextQuestion();
+    });
+  }
+
+  void _nextQuestion() {
+    if (currentQuestionIndex + 1 < quizzes.length) {
+      setState(() {
+        currentQuestionIndex++;
+        hasAnswered = false;
+      });
+      _pageController.nextPage(
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
       );
+    } else {
+      _showQuizEndDialog();
     }
+  }
+
+  void _showQuizEndDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: const Text("Quizz terminé !"),
+        content: Text("Votre score final est : $score points"),
+        actions: [
+          TextButton(
+            onPressed: () async {
+              sharedPreferences!.setInt("points", sharedPreferences!.getInt("points") == null ? score : sharedPreferences!.getInt("points")! + score);
+              await FirebaseFirestore.instance.collection("users").doc(sharedPreferences!.getString("uid")).update({
+                "points": FieldValue.increment(score)
+              });
+              Navigator.popUntil(context, (route) => route.isFirst);
+            },
+            child: const Text("OK"),
+          ),
+        ],
+      ),
+    );
   }
 
   void _showTrophyPopup() {
     showDialog(
+      barrierDismissible: false,
       context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          title: const Row(
-            children: [
-              Icon(Icons.emoji_events, color: Colors.blue, size: 40),
-              SizedBox(width: 10),
-              Text("Trophée Débloqué !"),
-            ],
-          ),
-          content: const Text(
-            "Félicitations ! Tu as débloqué le trophée \"Répondant Rapide\".",
-            style: TextStyle(fontSize: 16),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Fermer le pop-up
-              },
-              child: const Text("OK", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            ),
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: const Row(
+          children: [
+            Icon(Icons.emoji_events, color: Colors.blue, size: 40),
+            SizedBox(width: 10),
+            Text("Trophée Débloqué !"),
           ],
-        );
-      },
+        ),
+        content: const Text(
+          "Félicitations ! Tu as débloqué le trophée \"Répondant Rapide\".",
+          style: TextStyle(fontSize: 16),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("OK", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showImageDialog(String imageUrl) {
+    showDialog(
+      context: context,
+      builder: (context) => Container(
+        width: MediaQuery.of(context).size.width,
+        child: Dialog(
+          backgroundColor: Colors.transparent,
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: InteractiveViewer(
+                maxScale: 20,
+                  child: Image.network(imageUrl)),
+            ),
+          ),
+        ),
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-        title: const Text("Quiz",
-            style: TextStyle(fontFamily: 'Arima', fontSize: 22, color: Colors.black)),
+        title: const Text("Quizz", style: TextStyle(fontFamily: 'Arima', fontSize: 22, color: Colors.black)),
         backgroundColor: Colors.green[100],
         centerTitle: true,
         actions: [
-          Row(
-            children: [
-              Image.asset(
-                'assets/images/icons8-time-40.png',
-                width: 24,
-                height: 24,
-              ),
-              const SizedBox(width: 4),
-              Text("$remainingTime s",
-                  style: const TextStyle(fontFamily: 'Arima', fontSize: 16, color: Colors.black)),
-            ],
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: Row(
+              children: [
+                Image.asset('assets/images/icons8-time-40.png', width: 24, height: 24),
+                const SizedBox(width: 4),
+                Text("$remainingTime s", style: const TextStyle(fontSize: 16, color: Colors.black)),
+              ],
+            ),
           ),
         ],
       ),
       body: quizzes.isEmpty
           ? const Center(child: CircularProgressIndicator())
-          : Padding(
-        padding: const EdgeInsets.all(10.0),
+          : PageView.builder(
+        controller: _pageController,
+        physics: const NeverScrollableScrollPhysics(), // Prevent manual swiping
+        itemCount: quizzes.length,
+        itemBuilder: (context, index) {
+          return _buildQuestionCard(quizzes[index]);
+        },
+      ),
+    );
+  }
+
+  Widget _buildQuestionCard(Quizz quiz) {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: SingleChildScrollView(
         child: Column(
           children: [
-            Text("Score: $score",
-                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-
-            const SizedBox(height: 20),
-
-            Expanded(
-              child: ListView.builder(
-                itemCount: quizzes.length,
-                itemBuilder: (context, index) {
-                  return Column(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 10),
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          quizzes[index].question ?? "Question introuvable",
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      Wrap(
-                        alignment: WrapAlignment.spaceEvenly,
-                        children: List.generate(
-                          quizzes[index].answers!.length,
-                              (i) => AnswerButton(
-                            text: quizzes[index].answers![i],
-                            color: Colors.blue,
-                            onPressed: () => checkAnswer(index, i),
-                          ),
-                        ),
-                      ),
-                    ],
-                  );
-                },
+            Text("Score: $score", style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 10),
+            if (quiz.pictureUrl != null && quiz.pictureUrl!.isNotEmpty)
+              GestureDetector(
+                onTap: () => _showImageDialog(quiz.pictureUrl!),
+                child: Container(
+                  margin: const EdgeInsets.only(bottom: 10),
+                  width: double.infinity,
+                  height: 250,
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.network(quiz.pictureUrl!, fit: BoxFit.cover),
+                  ),
+                ),
+              ),
+            Text(quiz.question ?? "Question introuvable",
+                textAlign: TextAlign.center, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
+            const SizedBox(height: 10),
+            ...List.generate(
+              quiz.answers!.length,
+                  (i) => AnswerButton(
+                text: quiz.answers![i],
+                onPressed: () => checkAnswer(i),
               ),
             ),
           ],
@@ -237,38 +279,20 @@ class _QuizPageState extends State<QuizPage> {
   }
 }
 
-// Format des boutons de réponse
 class AnswerButton extends StatelessWidget {
   final String text;
-  final Color color;
   final VoidCallback onPressed;
 
-  const AnswerButton({
-    super.key,
-    required this.text,
-    required this.color,
-    required this.onPressed,
-  });
+  const AnswerButton({super.key, required this.text, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 50,
       width: double.infinity,
       margin: const EdgeInsets.symmetric(vertical: 5),
       child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: color,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
         onPressed: onPressed,
-        child: Text(
-          text,
-          style: const TextStyle(fontSize: 18, color: Colors.white),
-          textAlign: TextAlign.center,
-        ),
+        child: Text(text, style: const TextStyle(fontSize: 18)),
       ),
     );
   }

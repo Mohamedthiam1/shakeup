@@ -9,6 +9,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'firebase_options.dart';
 import 'global/global.dart';
+import 'legals/privacy_policy.dart';
+import 'legals/terms_of_use.dart';
 import 'pages/home_page.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
