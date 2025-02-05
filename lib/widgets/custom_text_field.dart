@@ -30,7 +30,7 @@ class CustomTextField extends StatelessWidget {
   final List<TextInputFormatter>? inputFormatters;
   String? autofillHints;
 
-  CustomTextField({
+  CustomTextField({super.key,
     this.controller,
     this.data,
     this.hintText,
@@ -72,7 +72,7 @@ class CustomTextField extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
         maxLines: maxLines,
         decoration: BoxDecoration(
-          color: backgroundColor ?? Color.fromRGBO(228, 228, 228, 1),
+          color: backgroundColor ?? const Color.fromRGBO(228, 228, 228, 1),
           borderRadius: BorderRadius.circular(10),
 
         ),
@@ -93,7 +93,7 @@ class CustomTextField extends StatelessWidget {
         cursorColor: Theme.of(context).primaryColor,
         prefix: data,
         placeholder: hintText,
-        style: TextStyle(color: Colors.black),
+        style: const TextStyle(color: Colors.black),
       ),
     );
   }

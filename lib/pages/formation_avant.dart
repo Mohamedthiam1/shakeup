@@ -15,7 +15,7 @@ class _AvantPage extends State<AvantPage> {
   @override
   void initState() {
     super.initState();
-    _checkFirstTimeOpening();
+    _checkFirstTimeOpening(); // Vérifie si l'utilisateur ouvre la page pour la première fois
     _loadLanguage(); // Charger la langue au démarrage
   }
 
@@ -30,16 +30,18 @@ class _AvantPage extends State<AvantPage> {
     }
   }
 
+  // Vérifie si c'est la première fois que l'utilisateur ouvre cette page
   Future<void> _checkFirstTimeOpening() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool hasOpenedBefore = prefs.getBool('opened_educational_file') ?? false;
 
     if (!hasOpenedBefore) {
       await prefs.setBool('opened_educational_file', true); // Enregistre l'ouverture
-      _showBadgePopup(); // Affiche le pop-up immédiatement
+      _showBadgePopup(); // Affiche le pop-up de badge débloqué
     }
   }
 
+  // Affiche une boîte de dialogue pour signaler que l'utilisateur a débloqué un badge
   void _showBadgePopup() {
     showDialog(
       context: context,
@@ -202,6 +204,7 @@ class _AvantPage extends State<AvantPage> {
     );
   }
 
+  // Fonction utilitaire pour créer une section avec un titre, un contenu et des icônes
   Widget _buildSection(
       String title,
       String content,
@@ -258,6 +261,7 @@ class _AvantPage extends State<AvantPage> {
     );
   }
 
+  // Widget pour afficher une liste d'éléments avec des icônes
   Widget _iconWithText(IconData icon, String text) {
     return Row(
       children: [

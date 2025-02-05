@@ -39,7 +39,7 @@ class ClassementPage extends StatelessWidget {
           var users = snapshot.data!.docs;
 
           return Container(
-            margin: EdgeInsets.symmetric(horizontal: 40),
+            margin: const EdgeInsets.symmetric(horizontal: 40),
             alignment: Alignment.center,
             child: ListView.builder(
               itemCount: users.length,
@@ -101,7 +101,7 @@ class ClassementPage extends StatelessWidget {
                           Expanded(
                             child: Text(
                               fullName,
-                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                             ),
                           ),
                           Text(
@@ -133,7 +133,7 @@ class ClassementPage extends StatelessWidget {
             children: [
               Text(
                 fullName,
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
               Text(

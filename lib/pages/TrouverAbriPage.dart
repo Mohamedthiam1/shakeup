@@ -54,23 +54,23 @@ class _TrouverAbriPageState extends State<TrouverAbriPage> {
 
             final data = snapshot.data!.docs;
             if (currentIndex >= data.length) {
-              return SingleChildScrollView( // Ajout d'un défilement
+              return const SingleChildScrollView( // Ajout d'un défilement
                 child: Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text(
+                      Text(
                         "🎊 Félicitations ! Vous avez trouvé tous les abris ! 🎊",
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.green),
                       ),
-                      const SizedBox(height: 10),
-                      const Text(
+                      SizedBox(height: 10),
+                      Text(
                         "🏆 Vous êtes un expert en survie ! 👏",
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 16),
                       ),
-                      const SizedBox(height: 20),
+                      SizedBox(height: 20),
                       AnimatedCelebration(), // Animation de célébration
                     ],
                   ),
@@ -143,7 +143,7 @@ class _TrouverAbriPageState extends State<TrouverAbriPage> {
                     ),
                   ),
                 ),
-                if (showCelebration) AnimatedCelebration(), // Animation de célébration
+                if (showCelebration) const AnimatedCelebration(), // Animation de célébration
               ],
             );
           },
@@ -288,21 +288,21 @@ class AnimatedCelebration extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return const Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text(
+          Text(
             "🎊",
             style: TextStyle(fontSize: 40), // Taille réduite des emojis
           ),
-          const SizedBox(height: 10),
-          const Text(
+          SizedBox(height: 10),
+          Text(
             "🏆",
             style: TextStyle(fontSize: 40), // Taille réduite des emojis
           ),
-          const SizedBox(height: 10),
-          const Text(
+          SizedBox(height: 10),
+          Text(
             "🎯",
             style: TextStyle(fontSize: 40), // Taille réduite des emojis
           ),

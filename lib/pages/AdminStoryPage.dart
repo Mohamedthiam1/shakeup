@@ -78,7 +78,7 @@ class _AdminStoryPageState extends State<AdminStoryPage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   // Title Section
-                  Text(
+                  const Text(
                     'Ajouter une Histoire',
                     style: TextStyle(
                       fontFamily: 'Arima',

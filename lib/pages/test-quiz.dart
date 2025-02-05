@@ -54,7 +54,7 @@ class _QuizPageState extends State<QuizPage> {
         });
       } else {
         timer.cancel();
-        _showQuizEndDialog();
+        _nextQuestion();
       }
     });
   }
@@ -126,7 +126,13 @@ class _QuizPageState extends State<QuizPage> {
       setState(() {
         currentQuestionIndex++;
         hasAnswered = false;
+        remainingTime = 30; // Réinitialiser le temps restant
       });
+
+      // Annuler le timer actuel et en démarrer un nouveau
+      _timer?.cancel();
+      startTimer(); // Redémarrer le timer avec le temps initial
+
       _pageController.nextPage(
         duration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut,
@@ -246,7 +252,31 @@ class _QuizPageState extends State<QuizPage> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            Text("Score: $score", style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            Container(
+              color: Colors.grey[200],
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                      "Score: $score",
+                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)
+                  ),
+                  ElevatedButton(
+                    onPressed: _showQuizEndDialog,  // Appeler une méthode pour finir le quiz
+                    child: const Text("Terminer",
+                        style: TextStyle(fontSize: 16)),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,  // Couleur du bouton
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
             const SizedBox(height: 10),
             if (quiz.pictureUrl != null && quiz.pictureUrl!.isNotEmpty)
               GestureDetector(

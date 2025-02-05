@@ -188,7 +188,7 @@ class _AdminQuizPageState extends State<AdminQuizPage> {
                           value: value,
                           child: Text(
                             "Niveau $value",
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontFamily: 'Arima',
                               fontSize: 18,
                               fontWeight: FontWeight.w400,

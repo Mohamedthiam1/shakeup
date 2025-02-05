@@ -60,13 +60,15 @@ class NavigationB extends State<NavigationBar> {
   @override
   void initState() {
     super.initState();
-    _checkTrophyUnlock();
+    _checkTrophyUnlock(); // Vérifie si un trophée peut être débloqué lors de l'initialisation
   }
 
+  // Fonction pour vérifier et gérer le déblocage du trophée "Récolteur de points"
   Future<void> _checkTrophyUnlock() async {
-    int userPoints = sharedPreferences!.getInt('points') ?? 0;
-    bool hasUnlockedTrophy = sharedPreferences!.getBool('unlocked_recolteur_points') ?? false;
+    int userPoints = sharedPreferences!.getInt('points') ?? 0; // Récupère les points utilisateur
+    bool hasUnlockedTrophy = sharedPreferences!.getBool('unlocked_recolteur_points') ?? false; // Vérifie si le trophée est déjà débloqué
 
+    // Si l'utilisateur a au moins 15 points et n'a pas encore débloqué le trophée
     if (userPoints >= 15 && !hasUnlockedTrophy) {
       // Marquer le trophée comme débloqué
       await sharedPreferences!.setBool('unlocked_recolteur_points', true);
@@ -80,22 +82,23 @@ class NavigationB extends State<NavigationBar> {
     }
   }
 
+  // Fonction pour afficher un pop-up annonçant le déblocage du trophée
   void _showTrophyPopup(int points) {
     showDialog(
-      context: context,
+      context: context, // Contexte nécessaire pour afficher la boîte de dialogue
       builder: (BuildContext context) {
         return AlertDialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           title: const Row(
             children: [
-              Icon(Icons.emoji_events, color: Colors.amber, size: 40),
+              Icon(Icons.emoji_events, color: Colors.amber, size: 40),  // Icône de trophée
               SizedBox(width: 10),
-              Text("Trophée Débloqué !"),
+              Text("Trophée Débloqué !"), // Titre du pop-up
             ],
           ),
-          content: Text(
-            "Bravo ! Vous avez obtenu le trophée \"Récolteur de points\" en atteignant plus de 15 points et vous avez reçu 20 points supplémentaires !\nTotal: $points points",
-            style: const TextStyle(fontSize: 16),
+          content: const Text(
+            "Bravo ! Vous avez obtenu le trophée \"Récolteur de points\"",
+            style: TextStyle(fontSize: 16),
           ),
           actions: [
             TextButton(
@@ -695,7 +698,7 @@ class Footer extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ClassementPage()),
+                MaterialPageRoute(builder: (context) => const ClassementPage()),
               );
             },
           ),

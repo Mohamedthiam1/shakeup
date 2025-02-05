@@ -10,14 +10,17 @@ class TropheeScreen extends StatefulWidget {
   State<TropheeScreen> createState() => _TropheeScreenState();
 }
 
+// Classe de l'état associé à TropheeScreen
 class _TropheeScreenState extends State<TropheeScreen> {
-  late List<BadgeModel> badges;
-  late List<Trophy> trophies;
-  bool hasReceivedFastAnswerTrophy = false;
+  late List<BadgeModel> badges; // Liste des badges
+  late List<Trophy> trophies; // Liste des trophées
+  bool hasReceivedFastAnswerTrophy = false; // Indicateur pour le trophée "Répondant Rapide"
 
   @override
   void initState() {
     super.initState();
+
+    // Initialisation de la liste des badges avec des informations statiques
     badges = [
       BadgeModel(
         title: 'Expert en sécurité',
@@ -64,7 +67,7 @@ class _TropheeScreenState extends State<TropheeScreen> {
         description: 'A complété un quiz sur la préparation avant un séisme.',
         icon: Icons.check,
         iconColor: Colors.orange,
-        criteria: 'Répondre à un quiz de préparation avec un score de 80 % ou plus.',
+        criteria: 'Répondre à 80% des quizs.',
         unlocked: false,
       ),
       BadgeModel(
@@ -75,16 +78,9 @@ class _TropheeScreenState extends State<TropheeScreen> {
         criteria: 'Utiliser la fonctionnalité de partage de l\'application.',
         unlocked: false,
       ),
-      BadgeModel(
-        title: 'Meneur de Projet',
-        description: 'A dirigé une discussion sur la sécurité en cas de tremblement de terre.',
-        icon: Icons.group,
-        iconColor: Colors.red,
-        criteria: 'Participer à une discussion de groupe ou un forum dans l\'application.',
-        unlocked: false,
-      ),
     ];
 
+    // Initialisation de la liste des trophées avec des informations statiques
     trophies = [
       Trophy(
         title: 'Récolteur de points',
@@ -116,24 +112,21 @@ class _TropheeScreenState extends State<TropheeScreen> {
         unlocked: false,
         points: 60,
       ),
-      Trophy(
-        title: 'Enquêteur des Tremblements',
-        description: 'Débloqué en complétant un rapport sur un tremblement de terre spécifique.',
-        unlocked: false,
-        points: 70,
-      ),
     ];
+    // Appels aux fonctions pour vérifier les statuts des badges et trophées en fonction des préférences utilisateur
     _checkEducationalFileOpened();
     _checkFastAnswerTrophy();
     _checkTrophies();
   }
 
+  // Vérifie si l'utilisateur a consulté une fiche éducative
   Future<void> _checkEducationalFileOpened() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool hasOpened = prefs.getBool('opened_educational_file') ?? false;
 
     if (hasOpened) {
       setState(() {
+        // Met à jour le badge correspondant comme débloqué
         badges[1] = BadgeModel(
           title: 'Chercheur débutant',
           description: 'Débloqué après avoir consulté une fiche éducative.',
@@ -152,7 +145,7 @@ class _TropheeScreenState extends State<TropheeScreen> {
     bool hasReceived = prefs.getBool('fast_answer_trophy') ?? false;
     if (hasReceived) {
       setState(() {
-        // Mise à jour du trophée "Répondant Rapide"
+        // Met à jour le trophée comme débloqué
         trophies[2] = Trophy(
           title: 'Répondant Rapide',
           description: 'Débloqué en répondant à un quiz en moins de 15 secondes.',
@@ -163,6 +156,7 @@ class _TropheeScreenState extends State<TropheeScreen> {
     }
   }
 
+  // Vérifie si d'autres trophées sont débloqués
   Future<void> _checkTrophies() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool hasUnlockedTrophy = prefs.getBool('unlocked_recolteur_points') ?? false;
@@ -170,6 +164,7 @@ class _TropheeScreenState extends State<TropheeScreen> {
     // Vérifier si le trophée "Récolteur de points" est débloqué
     if (hasUnlockedTrophy) {
       setState(() {
+        // Met à jour le trophée "Récolteur de points" comme débloqué
         trophies[0] = Trophy(
           title: 'Récolteur de points',
           description: 'Débloqué après avoir atteint 15 points.',
@@ -180,6 +175,7 @@ class _TropheeScreenState extends State<TropheeScreen> {
     }
   }
 
+  // Construction de l'interface utilisateur
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -187,7 +183,7 @@ class _TropheeScreenState extends State<TropheeScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.of(context).pop(); // Retour à l'écran précédent
           },
         ),
         title: const Text(
@@ -199,15 +195,16 @@ class _TropheeScreenState extends State<TropheeScreen> {
       ),
       body: ListView(
         children: [
-          _buildSectionHeader('Badges'),
-          ...badges.map((badge) => _buildBadgeTile(badge)),
-          _buildSectionHeader('Trophées'),
-          ...trophies.map((trophy) => _buildTrophyTile(trophy)),
+          _buildSectionHeader('Badges'), // Titre de la section des badges
+          ...badges.map((badge) => _buildBadgeTile(badge)), // Affichage de chaque badge
+          _buildSectionHeader('Trophées'), // Titre de la section des trophées
+          ...trophies.map((trophy) => _buildTrophyTile(trophy)), // Affichage de chaque trophée
         ],
       ),
     );
   }
 
+  // Fonction pour créer un en-tête de section
   Widget _buildSectionHeader(String title) {
     return Padding(
       padding: const EdgeInsets.all(20.0),
@@ -227,6 +224,7 @@ class _TropheeScreenState extends State<TropheeScreen> {
     );
   }
 
+  // Fonction pour construire l'affichage d'un badge
   Widget _buildBadgeTile(BadgeModel badge) {
     return ListTile(
       leading: Icon(
@@ -240,11 +238,12 @@ class _TropheeScreenState extends State<TropheeScreen> {
       ),
       subtitle: Text(badge.description),
       trailing: badge.unlocked // Affiche "Débloqué ✅" si le badge est débloqué
-          ? const Icon(Icons.check_circle, color: Colors.green)
-          : const Icon(Icons.lock, color: Colors.grey),
+          ? const Icon(Icons.check_circle, color: Colors.green) // Indicateur de succès
+          : const Icon(Icons.lock, color: Colors.grey), // Cadenas pour badge verrouillé
     );
   }
 
+  // Fonction pour construire l'affichage d'un trophée
   Widget _buildTrophyTile(Trophy trophy) {
     return ListTile(
       leading: Icon(
@@ -264,7 +263,7 @@ class _TropheeScreenState extends State<TropheeScreen> {
       subtitle: Text(trophy.description),
       trailing: trophy.unlocked
           ? Text(
-        '${trophy.points} pts',
+        '${trophy.points} pts', // Affiche les points si le trophée est débloqué
         style: const TextStyle(
           fontFamily: 'Arima',
           fontSize: 18,

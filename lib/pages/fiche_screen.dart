@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'home_page.dart';
 
-
+// Classe principale de l'écran des fiches
 class FicheScreen extends StatefulWidget {
   const FicheScreen({super.key});
 
@@ -23,13 +23,13 @@ class _FicheScreenState extends State<FicheScreen> {
     _loadLanguage(); // Charger la langue au démarrage
   }
 
-  // Charger la langue depuis SharedPreferences
+  // Méthode pour récupérer la langue depuis SharedPreferences
   Future<void> _loadLanguage() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? language = prefs.getString('selected_language');
+    String? language = prefs.getString('selected_language'); // Vérifie s'il y a une langue sauvegardée
     if (language != null) {
       setState(() {
-        selectedLanguage = language;
+        selectedLanguage = language; // Met à jour la langue sélectionnée
       });
     }
   }
@@ -44,8 +44,8 @@ class _FicheScreenState extends State<FicheScreen> {
             Navigator.of(context).pop(); // Action de retour
           },
         ),
-        title: Text(selectedLanguage == 'Français' ? 'Fiches' : 'Cards',
-          style: TextStyle(
+        title: Text(selectedLanguage == 'Français' ? 'Fiches' : 'Cards', // Change le titre selon la langue
+          style: const TextStyle(
             fontFamily: 'Arima',
             fontSize: 22,
             fontWeight: FontWeight.w400,
@@ -65,18 +65,18 @@ class _FicheScreenState extends State<FicheScreen> {
               child: ElevatedButton(
                 onPressed: () {
                   // Action pour "Avant"
-                  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => AvantPage()));
+                  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const AvantPage()));
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFFF6DFC5), // Fond du bouton en orange clair
+                  backgroundColor: const Color(0xFFF6DFC5), // Fond du bouton en orange clair
                   foregroundColor: Colors.black, // Texte en noir
-                  padding: EdgeInsets.symmetric(vertical: 15), // Hauteur ajustée
+                  padding: const EdgeInsets.symmetric(vertical: 15), // Hauteur ajustée
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8), // Coins légèrement arrondis (valeur réduite)
                   ),
                 ),
                 child: Text(selectedLanguage == 'Français' ? 'Avant' : 'Before',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Arima',
                     fontSize: 18,
                     fontWeight: FontWeight.w400,
@@ -85,25 +85,26 @@ class _FicheScreenState extends State<FicheScreen> {
                 ),
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10), // Espacement vertical entre les boutons
+
             // Bouton "Pendant" avec coins légèrement carrés
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.6,
               child: ElevatedButton(
                 onPressed: () {
-                  // Action pour "Pendant"
-                  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => PendantScreen()));
+                  // Navigation vers la page "Pendant"
+                  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const PendantScreen()));
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFFF6DFC5),
+                  backgroundColor: const Color(0xFFF6DFC5),
                   foregroundColor: Colors.black,
-                  padding: EdgeInsets.symmetric(vertical: 15),
+                  padding: const EdgeInsets.symmetric(vertical: 15),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8), // Coins légèrement arrondis
                   ),
                 ),
                 child: Text(selectedLanguage == 'Français' ? 'Pendant' : 'During',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Arima',
                     fontSize: 18,
                     fontWeight: FontWeight.w400,
@@ -112,25 +113,25 @@ class _FicheScreenState extends State<FicheScreen> {
                 ),
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             // Bouton "Après" avec coins légèrement carrés
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.6,
               child: ElevatedButton(
                 onPressed: () {
                   // Action pour "Après"
-                  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => After_Screen()));
+                  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const After_Screen()));
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFFF6DFC5),
+                  backgroundColor: const Color(0xFFF6DFC5),
                   foregroundColor: Colors.black,
-                  padding: EdgeInsets.symmetric(vertical: 15),
+                  padding: const EdgeInsets.symmetric(vertical: 15),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8), // Coins légèrement arrondis
                   ),
                 ),
                 child: Text(selectedLanguage == 'Français' ? 'Après' : 'After',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Arima',
                     fontSize: 18,
                     fontWeight: FontWeight.w400,

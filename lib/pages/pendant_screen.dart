@@ -13,9 +13,10 @@ class _PendantScreenState extends State<PendantScreen> {
   @override
   void initState() {
     super.initState();
-    _checkFirstTimeOpening();
+    _checkFirstTimeOpening(); // Vérifie si l'utilisateur ouvre la page pour la première fois
   }
 
+  // Vérifie si c'est la première fois que l'utilisateur ouvre cette page
   Future<void> _checkFirstTimeOpening() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool hasOpenedBefore = prefs.getBool('opened_educational_file') ?? false;
@@ -26,6 +27,7 @@ class _PendantScreenState extends State<PendantScreen> {
     }
   }
 
+  // Affiche une boîte de dialogue pour signaler que l'utilisateur a débloqué un badge
   void _showBadgePopup() {
     showDialog(
       context: context,
@@ -166,23 +168,24 @@ class _PendantScreenState extends State<PendantScreen> {
     );
   }
 
+  // Widget qui construit une section stylisée avec un titre, une icône et du contenu textuel
   Widget _buildSection(String title, String content, IconData icon) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 20),
-      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.only(bottom: 20), // Marge en bas de chaque section pour espacer les blocs
+      padding: const EdgeInsets.all(16), // Padding interne pour ajouter de l'espace autour du contenu
       decoration: BoxDecoration(
-        color: Colors.blue[50],
-        borderRadius: BorderRadius.circular(16),
+        color: Colors.blue[50], // Couleur de fond bleu clair
+        borderRadius: BorderRadius.circular(16), // Coins arrondis
         boxShadow: const [
           BoxShadow(
-            color: Colors.black12,
-            blurRadius: 5,
-            offset: Offset(0, 3),
+            color: Colors.black12, // Couleur de l'ombre (noir clair)
+            blurRadius: 5, // Rayon de flou de l'ombre
+            offset: Offset(0, 3), // Décalage vertical de l'ombre
           ),
         ],
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start, // Aligner les éléments à gauche
         children: [
           Row(
             children: [

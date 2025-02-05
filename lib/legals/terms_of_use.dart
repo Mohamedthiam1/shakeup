@@ -11,14 +11,6 @@ class TermsPage extends StatefulWidget {
 class _TermsPageState extends State<TermsPage> {
 
   @override
-  void dispose() {
-  // TODO: implement dispose
-  SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeRight, DeviceOrientation.landscapeLeft])
-      .then((_) {});
-   super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

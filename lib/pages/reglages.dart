@@ -14,6 +14,7 @@ import '../global/global.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/error_dialog.dart';
 import '../widgets/showloading.dart';
+import 'home_page.dart';
 
 // Page des paramètres de l'appli
 
@@ -64,7 +65,7 @@ class _SettingsPageState extends State<SettingsPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black), // Icône de retour
           onPressed: () {
-            Navigator.of(context).pop(); // Action de retour
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage()));// Lien vers la page d'histoire);
           },
         ),
         title: Text(selectedLanguage == 'Français' ? 'Réglages' : 'Settings',
@@ -848,9 +849,10 @@ class SettingLink extends StatelessWidget {
       child: InkWell(
         onTap: () {
           if (routeName != null) {
-            SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+            // Change l'orientation de l'écran en mode paysage avant de naviguer
+            SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft,DeviceOrientation.landscapeRight,])
                 .then((_) {
-              Navigator.pushNamed(context, routeName!);
+              Navigator.pushNamed(context, routeName!); // Navigation vers la route spécifiée
             });
           }
         },
@@ -887,21 +889,37 @@ class LanguageDropdown extends StatefulWidget {
 class _LanguageDropdownState extends State<LanguageDropdown> {
   String selectedLanguage = 'Français'; // Langue par défaut
 
-  // Charger la langue depuis SharedPreferences
+  @override
+  void initState() {
+    super.initState();
+    _loadLanguage(); // Charger la langue depuis SharedPreferences au démarrage
+  }
+
+  // Méthode pour récupérer la langue depuis SharedPreferences
   Future<void> _loadLanguage() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? language = prefs.getString('selected_language');
+    String? language = prefs.getString('selected_language'); // Vérifie si une langue est sauvegardée
     if (language != null) {
       setState(() {
-        selectedLanguage = language;
+        selectedLanguage = language; // Met à jour la langue sélectionnée
       });
     }
   }
 
-  // Sauvegarder la langue choisie dans SharedPreferences
-  Future<void> _saveLanguage(String language) async {
+  // Méthode appelée lorsqu'une nouvelle langue est sélectionnée
+  Future<void> _onLanguageChanged(String newValue) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('selected_language', language);
+    await prefs.setString('selected_language', newValue); // Sauvegarde la nouvelle langue
+
+    setState(() {
+      selectedLanguage = newValue; // Met à jour l'état avec la nouvelle langue
+    });
+
+    // Navigue vers la page SettingsPage pour appliquer la modification
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (BuildContext context) => const SettingsPage()),
+    );
   }
 
   @override
@@ -920,6 +938,7 @@ class _LanguageDropdownState extends State<LanguageDropdown> {
             ),
           ),
 
+          // Menu déroulant pour sélectionner la langue
           DropdownButton<String>(
             value: selectedLanguage, // Langue actuelle sélectionnée
             items: <String>['Français', 'English'].map((String value) {
@@ -929,12 +948,9 @@ class _LanguageDropdownState extends State<LanguageDropdown> {
               );
             }).toList(),
             onChanged: (newValue) {
-              setState(() {
-                selectedLanguage = newValue!; // Change la langue sélectionnée
-                _saveLanguage(newValue); // Sauvegarder la langue sélectionnée
-              });
-              // 🔄 Mettre à jour toute la page
-              setState(() {});
+              if (newValue != null && newValue != selectedLanguage) {
+                _onLanguageChanged(newValue); // Appelle la méthode pour changer la langue
+              }
             },
           ),
         ],
