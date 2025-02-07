@@ -1,5 +1,6 @@
 import 'package:cap/admin/add_quizz_screen.dart';
 import 'package:cap/admin/manage_quizz_screen.dart';
+import 'package:cap/pages/search_user_screen.dart';
 import 'package:cap/widgets/progress_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -31,10 +32,13 @@ class _SettingsPageState extends State<SettingsPage> {
   late TextEditingController passwordController = TextEditingController();
   late TextEditingController confirmPasswordController = TextEditingController();
   late TextEditingController fullNameController = TextEditingController();
+  late TextEditingController nameController = TextEditingController();
+  late TextEditingController ageController = TextEditingController();
   bool seePassword = true;
   bool seeConfirmationPassword = true;
   bool isLogin = true;
   bool loading = false;
+  // int age = 0;
 
   @override
   void initState() {
@@ -43,6 +47,10 @@ class _SettingsPageState extends State<SettingsPage> {
     passwordController = TextEditingController();
     confirmPasswordController = TextEditingController();
     fullNameController = TextEditingController();
+    nameController = TextEditingController();
+    ageController = TextEditingController();
+    nameController.text = sharedPreferences!.getString("fullname")!;
+    ageController.text = sharedPreferences!.getInt("age")!.toString();
     _loadLanguage(); // Charger la langue au démarrage
   }
 
@@ -65,7 +73,7 @@ class _SettingsPageState extends State<SettingsPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black), // Icône de retour
           onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage()));// Lien vers la page d'histoire);
+            Navigator.pop(context);// Lien vers la page d'histoire);
           },
         ),
         title: Text(selectedLanguage == 'Français' ? 'Réglages' : 'Settings',
@@ -120,18 +128,32 @@ class _SettingsPageState extends State<SettingsPage> {
                                 color: Colors.black,
                               ),
                             ),
-                            if (sharedPreferences!.getString("fullname") != null)
-                              Text(
-                                selectedLanguage == 'Français'
-                                    ? 'Bienvenu ${sharedPreferences!.getString("fullname")},'
-                                    : 'Welcome ${sharedPreferences!.getString("fullname")},',
-                                style: const TextStyle(
-                                  fontFamily: 'Arima',
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w400,
-                                  color: Colors.black,
-                                ),
-                              ),
+                            Row(
+                              children: [
+                                if (sharedPreferences!.getString("fullname") != null)
+                                  Text(
+                                    selectedLanguage == 'Français'
+                                        ? 'Bienvenu ${sharedPreferences!.getString("fullname")}, ${sharedPreferences!.getInt("age") == 0 ? "" : sharedPreferences!.getInt("age")}'
+                                        : 'Welcome ${sharedPreferences!.getString("fullname")}, ${sharedPreferences!.getInt("age") == 0 ? "" : sharedPreferences!.getInt("age")}',
+                                    style: const TextStyle(
+                                      fontFamily: 'Arima',
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                IconButton(onPressed: (){
+                                  showUserInfoModal(context, sharedPreferences!.getString("uid")!);
+                                }, icon: Icon(Icons.edit_rounded))
+                              ],
+                            ),
+
+                            IconButton(
+                                onPressed: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (BuildContext ctx) => SearchUserScreen(currentUserId: sharedPreferences!.getString("uid")!)));
+                                },
+                                icon: Icon(Icons.group_rounded)
+                            )
                           ],
                         ),
                         const SizedBox(height: 10), // Espacement
@@ -187,6 +209,113 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
       ),
+    );
+  }
+
+  void showUserInfoModal(BuildContext context, String userId) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            bool isLoading = false;
+
+            Future<void> saveUserData() async {
+              String fullName = nameController.text.trim();
+              String ageText = ageController.text.trim();
+
+              if (fullName.isEmpty || ageText.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Veuillez remplir tous les champs")),
+                );
+                return;
+              }
+
+              int? age = int.tryParse(ageText);
+              if (age == null || age <= 0) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Âge invalide")),
+                );
+                return;
+              }
+
+              setState(() => isLoading = true);
+
+              try {
+                await FirebaseFirestore.instance.collection('users').doc(userId).set({
+                  "fullname": fullName,
+                  "age": age,
+                }, SetOptions(merge: true));
+
+                sharedPreferences!.setString("fullname", fullName);
+                sharedPreferences!.setInt("age", age);
+                setState(() {
+                  sharedPreferences;
+                });
+
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Informations enregistrées avec succès !")),
+                );
+              } catch (e) {
+                print("Erreur Firestore: $e");
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Erreur lors de l'enregistrement")),
+                );
+              } finally {
+                setState(() => isLoading = false);
+              }
+            }
+
+            return Padding(
+              padding: EdgeInsets.only(
+                left: 16,
+                right: 16,
+                bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+                top: 16,
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text(
+                      "Entrez vos informations",
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 12),
+                    TextField(
+                      controller: nameController,
+                      decoration: const InputDecoration(labelText: "Nom complet"),
+                    ),
+                    const SizedBox(height: 12),
+                    TextField(
+                      controller: ageController,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(labelText: "Âge"),
+                    ),
+                    const SizedBox(height: 30),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.3,
+                      child: ElevatedButton(
+                        onPressed: isLoading ? null : saveUserData,
+                        style: ElevatedButton.styleFrom(backgroundColor: Colors.green,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                        child: isLoading
+                            ? const CircularProgressIndicator(color: Colors.white)
+                            : const Text("ENREGISTRER", style: TextStyle(color: Colors.white),),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
     );
   }
 
@@ -591,6 +720,7 @@ class _SettingsPageState extends State<SettingsPage> {
           await sharedPreferences!.setString("photoUrl", snapshot.data()!["photoUrl"] ?? "");
           await sharedPreferences!.setInt("joinDate", snapshot.data()!["joinDate"] ?? 0);
           await sharedPreferences!.setInt("points", snapshot.data()!["points"] ?? 0);
+          await sharedPreferences!.setInt("age", snapshot.data()!["age"] ?? 0);
           print("Holaaaa  3333333333");
 
           // FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).update({
@@ -678,6 +808,8 @@ class _SettingsPageState extends State<SettingsPage> {
       "token": "",
       "admin": false,
       "points": 0,
+      "age": 0,
+      "followers": [],
       "userIdentifierApple": userIdentifierApple,
       // "birthdate": DateTime(2000, 11, 9),
     }).whenComplete(() async{
@@ -689,6 +821,7 @@ class _SettingsPageState extends State<SettingsPage> {
       await sharedPreferences!.setString("fullname", fullname);
       await sharedPreferences!.setString("photoUrl", photoUrl);
       await sharedPreferences!.setInt("points", 0);
+      await sharedPreferences!.setInt("age", 0);
       await sharedPreferences!.setInt("joinDate", DateTime.now().millisecondsSinceEpoch);
       setState(() {
         sharedPreferences;
@@ -916,7 +1049,7 @@ class _LanguageDropdownState extends State<LanguageDropdown> {
     });
 
     // Navigue vers la page SettingsPage pour appliquer la modification
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (BuildContext context) => const SettingsPage()),
     );

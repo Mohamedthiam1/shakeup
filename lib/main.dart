@@ -8,6 +8,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'firebase_options.dart';
+import 'global/audio_manager.dart';
 import 'global/global.dart';
 import 'legals/privacy_policy.dart';
 import 'legals/terms_of_use.dart';
@@ -28,10 +29,16 @@ Future<void> main() async{
   if(sharedPreferences!.getInt("points") == null) {
     sharedPreferences!.setInt("points", 0);
   }
+
+  if(sharedPreferences!.getInt("age") == null) {
+    sharedPreferences!.setInt("age", 0);
+  }
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   FirebaseMessaging.instance.requestPermission();
   await [Permission.microphone, Permission.camera].request();
   Permission.locationWhenInUse.request();
+
+  AudioManager.play();
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeRight, DeviceOrientation.landscapeLeft])
       .then((_) {
