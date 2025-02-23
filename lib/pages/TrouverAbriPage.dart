@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class TrouverAbriPage extends StatefulWidget {
   const TrouverAbriPage({super.key});
@@ -12,7 +13,9 @@ class _TrouverAbriPageState extends State<TrouverAbriPage> {
   int currentIndex = 0;
   bool isCorrect = false;
   String? selectedAnswer;
-  bool showCelebration = false; // Pour afficher l'animation de célébration
+  bool showCelebration = false;
+
+  final AudioPlayer _audioPlayer = AudioPlayer(); // Lecteur audio
 
   final Map<String, Color> defaultColors = {
     '1': Colors.purple[200]!,
@@ -26,17 +29,18 @@ class _TrouverAbriPageState extends State<TrouverAbriPage> {
     'wrong': Colors.red[400]!,
   };
 
+  // Fonction pour jouer un son
+  void _playSound(String soundPath) async {
+    await _audioPlayer.play(AssetSource(soundPath));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
           "Trouver l’Abri",
-          style: TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.w400,
-            color: Colors.black,
-          ),
+          style: TextStyle(fontSize: 22, fontWeight: FontWeight.w400, color: Colors.black),
         ),
         backgroundColor: Colors.green[100],
         centerTitle: true,
@@ -54,26 +58,17 @@ class _TrouverAbriPageState extends State<TrouverAbriPage> {
 
             final data = snapshot.data!.docs;
             if (currentIndex >= data.length) {
-              return const SingleChildScrollView( // Ajout d'un défilement
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "🎊 Félicitations ! Vous avez trouvé tous les abris ! 🎊",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.green),
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        "🏆 Vous êtes un expert en survie ! 👏",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      SizedBox(height: 20),
-                      AnimatedCelebration(), // Animation de célébration
-                    ],
-                  ),
+              return const Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "🎊 Félicitations ! Vous avez trouvé tous les abris ! 🎊",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.green),
+                    ),
+                    SizedBox(height: 10),
+                  ],
                 ),
               );
             }
@@ -107,11 +102,7 @@ class _TrouverAbriPageState extends State<TrouverAbriPage> {
                           ),
                           child: const Text(
                             "🏠 Cliquez sur le numéro de l'abri 🏠",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.blue,
-                            ),
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.blue),
                           ),
                         ),
                         const SizedBox(height: 20),
@@ -143,7 +134,6 @@ class _TrouverAbriPageState extends State<TrouverAbriPage> {
                     ),
                   ),
                 ),
-                if (showCelebration) const AnimatedCelebration(), // Animation de célébration
               ],
             );
           },
@@ -164,8 +154,15 @@ class _TrouverAbriPageState extends State<TrouverAbriPage> {
         setState(() {
           selectedAnswer = text;
           isCorrect = text == correctAnswer;
-          showCelebration = isCorrect; // Afficher l'animation si la réponse est correcte
         });
+
+        // Jouer le son selon la réponse
+        if (isCorrect) {
+          _playSound("sounds/correct.mp3");
+        } else {
+          _playSound("sounds/wrong.mp3");
+        }
+
         _showResultDialog(context);
       },
       child: AnimatedContainer(
@@ -199,18 +196,14 @@ class _TrouverAbriPageState extends State<TrouverAbriPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           backgroundColor: isCorrect ? Colors.green[100] : Colors.red[100],
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              AnimatedEmoji(isCorrect: isCorrect), // Animation d'emoji
-            ],
-          ),
-          content: Text(
-            isCorrect
-                ? "Félicitations, vous avez trouvé le bon abri ! 🏆👏"
-                : "Réessayez pour trouver le bon abri. 😔💪",
+          title: Text(
+            isCorrect ? "Bonne réponse ! 🎉" : "Mauvaise réponse 😞",
             textAlign: TextAlign.center,
             style: TextStyle(color: isCorrect ? Colors.green[800] : Colors.red[800]),
+          ),
+          content: Text(
+            isCorrect ? "Félicitations, vous avez trouvé le bon abri ! 🏆" : "Réessayez pour trouver le bon abri. 💪",
+            textAlign: TextAlign.center,
           ),
           actions: [
             TextButton(
@@ -220,7 +213,6 @@ class _TrouverAbriPageState extends State<TrouverAbriPage> {
                   setState(() {
                     currentIndex++;
                     selectedAnswer = null;
-                    showCelebration = false; // Réinitialiser l'animation
                   });
                 } else {
                   setState(() {
@@ -240,74 +232,3 @@ class _TrouverAbriPageState extends State<TrouverAbriPage> {
   }
 }
 
-// Widget pour l'animation d'emoji
-class AnimatedEmoji extends StatefulWidget {
-  final bool isCorrect;
-
-  const AnimatedEmoji({super.key, required this.isCorrect});
-
-  @override
-  State<AnimatedEmoji> createState() => _AnimatedEmojiState();
-}
-
-class _AnimatedEmojiState extends State<AnimatedEmoji> with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 1000),
-      vsync: this,
-    )..repeat(reverse: true);
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ScaleTransition(
-      scale: Tween(begin: 1.0, end: 1.5).animate(
-        CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-      ),
-      child: Text(
-        widget.isCorrect ? "🎉" : "😞",
-        style: const TextStyle(fontSize: 40),
-      ),
-    );
-  }
-}
-
-// Widget pour l'animation de célébration
-class AnimatedCelebration extends StatelessWidget {
-  const AnimatedCelebration({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            "🎊",
-            style: TextStyle(fontSize: 40), // Taille réduite des emojis
-          ),
-          SizedBox(height: 10),
-          Text(
-            "🏆",
-            style: TextStyle(fontSize: 40), // Taille réduite des emojis
-          ),
-          SizedBox(height: 10),
-          Text(
-            "🎯",
-            style: TextStyle(fontSize: 40), // Taille réduite des emojis
-          ),
-        ],
-      ),
-    );
-  }
-}
