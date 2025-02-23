@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 import 'dart:math';
+import 'package:audioplayers/audioplayers.dart'; // Importez le package audioplayers
 
 import '../models/quizz.dart';
 
@@ -23,6 +24,7 @@ class _QuizPageState extends State<QuizPage> {
   int currentQuestionIndex = 0;
   bool hasAnswered = false;
   PageController _pageController = PageController();
+  final AudioPlayer _audioPlayer = AudioPlayer(); // Créez une instance d'AudioPlayer
 
   @override
   void initState() {
@@ -36,6 +38,7 @@ class _QuizPageState extends State<QuizPage> {
   void dispose() {
     _timer?.cancel();
     _pageController.dispose();
+    _audioPlayer.dispose(); // Libérez les ressources de l'AudioPlayer
     super.dispose();
   }
 
@@ -96,7 +99,16 @@ class _QuizPageState extends State<QuizPage> {
       }
     }
 
+    _playSound(isCorrect); // Jouer le son correspondant
     _showAnswerFeedback(isCorrect);
+  }
+
+  void _playSound(bool isCorrect) async {
+    if (isCorrect) {
+      await _audioPlayer.play(AssetSource('sounds/correct.mp3')); // Son de succès
+    } else {
+      await _audioPlayer.play(AssetSource('sounds/wrong.mp3')); // Son d'échec
+    }
   }
 
   void _showAnswerFeedback(bool isCorrect) {
@@ -204,7 +216,7 @@ class _QuizPageState extends State<QuizPage> {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: InteractiveViewer(
-                maxScale: 20,
+                  maxScale: 20,
                   child: Image.network(imageUrl)),
             ),
           ),
