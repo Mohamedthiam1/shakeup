@@ -1,5 +1,6 @@
 import 'package:cap/admin/add_quizz_screen.dart';
 import 'package:cap/admin/manage_quizz_screen.dart';
+import 'package:cap/global/audio_manager.dart';
 import 'package:cap/pages/search_user_screen.dart';
 import 'package:cap/widgets/progress_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -962,6 +963,18 @@ class _SettingToggleState extends State<SettingToggle> {
             setState(() {
               isEnabled = value; // Change l'état de l'interrupteur
             });
+            if(widget.title == "Musique" || widget.title == "Music") {
+              print("Bool is: $isEnabled");
+              if(isEnabled) {
+                AudioManager.play();
+              } else {
+                AudioManager.stop();
+              }
+            }
+            if(widget.title == "Son" || widget.title == "Sound") {
+              print("Bool is: $isEnabled");
+                playOrNot = isEnabled;
+            }
           },
           activeColor: Colors.green, // Couleur lorsque l'interrupteur est activé
         ),

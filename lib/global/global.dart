@@ -11,6 +11,7 @@ String cloudMessagingServerToken = "";
 bool isAdmin = false;
 
 int indexDocx = 1;
+bool playOrNot = true;
 
 bool authenticated = false;
 bool canAuth = true;
