@@ -49,7 +49,7 @@ class _MiniJeuScreenState extends State<MiniJeuScreen> {
                       Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const TrouverAbriPage()));
                     },
                     child: SizedBox(
-                      width: screenWidth * 0.22, // 30% de la largeur de l'écran
+                      width: screenWidth * 0.22, // 22% de la largeur de l'écran
                       child: Image.asset('assets/images/img5.jpg'),
                     ),
                   ),
@@ -71,7 +71,7 @@ class _MiniJeuScreenState extends State<MiniJeuScreen> {
                       Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const KitDeSurviePage()));
                     },
                     child: SizedBox(
-                      width: screenWidth * 0.22, // 30% de la largeur de l'écran
+                      width: screenWidth * 0.22, // 22% de la largeur de l'écran
                       child: Image.asset('assets/images/img4.jpg'),
                     ),
                   ),
@@ -93,7 +93,7 @@ class _MiniJeuScreenState extends State<MiniJeuScreen> {
                       Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const DangerPage()));
                     },
                     child: SizedBox(
-                      width: screenWidth * 0.22, // 30% de la largeur de l'écran
+                      width: screenWidth * 0.22, // 22% de la largeur de l'écran
                       child: Image.asset('assets/images/img3.jpg'),
                     ),
                   ),

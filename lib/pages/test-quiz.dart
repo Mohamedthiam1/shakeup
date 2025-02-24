@@ -105,6 +105,7 @@ class _QuizPageState extends State<QuizPage> {
     _showAnswerFeedback(isCorrect);
   }
 
+  //Fonction pour jouer le son de victoire ou de perte
   void _playSound(bool isCorrect) async {
     if (isCorrect) {
       await _audioPlayer.play(AssetSource('sounds/correct.mp3')); // Son de succès
@@ -113,6 +114,7 @@ class _QuizPageState extends State<QuizPage> {
     }
   }
 
+  //Montrer la boîte de dialogue pour une bonne ou mauvaise réponse
   void _showAnswerFeedback(bool isCorrect) {
     showDialog(
       context: context,
@@ -179,6 +181,7 @@ class _QuizPageState extends State<QuizPage> {
     );
   }
 
+  //Si un trophée est gagné, ce popup s'affiche !
   void _showTrophyPopup() {
     showDialog(
       barrierDismissible: false,
@@ -206,6 +209,7 @@ class _QuizPageState extends State<QuizPage> {
     );
   }
 
+  //Fonction pour montrer l'image en grand pour pouvoir zoomer ou dézoomer
   void _showImageDialog(String imageUrl) {
     showDialog(
       context: context,
@@ -272,10 +276,12 @@ class _QuizPageState extends State<QuizPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  //Ici nous affichons le score au fur et à mesure de la progression du jeu
                   Text(
                       "Score: $score",
                       style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)
                   ),
+                  //Bouton pour terminer la partie
                   ElevatedButton(
                     onPressed: _showQuizEndDialog,  // Appeler une méthode pour finir le quiz
                     child: const Text("Terminer",
@@ -293,6 +299,7 @@ class _QuizPageState extends State<QuizPage> {
             ),
             const SizedBox(height: 10),
             if (quiz.pictureUrl != null && quiz.pictureUrl!.isNotEmpty)
+              //Nous affichons l'image du quizz
               GestureDetector(
                 onTap: () => _showImageDialog(quiz.pictureUrl!),
                 child: Container(
@@ -306,9 +313,11 @@ class _QuizPageState extends State<QuizPage> {
                   ),
                 ),
               ),
+            //Puis la question
             Text(quiz.question ?? "Question introuvable",
                 textAlign: TextAlign.center, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
             const SizedBox(height: 10),
+            //Et enfin les différentes réponses possibles afin d'en choisir une
             ...List.generate(
               quiz.answers!.length,
                   (i) => AnswerButton(
@@ -323,6 +332,7 @@ class _QuizPageState extends State<QuizPage> {
   }
 }
 
+//Le bouton de réponse correspond à cette classe
 class AnswerButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;

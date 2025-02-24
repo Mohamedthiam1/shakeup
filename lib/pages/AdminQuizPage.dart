@@ -19,6 +19,7 @@ class _AdminQuizPageState extends State<AdminQuizPage> {
 
   List<Map<String, dynamic>> questions = [];
 
+  //Méthode pour ajouter une question
   void _addQuestion() {
     setState(() {
       questions.add({

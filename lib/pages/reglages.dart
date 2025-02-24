@@ -216,6 +216,7 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
+  // Ce showModalBottomSheet nous permet de modifier le nom complet et l'âge de l'utilisateur
   void showUserInfoModal(BuildContext context, String userId) {
     showModalBottomSheet(
       context: context,
@@ -308,7 +309,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         onPressed: isLoading ? null : saveUserData,
                         style: ElevatedButton.styleFrom(backgroundColor: Colors.green,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
-                        child: isLoading
+                        child: isLoading // isLoading nous permet de montrer la période de chargement
                             ? const CircularProgressIndicator(color: Colors.white)
                             : const Text("ENREGISTRER", style: TextStyle(color: Colors.white),),
                       ),
@@ -323,6 +324,7 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
+  //Une méthode pour se déconnecter de manière sûre, et que cela ne soit pas par mégarde
   void logoutSafely(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -404,6 +406,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                     )
                                 ),
                                 onPressed: () async {
+                                  //À la confirmation, nous vidons le token de messagerie avant de déconnecter l'utilisateur et réinitialiser sharedPreferences
                                   HapticFeedback.selectionClick();
                                   showloading(context);
                                   FirebaseFirestore.instance.collection("users").doc(sharedPreferences!.getString("uid")).update({
@@ -495,7 +498,7 @@ class _SettingsPageState extends State<SettingsPage> {
               });
               print("Google signIn ended");
             } else if(label == "Apple") {
-
+              //Ce scénario a été enlevé
             } else if(label == "Email") {
               usedGoogle = false;
               showAuthModal(context);
@@ -550,7 +553,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                     const SizedBox(height: 15),
 
-                    if (!isLogin) // Full name field only for registration
+                    if (!isLogin) // Full name field for registration only
                       Container(
                         margin: EdgeInsets.only(top: 10),
                         child: CustomTextField(
@@ -707,6 +710,7 @@ class _SettingsPageState extends State<SettingsPage> {
     }
   }
 
+  //Fonction pour récupérer les informations associées à l'utilisateur et les enregistrer en local
   Future readDataAndSetDataLocally(User currentUser, BuildContext context, StateSetter setState) async {
     print(currentUser.email! +" hello");
     await FirebaseFirestore.instance
@@ -774,6 +778,7 @@ class _SettingsPageState extends State<SettingsPage> {
     });
   }
 
+  //Fonction pour se connecter à Firebase
   loginNow(String email, String hidden, BuildContext context, StateSetter setState) async {
     print('Entered login now');
     // print(email);
@@ -804,6 +809,7 @@ class _SettingsPageState extends State<SettingsPage> {
     }
   }
 
+  //Fonction pour s'inscrire à Firebase et enregistrer les infos sur Firestore et en local
   Future saveDataToFirestore(User currentUser, String email, String fullname, String photoUrl, String userIdentifierApple, BuildContext context, StateSetter setState) async {
 
     String uid = currentUser.uid;
@@ -877,7 +883,7 @@ class _SettingsPageState extends State<SettingsPage> {
 }
 
 
-
+//Fonction pour vérifier si l'adresse email existe déjà dans la base de données ou pas
 Future<bool> doesUserExistWithEmail(String email) async {
   print('Check Email Verif!');
   try {
@@ -894,6 +900,7 @@ Future<bool> doesUserExistWithEmail(String email) async {
   }
 }
 
+//Nous récupérons ici le mot de passe par défaut pour l'authentification avec Google
 Future<String> fetchHiddenThingGoogle() async {
   try {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
@@ -916,6 +923,7 @@ Future<String> fetchHiddenThingGoogle() async {
   }
 }
 
+//Same for Apple
 Future<String> fetchHiddenThingApple() async {
   try {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
@@ -939,7 +947,7 @@ Future<String> fetchHiddenThingApple() async {
   }
 }
 
-// Interrupteur pour activer/désactiver une fonctionnalité (carré où on coche)
+// Switcher pour activer/désactiver une fonctionnalité (carré où on coche)
 class SettingToggle extends StatefulWidget {
   final String title; // Titre de l'option
 

@@ -20,6 +20,7 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
   bool isLoading = false;
   bool followsMe = false;
 
+  //Fonction pour rechercher une adresse email par son adresse email sur Firestore
   Future<void> searchUserByEmail() async {
     String email = emailController.text.trim().toLowerCase();
 
@@ -59,6 +60,7 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
     }
   }
 
+  //Fonction pour ajouter un nouveau follower
   Future<void> addToFollowers() async {
     if (searchedUser == null || searchedUser!.uid == widget.currentUserId) return;
 
@@ -90,6 +92,7 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
     return Scaffold(
       appBar: AppBar(title: const Text("Rechercher un utilisateur"),
       actions: [
+        //Ce bouton nous renvoie vers la page des comptes que l'on suit déjà et voir ses amis
         TextButton(onPressed: (){
           Navigator.push(
             context,
@@ -108,6 +111,7 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              //TextField pour rentrer l'adresse email
               TextField(
                 controller: emailController,
                 decoration: const InputDecoration(
@@ -117,6 +121,7 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
                 ),
               ),
               const SizedBox(height: 12),
+              //Bouton pour rechercher l'utilisateur
               ElevatedButton(
                 onPressed: isLoading ? null : searchUserByEmail,
                 child: isLoading
@@ -124,6 +129,7 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
                     : const Text("Rechercher"),
               ),
               const SizedBox(height: 20),
+              //Si trouvé. nous affichons ici ses infos
               searchedUser != null
                   ? Card(
                 elevation: 4,

@@ -21,6 +21,7 @@ class _FollowingScreenState extends State<FollowingScreen> {
     fetchFollowingUsers();
   }
 
+  //Au début, on récupère les utlisateurs que l'on suit déjà sur Firestore
   Future<void> fetchFollowingUsers() async {
     try {
       DocumentSnapshot userDoc = await FirebaseFirestore.instance
@@ -49,6 +50,7 @@ class _FollowingScreenState extends State<FollowingScreen> {
     }
   }
 
+  //Fonction pour supprimer un follower
   Future<void> removeFromFollowers(String userId) async {
     try {
       await FirebaseFirestore.instance
@@ -90,6 +92,7 @@ class _FollowingScreenState extends State<FollowingScreen> {
           return Card(
             elevation: 4,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            //Ce widget ListTile permet l'affiche en liste dans la ListView
             child: ListTile(
               leading: CircleAvatar(
                 backgroundImage: user.photoUrl != null

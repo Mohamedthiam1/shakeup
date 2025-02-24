@@ -31,8 +31,8 @@ class KitDeSurviePage extends StatelessWidget {
           Expanded(
             child: ListView(
               padding: const EdgeInsets.all(16.0),
-              children: [
-                const ListTile(
+              children: const [
+                ListTile(
                   leading: Icon(Icons.local_drink, color: Colors.blue, size: 40),
                   title: Text(
                     'Eau potable',
@@ -42,8 +42,8 @@ class KitDeSurviePage extends StatelessWidget {
                     'Glou glou ! Reste hydraté comme un super-héros avec au moins 3 litres d’eau !',
                   ),
                 ),
-                const Divider(),
-                const ListTile(
+                Divider(),
+                ListTile(
                   leading: Icon(Icons.healing, color: Colors.red, size: 40),
                   title: Text(
                     'Trousse de secours',
@@ -53,8 +53,8 @@ class KitDeSurviePage extends StatelessWidget {
                     'Des pansements magiques et des potions (désinfectant) pour soigner les bobos !',
                   ),
                 ),
-                const Divider(),
-                const ListTile(
+                Divider(),
+                ListTile(
                   leading: Icon(Icons.flashlight_on, color: Colors.yellow, size: 40),
                   title: Text(
                     'Lampe de poche',
@@ -64,8 +64,8 @@ class KitDeSurviePage extends StatelessWidget {
                     'Pour explorer les ombres comme un aventurier... avec des piles de rechange bien sûr !',
                   ),
                 ),
-                const Divider(),
-                const ListTile(
+                Divider(),
+                ListTile(
                   leading: Icon(Icons.fastfood, color: Colors.orange, size: 40),
                   title: Text(
                     'Nourriture magique',
@@ -75,8 +75,8 @@ class KitDeSurviePage extends StatelessWidget {
                     'Des barres énergétiques et des conserves pour devenir fort comme un lion !',
                   ),
                 ),
-                const Divider(),
-                const ListTile(
+                Divider(),
+                ListTile(
                   leading: Icon(Icons.bed, color: Colors.purple, size: 40),
                   title: Text(
                     'Couverture câline',
@@ -86,7 +86,7 @@ class KitDeSurviePage extends StatelessWidget {
                     'Un manteau de chaleur pour rester bien au chaud comme un ours en hiver !',
                   ),
                 ),
-                const Divider(),
+                Divider(),
               ],
             ),
           ),

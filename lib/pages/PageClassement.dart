@@ -25,6 +25,7 @@ class _ClassementPageState extends State<ClassementPage> {
     "51+"
   ];
 
+  //Cette fonction nous permet de récupérer les utilisateurs et de les classer selon leurs nombres de points et tranche d'âge
   Stream<QuerySnapshot> getUsersStream() {
     var query = FirebaseFirestore.instance
         .collection('users')
@@ -81,6 +82,7 @@ class _ClassementPageState extends State<ClassementPage> {
           const SizedBox(width: 16),
         ],
       ),
+      //Streambuilder pour afficher le classement en temps réel
       body: StreamBuilder<QuerySnapshot>(
         stream: getUsersStream(),
         builder: (context, snapshot) {
@@ -174,6 +176,7 @@ class _ClassementPageState extends State<ClassementPage> {
     );
   }
 
+  //Boîte de dialogue affichant les détails des informations de l'utilisateur
   void _showUserDetails(BuildContext context, String fullName, int points, int age) {
     showDialog(
       context: context,

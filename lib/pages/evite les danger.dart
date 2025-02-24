@@ -27,6 +27,7 @@ class _DangerPageState extends State<DangerPage> {
         centerTitle: true,
       ),
       body: SafeArea(
+        //Ce widget nous permet de récupérer tous les dangers
         child: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance.collection("danger").snapshots(),
           builder: (context, snapshot) {
@@ -42,6 +43,7 @@ class _DangerPageState extends State<DangerPage> {
               return _buildFinalCelebration();
             }
 
+            //Nous récupérons ici les images et la bonne réponse
             final currentDocument = data[currentIndex].data() as Map<String, dynamic>;
             final String image1Url = currentDocument["image1Url"] ?? "";
             final String image2Url = currentDocument["image2Url"] ?? "";
@@ -149,6 +151,7 @@ class _DangerPageState extends State<DangerPage> {
     );
   }
 
+  //Widget affiché au final en guise de félicitations
   Widget _buildFinalCelebration() {
     return const Center(
       child: Column(

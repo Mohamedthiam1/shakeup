@@ -77,6 +77,7 @@ class _TrouverAbriPageState extends State<TrouverAbriPage> {
             final imageUrl = currentDocument["imageUrl"];
             final correctAnswer = currentDocument["correctAnswer"];
 
+            //Ce widget affichera l'image avec les différents choix à faire pour trouver le meilleur abris, et donc la bonne réponse
             return Stack(
               children: [
                 SingleChildScrollView(
@@ -190,6 +191,7 @@ class _TrouverAbriPageState extends State<TrouverAbriPage> {
     );
   }
 
+  //Fonction nous permettant d'afficher le résultat si c'est la bonne réponse ou pas
   void _showResultDialog(BuildContext context) {
     showDialog(
       context: context,

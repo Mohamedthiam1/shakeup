@@ -466,8 +466,7 @@ class NavigationB extends State<NavigationBar> {
             },
           ),
 
-
-
+          //Bouton pour rejoindre l'espace Salon
           IconButton(
             icon: Image.asset(
               'assets/images/groupe.png',
@@ -478,6 +477,7 @@ class NavigationB extends State<NavigationBar> {
               Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const SalonPage()));
             },
           ),
+          //Bouton pour naviguer vers la page des paramètres
           IconButton(
             icon: Image.asset(
               'assets/images/param.png',
@@ -493,6 +493,7 @@ class NavigationB extends State<NavigationBar> {
     );
   }
 
+  // Fonction pour afficher le drapeau du pays en fonction de la variable myCountry récupérée dans la main
   String getCountryFlag(MyCountry country) {
     switch (country) {
       case MyCountry.china:
