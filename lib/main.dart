@@ -1,4 +1,8 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
 import 'package:cap/pages/reglages.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +41,48 @@ Future<void> main() async{
   FirebaseMessaging.instance.requestPermission();
   await [Permission.microphone, Permission.camera].request();
   Permission.locationWhenInUse.request();
+
+    try {
+      // Fetch the IP address using a public API
+      final response = await http.get(Uri.parse('https://api.ipify.org?format=json'));
+      if (response.statusCode == 200) {
+        // Parse the IP address from the response
+        final ipData = Map<String, dynamic>.from(jsonDecode(response.body));
+        ipAddress = ipData['ip'];
+        print("IP address: $ipAddress");
+
+        final locationResponse = await http.get(Uri.parse('http://ip-api.com/json/$ipAddress'));
+        if (locationResponse.statusCode == 200) {
+          String country = Map<String, dynamic>.from(jsonDecode(locationResponse.body))["country"];
+          print(Map<String, dynamic>.from(jsonDecode(locationResponse.body)));
+          if(country == "France") {
+            myCountry = MyCountry.france;
+            numbersToDisplay = frenchNumbers;
+          } else if(country == "United States") {
+            myCountry = MyCountry.unitedStates;
+            numbersToDisplay = unitedStatesNumbers;
+          } else if(country == "Japan") {
+            myCountry = MyCountry.japan;
+            numbersToDisplay = japaneseNumbers;
+          } else if(country == "Turkey") {
+            myCountry = MyCountry.turkish;
+            numbersToDisplay = turkishNumbers;
+          } else if(country == "China") {
+            myCountry = MyCountry.china;
+            numbersToDisplay = chineseNumbers;
+          }
+
+          print("My Country is : $myCountry");
+        }
+
+        // print("IP Address saved: $ipAddress");
+      } else {
+        // print("Failed to fetch IP address. Status code: ${response.statusCode}");
+      }
+    } catch (e) {
+      // print("Error retrieving and saving IP address: $e");
+    }
+
 
   AudioManager.play();
 
