@@ -8,7 +8,7 @@ class AdminPrincipalPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final adminName = "OURARI Tinhinane"; // Exemple : nom de l'admin
+    final adminName = "OURARI Tinhinane"; // nom de l'admin
 
     return Scaffold(
       appBar: AppBar(

@@ -148,7 +148,6 @@ class _PendantScreenState extends State<PendantScreen> {
                   onPressed: () {
                     Navigator.pop(context); // Retour à la page précédente
                   },
-                  child: const Text('Retour à l\'Accueil'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
                     padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
@@ -159,6 +158,7 @@ class _PendantScreenState extends State<PendantScreen> {
                       color: Colors.black,
                     ),
                   ),
+                  child: const Text('Retour à l\'Accueil'),
                 ),
               ),
             ],

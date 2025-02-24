@@ -213,11 +213,11 @@ class _QuizPageState extends State<QuizPage> {
   void _showImageDialog(String imageUrl) {
     showDialog(
       context: context,
-      builder: (context) => Container(
+      builder: (context) => SizedBox(
         width: MediaQuery.of(context).size.width,
         child: Dialog(
           backgroundColor: Colors.transparent,
-          child: Container(
+          child: SizedBox(
             width: MediaQuery.of(context).size.width,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
@@ -283,16 +283,16 @@ class _QuizPageState extends State<QuizPage> {
                   ),
                   //Bouton pour terminer la partie
                   ElevatedButton(
-                    onPressed: _showQuizEndDialog,  // Appeler une méthode pour finir le quiz
-                    child: const Text("Terminer",
-                        style: TextStyle(fontSize: 16)),
+                    onPressed: _showQuizEndDialog,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green,  // Couleur du bouton
                       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
-                    ),
+                    ),  // Appeler une méthode pour finir le quiz
+                    child: const Text("Terminer",
+                        style: TextStyle(fontSize: 16)),
                   ),
                 ],
               ),

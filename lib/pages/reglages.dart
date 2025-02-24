@@ -148,7 +148,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                   ),
                                 IconButton(onPressed: (){
                                   showUserInfoModal(context, sharedPreferences!.getString("uid")!);
-                                }, icon: Icon(Icons.edit_rounded))
+                                }, icon: const Icon(Icons.edit_rounded))
                               ],
                             ),
 
@@ -156,7 +156,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                 onPressed: (){
                                   Navigator.push(context, MaterialPageRoute(builder: (BuildContext ctx) => SearchUserScreen(currentUserId: sharedPreferences!.getString("uid")!)));
                                 },
-                                icon: Icon(Icons.group_rounded)
+                                icon: const Icon(Icons.group_rounded)
                             )
                           ],
                         ),
@@ -206,7 +206,6 @@ class _SettingsPageState extends State<SettingsPage> {
                   // Liens vers d'autres pages
                   SettingLink(title: selectedLanguage == 'Français' ? 'Politique de confidentialité' : 'Privacy Policy', routeName: '/privacy'),
                   SettingLink(title: selectedLanguage == 'Français' ? 'Conditions d\'utilisation' : 'Terms of Use', routeName: '/terms'),
-                  SettingLink(title: selectedLanguage == 'Français' ? 'Support' : 'Support'),
                 ],
               ),
             ),
@@ -303,7 +302,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       decoration: const InputDecoration(labelText: "Âge"),
                     ),
                     const SizedBox(height: 30),
-                    Container(
+                    SizedBox(
                       width: MediaQuery.of(context).size.width * 0.3,
                       child: ElevatedButton(
                         onPressed: isLoading ? null : saveUserData,
@@ -333,7 +332,7 @@ class _SettingsPageState extends State<SettingsPage> {
       // showDragHandle: true,
       builder: (BuildContext context) {
         final double width = MediaQuery.of(context).size.width;
-        return Container(
+        return SizedBox(
           width: width,
           child: StatefulBuilder(
             builder: (BuildContext context, StateSetter setStater) {
@@ -380,7 +379,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Container(
+                            SizedBox(
                               width: width * 1.7 / 5,
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
@@ -396,7 +395,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                 child: const Text("RETOURNER", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
                               ),
                             ),
-                            Container(
+                            SizedBox(
                               width: width * 0.5 / 5,
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
@@ -469,7 +468,7 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
           ],
         ),
-        SizedBox(height: 5),
+        const SizedBox(height: 5),
         ElevatedButton(
           onPressed: sharedPreferences!.getString("uid") != null ? null : () {
             if(label == 'Google') {
@@ -555,7 +554,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
                     if (!isLogin) // Full name field for registration only
                       Container(
-                        margin: EdgeInsets.only(top: 10),
+                        margin: const EdgeInsets.only(top: 10),
                         child: CustomTextField(
                           autofillHints: AutofillHints.name,
                           controller: fullNameController,
@@ -633,7 +632,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
                     const SizedBox(height: 20),
 
-                    Container(
+                    SizedBox(
                       width: MediaQuery.of(context).size.width * 0.4,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
@@ -675,7 +674,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             authenticateUserAndSignUp(email, password, fullName, "", "", context, setState);
                           }
                         },
-                        child: loading ? circularProgress() : Text(isLogin ? "Se connecter" : "S'inscrire", style: TextStyle(color: Colors.white),),
+                        child: loading ? circularProgress() : Text(isLogin ? "Se connecter" : "S'inscrire", style: const TextStyle(color: Colors.white),),
                       ),
                     ),
 

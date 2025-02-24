@@ -2,10 +2,8 @@ import 'dart:io';
 
 import 'package:cap/global/global.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart' as storage;
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -75,7 +73,7 @@ class _AddQuizzScreenState extends State<AddQuizzScreen> {
               )
           ),
           onPressed: _submitQuiz,
-          child: Text("ENREGISTRER", overflow: TextOverflow.ellipsis, style: TextStyle(
+          child: const Text("ENREGISTRER", overflow: TextOverflow.ellipsis, style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold),),
         ),
@@ -85,7 +83,7 @@ class _AddQuizzScreenState extends State<AddQuizzScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
+            SizedBox(
               width: width,
               height: 175,
               child: ClipRRect(

@@ -7,6 +7,7 @@ import 'package:cap/pages/reglages.dart';
 import 'package:cap/pages/salon.dart';
 import 'package:cap/pages/test-quiz.dart';
 import 'package:cap/pages/trophee_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -57,16 +58,18 @@ class NavigationBar extends StatefulWidget {
 class NavigationB extends State<NavigationBar> {
   // Avatar par défaut
   String selectedAvatar = 'assets/images/profil.png';
+  String selectedPseudo = "Name/Pseudo";
 
   @override
   void initState() {
     super.initState();
     _checkTrophyUnlock(); // Vérifie si un trophée peut être débloqué lors de l'initialisation
+    _loadUserPreferences(); // Charge l'avatar et le pseudo sauvegardés
   }
 
   // Fonction pour vérifier et gérer le déblocage du trophée "Récolteur de points"
   Future<void> _checkTrophyUnlock() async {
-    int userPoints = sharedPreferences!.getInt('points') ?? 0; // Récupère les points utilisateur
+    int userPoints = sharedPreferences!.getInt("points") ?? 0;; // Récupère les points utilisateur
     bool hasUnlockedTrophy = sharedPreferences!.getBool('unlocked_recolteur_points') ?? false; // Vérifie si le trophée est déjà débloqué
 
     // Si l'utilisateur a au moins 15 points et n'a pas encore débloqué le trophée
@@ -75,9 +78,17 @@ class NavigationB extends State<NavigationBar> {
       await sharedPreferences!.setBool('unlocked_recolteur_points', true);
 
       // Ajouter 20 points lors du déblocage du trophée
-      userPoints += 20;  // Ajouter 20 points
-      await sharedPreferences!.setInt('points', userPoints); // Mettre à jour le score du joueur
+      int newPoints = userPoints + 20; // Ajouter 20 points
+      await sharedPreferences!.setInt("points", newPoints);
 
+      String? uid = sharedPreferences!.getString("uid");
+      if (uid != null) {
+        await FirebaseFirestore.instance.collection("users").doc(uid).update({
+          "points": FieldValue.increment(20)
+        });
+      } else {
+        print("Erreur: UID utilisateur introuvable.");
+      }
       // Afficher un pop-up pour annoncer le trophée débloqué
       _showTrophyPopup(userPoints); // Passer le nouveau nombre de points pour l'afficher dans le pop-up
     }
@@ -114,6 +125,14 @@ class NavigationB extends State<NavigationBar> {
     );
   }
 
+  // Charge les préférences utilisateur (pseudo et avatar) depuis SharedPreferences
+  Future<void> _loadUserPreferences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      selectedAvatar = prefs.getString('selectedAvatar') ?? 'assets/images/profil.png';
+      selectedPseudo = prefs.getString('selectedPseudo') ?? 'Name/Pseudo';
+    });
+  }
 
 
   @override
@@ -132,165 +151,219 @@ class NavigationB extends State<NavigationBar> {
           // Trois icônes sur la gauche
           // Profil Icone
           IconButton(
-            icon: Image.asset(
-              selectedAvatar, // Avatar dynamique
-              width: 35,
-              height: 35,
-            ),
+              icon: ClipOval(
+                child: Container(
+                  width: 50, // Taille du cercle
+                  height: 50,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle, // Forme circulaire
+                    color: Colors.white, // Couleur de fond (modifiable)
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black26, // Ombre légère
+                        blurRadius: 4,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Transform.scale(
+                    scale: 0.8, // Dézoome l'image (ajuste la valeur selon ton besoin)
+                    child: Image.asset(
+                      selectedAvatar, // Avatar dynamique
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ),
             onPressed: () {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
                   String tempAvatar = selectedAvatar; // Avatar temporaire
-                  String pseudo = "Name/Pseudo"; // Valeur par défaut
+                  TextEditingController pseudoController = TextEditingController(text: selectedPseudo);
 
                   return StatefulBuilder(
                     builder: (BuildContext context, StateSetter setDialogState) {
-                      return AlertDialog(
-                        backgroundColor: const Color(0xFFE6EFE3), // Couleur de fond
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15), // Effet de radius
-                        ),
-                        content: SizedBox(
-                          width: 300, // Largeur de la boîte de dialogue
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              // Zone pour l'icône de profil et le pseudo
-                              Row(
-                                children: [
-                                  // Avatar sélectionné
-                                  Container(
-                                    width: 45,
-                                    height: 45,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15),
-                                      color: Colors.transparent,
-                                    ),
-                                    child: Image.asset(
-                                      tempAvatar, // Avatar temporaire
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 10), // Espacement
-                                  // Champ texte pour modifier le pseudo
-                                  Expanded(
-                                    child: TextField(
-                                      onChanged: (value) {
-                                        pseudo = value; // Met à jour le pseudo
-                                      },
-                                      decoration: InputDecoration(
-                                        labelText: 'Nom/Pseudo',
-                                        border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(12),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 10),
-
-                              // Grille d'avatars
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  color: const Color(0xFFC7E4BF),
-                                  boxShadow: const [
-                                    BoxShadow(
-                                      color: Color(0x40000000),
-                                      blurRadius: 4,
-                                      offset: Offset(0, 4),
-                                    ),
-                                  ],
-                                ),
-                                constraints: const BoxConstraints(maxHeight: 200), // Limite la hauteur
-                                child: Wrap(
-                                  spacing: 8.0, // Espacement horizontal entre les avatars
-                                  runSpacing: 8.0, // Espacement vertical entre les avatars
-                                  alignment: WrapAlignment.center,
+                      return LayoutBuilder(
+                        builder: (context, constraints) {
+                          double keyboardHeight = MediaQuery.of(context).viewInsets.bottom; // Hauteur du clavier
+                          return AlertDialog(
+                            backgroundColor: const Color(0xFFE6EFE3), // Couleur de fond
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15), // Effet de radius
+                            ),
+                            content: SingleChildScrollView(
+                              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag, // Cache le clavier en scrollant
+                              child: Padding(
+                                padding: EdgeInsets.only(bottom: keyboardHeight), // Ajuste la hauteur selon le clavier
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    for (var avatarPath in [
-                                      'assets/images/an1.jpg',
-                                      'assets/images/an2.png',
-                                      'assets/images/an3.jpg',
-                                      'assets/images/an4.jpg',
-                                      'assets/images/an5.jpg',
-                                      'assets/images/an6.png',
-                                    ])
-                                      GestureDetector(
-                                        onTap: () {
-                                          setDialogState(() {
-                                            tempAvatar = avatarPath; // Change avatar temporaire
-                                          });
-                                        },
-                                        child: Container(
-                                          width: 60,
-                                          height: 60,
-                                          decoration: const BoxDecoration(
-                                            shape: BoxShape.circle, // Forme circulaire
-                                            color: Colors.white, // Couleur de fond blanche
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Color(0x40000000), // Couleur de l'ombre
-                                                blurRadius: 4, // Flou de l'ombre
-                                                offset: Offset(0, 2), // Décalage de l'ombre
+                                    // Zone pour l'icône de profil et le pseudo
+                                    Row(
+                                      children: [
+                                        // Avatar sélectionné
+                                          ClipOval(
+                                            child: Container(
+                                              width: 45,
+                                              height: 45,
+                                              decoration: const BoxDecoration(
+                                                shape: BoxShape.circle, // Forme circulaire
+                                                color: Colors.white, // Couleur de fond blanche
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Color(0x40000000), // Couleur de l'ombre
+                                                    blurRadius: 4, // Flou de l'ombre
+                                                    offset: Offset(0, 2), // Décalage de l'ombre
+                                                  ),
+                                                ],
                                               ),
-                                            ],
+                                              child: Transform.scale(
+                                                scale: 0.8, // Dézoome l'image (ajuste la valeur selon ton besoin)
+                                                child: Image.asset(
+                                                  tempAvatar, // Avatar dynamique
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
                                           ),
-                                          child: ClipOval(
-                                            child: Image.asset(
-                                              avatarPath,
-                                              width: 75,
-                                              height: 75,
-                                              fit: BoxFit.cover,
+                                        ),
+                                        const SizedBox(width: 10), // Espacement
+                                        // Champ texte pour modifier le pseudo
+                                        Expanded(
+                                          child: TextField(
+                                            controller: pseudoController, // Utilise le contrôleur
+                                            decoration: InputDecoration(
+                                              labelText: 'Nom/Pseudo',
+                                              border: OutlineInputBorder(
+                                                borderRadius: BorderRadius.circular(12),
+                                              ),
                                             ),
                                           ),
                                         ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 10),
+
+                                    // Grille d'avatars
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                        color: const Color(0xFFC7E4BF),
+                                        boxShadow: const [
+                                          BoxShadow(
+                                            color: Color(0x40000000),
+                                            blurRadius: 4,
+                                            offset: Offset(0, 4),
+                                          ),
+                                        ],
                                       ),
+                                      constraints: const BoxConstraints(maxHeight: 200), // Limite la hauteur
+                                      child: SingleChildScrollView( // Ajoute un défilement si besoin
+                                        child: Wrap(
+                                          spacing: 8.0, // Espacement horizontal entre les avatars
+                                          runSpacing: 8.0, // Espacement vertical entre les avatars
+                                          alignment: WrapAlignment.center,
+                                          children: [
+                                            for (var avatarPath in [
+                                              'assets/images/an1.jpg',
+                                              'assets/images/an2.png',
+                                              'assets/images/an3.jpg',
+                                              'assets/images/an4.jpg',
+                                              'assets/images/an5.jpg',
+                                              'assets/images/an6.png',
+                                            ])
+                                              GestureDetector(
+                                                onTap: () {
+                                                  setDialogState(() {
+                                                    tempAvatar = avatarPath; // Change avatar temporaire
+                                                  });
+                                                },
+                                                child: Container(
+                                                  width: 60,
+                                                  height: 60,
+                                                  decoration: const BoxDecoration(
+                                                    shape: BoxShape.circle, // Forme circulaire
+                                                    color: Colors.white, // Couleur de fond blanche
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        color: Color(0x40000000), // Couleur de l'ombre
+                                                        blurRadius: 4, // Flou de l'ombre
+                                                        offset: Offset(0, 2), // Décalage de l'ombre
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  child: ClipOval(
+                                                    child: Transform.scale(
+                                                      scale: 0.98, // Dézoome l'image (ajuste la valeur selon ton besoin)
+                                                      child: Image.asset(
+                                                        avatarPath, // Avatar dynamique
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+
+                                    // Boutons "Annuler" et "Confirmer"
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop(); // Ferme le dialogue
+                                          },
+                                          child: const Text("Annuler",
+                                            style: TextStyle(
+                                              fontFamily: 'Arima',
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w400,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ),
+                                        TextButton(
+                                          onPressed: () async {
+                                            SharedPreferences prefs = await SharedPreferences.getInstance();
+
+                                            setState(() {
+                                              selectedAvatar = tempAvatar; // Sauvegarde l'avatar
+                                              selectedPseudo = pseudoController.text; // Sauvegarde le pseudo
+                                            });
+
+                                            // Sauvegarde dans SharedPreferences
+                                            await prefs.setString('selectedAvatar', selectedAvatar);
+                                            await prefs.setString('selectedPseudo', selectedPseudo);
+
+                                            Navigator.of(context).pop(); // Ferme le dialogue
+                                          },
+                                          child: const Text("Confirmer",
+                                            style: TextStyle(
+                                              fontFamily: 'Arima',
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w400,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ],
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop(); // Ferme le dialogue
-                            },
-                            child: const Text("Annuler",
-                              style: TextStyle(
-                                fontFamily: 'Arima',
-                                fontSize: 18,
-                                fontWeight: FontWeight.w400,
-                                color: Colors.black,
-                              ),
                             ),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              setState(() {
-                                selectedAvatar = tempAvatar; // Sauvegarde l'avatar
-                              });
-                              Navigator.of(context).pop(); // Ferme le dialogue
-                            },
-                            child: const Text("Confirmer",
-                              style: TextStyle(
-                                fontFamily: 'Arima',
-                                fontSize: 18,
-                                fontWeight: FontWeight.w400,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                        ],
+                          );
+                        },
                       );
                     },
                   );
                 },
               );
-            },
+            }
           ),
 
           IconButton(
@@ -362,9 +435,9 @@ class NavigationB extends State<NavigationBar> {
 
           IconButton(
             icon: Image.asset(
-              'assets/images/levelE.png',
-              width: 45,
-              height: 45,
+              'assets/images/urgence.png',
+              width: 35,
+              height: 35,
             ),
             onPressed: () {
               showDialog(

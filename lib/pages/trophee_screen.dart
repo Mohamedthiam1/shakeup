@@ -55,14 +55,6 @@ class _TropheeScreenState extends State<TropheeScreen> {
         unlocked: false,
       ),
       BadgeModel(
-        title: 'Historien des Tremblements',
-        description: 'A étudié et complété des rapports sur 10 tremblements de terre historiques.',
-        icon: Icons.history,
-        iconColor: Colors.blue,
-        criteria: 'Terminer des articles éducatifs sur 10 tremblements de terre.',
-        unlocked: false,
-      ),
-      BadgeModel(
         title: 'Champion de la Préparation',
         description: 'A complété un quiz sur la préparation avant un séisme.',
         icon: Icons.check,
@@ -72,10 +64,18 @@ class _TropheeScreenState extends State<TropheeScreen> {
       ),
       BadgeModel(
         title: 'Ambassadeur de la Sécurité',
-        description: 'A partagé des conseils de sécurité avec 5 amis.',
+        description: 'A regardé les numéros de téléphone important dans sa région.',
         icon: Icons.share,
         iconColor: Colors.purple,
-        criteria: 'Utiliser la fonctionnalité de partage de l\'application.',
+        criteria: 'Consulter la page numéros d\'urgences.',
+        unlocked: false,
+      ),
+      BadgeModel(
+        title: 'Maître des Défis',
+        description: 'A obtenu tous les badges du jeu.',
+        icon: Icons.history,
+        iconColor: Colors.blue,
+        criteria: 'Obtenir tous les badges.',
         unlocked: false,
       ),
     ];
@@ -102,7 +102,7 @@ class _TropheeScreenState extends State<TropheeScreen> {
       ),
       Trophy(
         title: 'Voyageur du Temps',
-        description: 'Débloqué en étudiant 5 tremblements de terre historiques.',
+        description: 'Débloqué en lisant 4 histoires.',
         unlocked: false,
         points: 40,
       ),
