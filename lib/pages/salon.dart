@@ -19,13 +19,11 @@ class SalonPage extends StatefulWidget {
 // Page pour gérer les salons : création ou connexion
 class _SalonPageState extends State<SalonPage> {
   late TextEditingController professorName; //nom du sallon
-  late String difficulty; // Niveau de difficulté par défaut
 
   @override
   void initState() {
     super.initState();
     professorName = TextEditingController(); // Initialisation du TextEditingController
-    difficulty = '1'; // Initialisation du niveau de difficulté par défaut à '1'
   }
 
   @override
@@ -96,14 +94,12 @@ class _SalonPageState extends State<SalonPage> {
     await FirebaseFirestore.instance.collection("salons").doc(roomCode).set({
       'roomCode': roomCode,
       'professorName': professorName.text, // Nom du salon
-      'difficulty': difficulty, // Niveau de difficulté
       'participants': [], // Liste vide pour les participants
     }).whenComplete(() async {
       // Une fois que l'ajout Firestore est terminé, nous stockons les valeurs dans sharedPreferences
       sharedPreferences = await SharedPreferences.getInstance();
       await sharedPreferences!.setString("roomCode", roomCode);
       await sharedPreferences!.setString("professorName", professorName.text);
-      await sharedPreferences!.setString("difficulty", difficulty);
 
       setState(() {
         sharedPreferences; // Met à jour l'état avec les nouvelles données
@@ -118,8 +114,7 @@ class _SalonPageState extends State<SalonPage> {
           builder: (context) =>
               ParticipantsPage(
                 roomNumber: roomCode, // Passer le code généré comme numéro de salon
-                professorName: professorName.text, // Passer le nom du professeur
-                difficulty: difficulty, // Passer la difficulté
+                professorName: professorName.text // Passer le nom du professeur
               ),
         ),
       );
@@ -162,31 +157,7 @@ class _SalonPageState extends State<SalonPage> {
                         ),
                         const SizedBox(height: 16),
                         // Dropdown pour sélectionner la difficulté
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text(
-                              'Niveau de difficulté :',
-                              style: TextStyle(fontSize: 16),
-                            ),
-                            DropdownButton<String>(
-                              value: difficulty, // Valeur actuelle de la difficulté
-                              items: ['1', '2', '3'].map((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                              onChanged: (String? newValue) {
-                                if (newValue != null) {
-                                  setState(() {
-                                    difficulty = newValue; // Mettre à jour la difficulté
-                                  });
-                                }
-                              },
-                            ),
-                          ],
-                        ),
+                        
                         const SizedBox(height: 24),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
@@ -282,9 +253,8 @@ class _SalonPageState extends State<SalonPage> {
 
                             if (salonSnapshot.exists) {
                               String professorName = salonSnapshot['professorName'];
-                              String difficulty = salonSnapshot['difficulty'];
 
-                              joinSalon(context, roomCode, playerName, professorName, difficulty);
+                              joinSalon(context, roomCode, playerName, professorName);
 
                               Navigator.of(context).pop(); // Fermer la popup
                               Navigator.push(
@@ -293,7 +263,6 @@ class _SalonPageState extends State<SalonPage> {
                                   builder: (context) => ParticipantsPage(
                                     roomNumber: roomCode, // Passer le code du salon
                                     professorName: professorName, // Passer le nom du professeur
-                                    difficulty: difficulty, // Passer le niveau de difficulté
                                   ),
                                 ),
                               );
@@ -317,7 +286,7 @@ class _SalonPageState extends State<SalonPage> {
   }
 
   // Fonction pour rejoindre un salon
-  void joinSalon(BuildContext context, String roomNumber, String playerName, String professorName, String difficulty) async {
+  void joinSalon(BuildContext context, String roomNumber, String playerName, String professorName) async {
     final salonRef = FirebaseFirestore.instance.collection('salons').doc(roomNumber);
 
     try {
@@ -333,7 +302,6 @@ class _SalonPageState extends State<SalonPage> {
           builder: (context) => ParticipantsPage(
                 roomNumber: roomNumber,
                 professorName: professorName,
-                difficulty: difficulty,
               ),
         ),
       );
@@ -388,13 +356,11 @@ class SalonButton extends StatelessWidget {
 class ParticipantsPage extends StatefulWidget {
   final String roomNumber;
   final String professorName;
-  final String difficulty;
 
   const ParticipantsPage({
     super.key,
     required this.roomNumber,
-    required this.professorName,
-    required this.difficulty,
+    required this.professorName
   });
 
   @override
