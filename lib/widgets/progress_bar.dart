@@ -14,6 +14,8 @@ circularProgress() {
     ),
   );
 }
+
+//Cette fonction affiche une ligne de chargement dans certains cas pour varier un peu au circularProgress
 linearProgress() {
   return Container(
     alignment: Alignment.center,

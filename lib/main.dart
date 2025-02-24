@@ -22,39 +22,48 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // print("Background message: ${message.messageId}");
 }
 
+//Notre fonction main est le point d'entrée de notre application, tout commence ici!
 Future<void> main() async{
   WidgetsFlutterBinding.ensureInitialized();
   sharedPreferences = await SharedPreferences.getInstance();
 
+  //Ici Firebase est initialisé avec les identifiants de notre firebase_options
   await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform
   );
 
+  //Si la variable points n'existait pas dans sharedPreferences, on l'initialise
   if(sharedPreferences!.getInt("points") == null) {
     sharedPreferences!.setInt("points", 0);
   }
 
+  //Pareil pour l'âge, il est initialisé à 0
   if(sharedPreferences!.getInt("age") == null) {
     sharedPreferences!.setInt("age", 0);
   }
+
+  //Ici on démare les services de Firebase Messaging pour l'envoi de notifications
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  //Nous demandons les permissions nécessaires l'utilisation de notre application
   FirebaseMessaging.instance.requestPermission();
   await [Permission.microphone, Permission.camera].request();
   Permission.locationWhenInUse.request();
 
     try {
-      // Fetch the IP address using a public API
+      // Ici, nous allons d'abord récupérer l'adresse IP de l'utilisateur avec un API gratuite
       final response = await http.get(Uri.parse('https://api.ipify.org?format=json'));
       if (response.statusCode == 200) {
-        // Parse the IP address from the response
+        // We parse the IP address from the response
         final ipData = Map<String, dynamic>.from(jsonDecode(response.body));
         ipAddress = ipData['ip'];
         print("IP address: $ipAddress");
 
+        //Puis ici nous récupérons la localisation de l'appareil en fonction de l'adresse IP précédemment eu
         final locationResponse = await http.get(Uri.parse('http://ip-api.com/json/$ipAddress'));
         if (locationResponse.statusCode == 200) {
           String country = Map<String, dynamic>.from(jsonDecode(locationResponse.body))["country"];
           print(Map<String, dynamic>.from(jsonDecode(locationResponse.body)));
+          //En fonction du pays associé à l'adresse, nous modifions la variable myCountry qui va nous permettre d'afficher les numéros d'urgence par la suite
           if(country == "France") {
             myCountry = MyCountry.france;
             numbersToDisplay = frenchNumbers;
@@ -84,8 +93,10 @@ Future<void> main() async{
     }
 
 
+    //Nous démarrons la musique en arrière plan
   AudioManager.play();
 
+    //Nous fixons l'orientation du téléphone en mode Paysage
   SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeRight, DeviceOrientation.landscapeLeft])
       .then((_) {
     runApp(const MyApp());
