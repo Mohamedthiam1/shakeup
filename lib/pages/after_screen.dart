@@ -141,7 +141,6 @@ class _After_ScreenState extends State<After_Screen> {
                   onPressed: () {
                     Navigator.pop(context); // Retour à la page précédente
                   },
-                  child: const Text('Retour à l\'Accueil'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
                     padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
@@ -152,6 +151,7 @@ class _After_ScreenState extends State<After_Screen> {
                       color: Colors.black,
                     ),
                   ),
+                  child: const Text('Retour à l\'Accueil'),
                 ),
               ),
             ],

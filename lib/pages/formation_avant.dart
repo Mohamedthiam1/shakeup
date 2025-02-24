@@ -184,7 +184,6 @@ class _AvantPage extends State<AvantPage> {
                   onPressed: () {
                     Navigator.pop(context); // Retour à la page précédente
                   },
-                  child: Text(selectedLanguage == 'Français' ? 'Retour à l\'Accueil' : 'Return to Home'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
                     padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
@@ -195,6 +194,7 @@ class _AvantPage extends State<AvantPage> {
                       color: Colors.black,
                     ),
                   ),
+                  child: Text(selectedLanguage == 'Français' ? 'Retour à l\'Accueil' : 'Return to Home'),
                 ),
               )
             ],

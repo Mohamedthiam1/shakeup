@@ -251,10 +251,10 @@ class AnimatedCelebration extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return const Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
+        children: [
           Text("🎊", style: TextStyle(fontSize: 40)),
           SizedBox(height: 10),
           Text("🏆", style: TextStyle(fontSize: 40)),
