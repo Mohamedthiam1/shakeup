@@ -49,8 +49,10 @@ class _SettingsPageState extends State<SettingsPage> {
     fullNameController = TextEditingController();
     nameController = TextEditingController();
     ageController = TextEditingController();
-    nameController.text = sharedPreferences!.getString("fullname")!;
-    ageController.text = sharedPreferences!.getInt("age")!.toString();
+    if(sharedPreferences!.getString("uid") != null) {
+      nameController.text = sharedPreferences!.getString("fullname")!;
+      ageController.text = sharedPreferences!.getInt("age")!.toString();
+    }
     _loadLanguage(); // Charger la langue au démarrage
   }
 
