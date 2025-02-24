@@ -1,3 +1,4 @@
+// Ce model représente les objets de type Trophée
 class Trophy {
   final String title;
   final String description;

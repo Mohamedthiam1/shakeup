@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+//Cette fonction affiche le cercle qui charge avant d'afficher certains widgets asynchrones
 circularProgress() {
   return Container(
     alignment: Alignment.center,

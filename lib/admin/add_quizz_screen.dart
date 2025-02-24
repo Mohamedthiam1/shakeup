@@ -19,6 +19,7 @@ class AddQuizzScreen extends StatefulWidget {
 }
 
 class _AddQuizzScreenState extends State<AddQuizzScreen> {
+  //On déclare nos variables ici
   late TextEditingController questionController;
   late TextEditingController firstController;
   late TextEditingController secondController;
@@ -33,6 +34,7 @@ class _AddQuizzScreenState extends State<AddQuizzScreen> {
   @override
   void initState() {
     super.initState();
+    //On initialise les controllers pour des raisons de performance
     questionController = TextEditingController();
     firstController = TextEditingController();
     secondController = TextEditingController();
@@ -42,6 +44,7 @@ class _AddQuizzScreenState extends State<AddQuizzScreen> {
 
   @override
   void dispose() {
+    //On libère les ressources pour des raisons de performance
     questionController.dispose();
     firstController.dispose();
     secondController.dispose();
@@ -62,6 +65,7 @@ class _AddQuizzScreenState extends State<AddQuizzScreen> {
       bottomNavigationBar: Container(
         width: width,
         margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+        //Nous enregistrons les données du nouveau quizz
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
               padding: EdgeInsets.symmetric(vertical: 5, horizontal: width * 0.06),
@@ -93,10 +97,10 @@ class _AddQuizzScreenState extends State<AddQuizzScreen> {
                     children: [
                       Container(
                         padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                        child: imageXFile == null
+                        child: imageXFile == null //Nous verifions si l'image a été déjà choisie ou pas encore
                             ? Container(
                           alignment: Alignment.center,
-                          child: Text("Cliquez pour choisir une image"),
+                          child: Text("Cliquez pour choisir une image"), //Si non on lui demande de la choisir
                         )
                             : Container(
                           width: width * 0.90,
@@ -104,7 +108,7 @@ class _AddQuizzScreenState extends State<AddQuizzScreen> {
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
-                            image: DecorationImage(image: FileImage(File(imageXFile!.path)), fit: BoxFit.cover)
+                            image: DecorationImage(image: FileImage(File(imageXFile!.path)), fit: BoxFit.cover) // Si c'est déjà fait on l'affiche dans un Container pour controler les dimensions
                           ),
                         ),
                       ),
@@ -115,7 +119,7 @@ class _AddQuizzScreenState extends State<AddQuizzScreen> {
             ),
 
             const SizedBox(height: 20),
-            // Question Input
+            // Question Input - Nous recupérons la question
             TextField(
               controller: questionController,
               textCapitalization: TextCapitalization.sentences,
@@ -123,7 +127,7 @@ class _AddQuizzScreenState extends State<AddQuizzScreen> {
             ),
             const SizedBox(height: 15),
 
-            // Answer Options
+            // Answer Options - Nous renseignons les réponses possibles puis nous choisissons la bonne réponse au quizz
             _buildAnswerOption(0, firstController),
             _buildAnswerOption(1, secondController),
             _buildAnswerOption(2, thirdController),
@@ -137,9 +141,11 @@ class _AddQuizzScreenState extends State<AddQuizzScreen> {
     );
   }
 
+  //Notre widget pour afficher nos réponses en liste
   Widget _buildAnswerOption(int index, TextEditingController controller) {
     return Row(
       children: [
+        //Ce widget Radio nous permettra de ne choisir qu'une seule bonne réponse
         Radio<int>(
           value: index,
           groupValue: correctResponse,
@@ -160,6 +166,7 @@ class _AddQuizzScreenState extends State<AddQuizzScreen> {
     );
   }
 
+  //Cette function nous permettra de récupérer l'image depuis la gallerie grâce au package image_picker
   Future<void> _getImage() async {
     imageXFile = await _picker.pickImage(source: ImageSource.gallery);
     setState(() {
@@ -174,6 +181,7 @@ class _AddQuizzScreenState extends State<AddQuizzScreen> {
     }
   }
 
+  //Cette fonction va stocker le nouveau quizz dans la base de donnees pour pouvoir l'utiliser et l'afficher plus tard
   Future<void> _submitQuiz() async {
     if (questionController.text.isEmpty ||
         firstController.text.isEmpty ||
@@ -186,7 +194,6 @@ class _AddQuizzScreenState extends State<AddQuizzScreen> {
     }
     showloading(context);
 
-    // Create a quiz object (this can be modified to fit your backend structure)
     // final quiz = {
     //   "question": questionController.text,
     //   "answers": [
@@ -198,20 +205,22 @@ class _AddQuizzScreenState extends State<AddQuizzScreen> {
     //   "correctIndex": correctResponse,
     // };
 
-    // print("Quiz Submitted: $quiz"); // Replace with actual save logic
     String quizzID = DateTime.now().millisecondsSinceEpoch.toString();
 
+    //Ici on enregistre l'image(si elle existe) du quizz sur Firebase Storage
     if(imageXFile != null) {
       storage.Reference reference = storage.FirebaseStorage.instance.ref().child("quizzes").child(quizzID);
       storage.UploadTask uploadTask = reference.putFile(File(imageXFile!.path));
       storage.TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() {});
       await taskSnapshot.ref.getDownloadURL().then((url) {
+        //On recupère l'url pour l'utiliser plus tard
         imageUrl = url;
         //Save informations to Firestore Database
 
       });
     }
 
+    //Et c'est là que nous enregistrions les données sur Firestore
     await FirebaseFirestore.instance.collection("quizzes").doc(quizzID).set({
       "quizzID": quizzID,
       "question": questionController.text,
@@ -230,7 +239,7 @@ class _AddQuizzScreenState extends State<AddQuizzScreen> {
       Fluttertoast.showToast(msg: "Question ajoutée avec succès!", timeInSecForIosWeb: 5);
     });
 
-    // Clear fields after submission
+    // Après tout on réinitialise et vide les controllers et variables
     questionController.clear();
     firstController.clear();
     secondController.clear();

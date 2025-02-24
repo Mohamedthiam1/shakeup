@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+// Ce model représente les objets de type Utilisateur afin de pouvoir bien gérer nos utilisateurs et plus facilement
 class User {
   bool? admin;
   String? email;
