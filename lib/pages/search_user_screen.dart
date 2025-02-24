@@ -98,7 +98,7 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
             ),
           );
         },
-            child: Text("Voir mes amis", style: TextStyle(
+            child: const Text("Voir mes amis", style: TextStyle(
               color: Colors.black,
               fontSize: 16
         )))
