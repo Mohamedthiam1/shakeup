@@ -40,6 +40,7 @@ class _SettingsPageState extends State<SettingsPage> {
   bool isLogin = true;
   bool loading = false;
   // int age = 0;
+  bool usedGoogle = false;
 
   @override
   void initState() {
@@ -477,9 +478,11 @@ class _SettingsPageState extends State<SettingsPage> {
                 print(account.id);
                 Fluttertoast.showToast(msg: "Redirecting...", timeInSecForIosWeb: 4);
                 bool userAlreadyExists = await doesUserExistWithEmail(account.email);
+                usedGoogle = true;
                 if (userAlreadyExists) {
+                  print("User exists");
                   String hidden = await fetchHiddenThingGoogle();
-                  formValidation(account.email, hidden, context, setState);
+                  await formValidation(account.email, hidden, context, setState);
                 }
                 else {
                   String hidden = await fetchHiddenThingGoogle();
@@ -494,6 +497,7 @@ class _SettingsPageState extends State<SettingsPage> {
             } else if(label == "Apple") {
 
             } else if(label == "Email") {
+              usedGoogle = false;
               showAuthModal(context);
             }
           }, // Action à définir lors de l'appui sur le bouton
@@ -693,6 +697,7 @@ class _SettingsPageState extends State<SettingsPage> {
   formValidation(String email, String hidden, BuildContext context, StateSetter setState) {
     print('Entered properly 1');
     if (email.isNotEmpty && hidden.isNotEmpty) {
+      print("Login now");
       //Login
       // print(email);
       // print(hidden);
@@ -734,7 +739,9 @@ class _SettingsPageState extends State<SettingsPage> {
           setState(() {
             sharedPreferences;
           });
-          Navigator.pop(context);
+          if(!usedGoogle) {
+            Navigator.pop(context);
+          }
           Navigator.pop(context);
           // setState(() {
           //   sharedPreferences;
