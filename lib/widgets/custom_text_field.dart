@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 
 import '../global/global.dart';
 
+//Nous avons créer un CustomTextField afin d'uniformiser tous nos TextFields ou la plupart et pour un accès plus facile et avec moins de code
 class CustomTextField extends StatelessWidget {
 
   final TextEditingController? controller;
@@ -74,7 +75,6 @@ class CustomTextField extends StatelessWidget {
         decoration: BoxDecoration(
           color: backgroundColor ?? const Color.fromRGBO(228, 228, 228, 1),
           borderRadius: BorderRadius.circular(10),
-
         ),
         placeholderStyle: TextStyle(color: Colors.grey.withOpacity(0.5),),
         inputFormatters: inputFormatters,

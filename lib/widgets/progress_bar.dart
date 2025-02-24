@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+//Cette fonction affiche le cercle qui charge avant d'afficher certains widgets asynchrones
 circularProgress() {
   return Container(
     alignment: Alignment.center,
@@ -13,6 +14,8 @@ circularProgress() {
     ),
   );
 }
+
+//Cette fonction affiche une ligne de chargement dans certains cas pour varier un peu au circularProgress
 linearProgress() {
   return Container(
     alignment: Alignment.center,

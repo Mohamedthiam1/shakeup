@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+// Ce model représente les objets de type Quizz
 class Quizz {
   List? answers;
   int? correctOne;

@@ -99,7 +99,9 @@ class _QuizPageState extends State<QuizPage> {
       }
     }
 
-    _playSound(isCorrect); // Jouer le son correspondant
+    if(playOrNot) {
+      _playSound(isCorrect);
+    }
     _showAnswerFeedback(isCorrect);
   }
 

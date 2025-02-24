@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
+//Ici, nous avons nos Conditions Générales d'Utilisation
 class TermsPage extends StatefulWidget {
   const TermsPage({super.key});
 
@@ -179,6 +179,7 @@ class _TermsPageState extends State<TermsPage> {
     );
   }
 
+  // Fonction pour styliser les titres
   TextStyle titleStyle() {
     return const TextStyle(
       fontFamily: 'Arima',

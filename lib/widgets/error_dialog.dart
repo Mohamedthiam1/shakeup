@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 class ErrorDialog extends StatelessWidget {
 
+  //Ceci est une simple boite de dialogue par défaut, selon le message à afficher, qui affiche des messages en cas d'erreur
   final String? message;
   ErrorDialog({this.message});
   @override

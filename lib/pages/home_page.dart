@@ -11,6 +11,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -442,134 +443,94 @@ class NavigationB extends State<NavigationBar> {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return AlertDialog(
-                    backgroundColor: Colors.transparent, // Boîte principale transparente
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    content: SizedBox(
-                      width: 350,
-                      height: 420,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          // Niveau 1
-                          Container(
-                            width: 340,
-                            height: 80,
-                            margin: const EdgeInsets.only(bottom: 8), // Espacement entre les niveaux
-                            decoration: const BoxDecoration(
-                              color: Color(0xFFC7E4BF), // Couleur de fond pour chaque niveau
-                              borderRadius: BorderRadius.all(Radius.circular(15)),
-                            ),
-                            child: const Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Niveau 1',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontFamily: 'Arima',
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.black,
-                                    letterSpacing: -0.15,
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 16), // Margin left et right
-                                  child: Text(
-                                    'Apprendre les bases de la préparation avant un séisme',
-                                    textAlign: TextAlign.center, // Aligner le texte au centre
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontFamily: 'Arima',
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.black,
-                                      letterSpacing: -0.15,
+                  return ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: AlertDialog(
+                      backgroundColor: Colors.transparent, // Boîte principale transparente
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                      content: SingleChildScrollView(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            // Contact d'urgence selon le pays
+                            Container(
+                              // width: 340,
+                              // height: 80,
+                              margin: const EdgeInsets.only(bottom: 8), // Espacement entre les niveaux
+                              decoration: const BoxDecoration(
+                                color: Colors.white, // Couleur de fond pour chaque niveau
+                                // color: Color(0xFFDADADA), // Couleur de fond pour chaque niveau
+                                borderRadius: BorderRadius.all(Radius.circular(15)),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    // margin: EdgeInsets.only(top: 10),
+                                    padding: EdgeInsets.only(bottom: 5, top: 5),
+                                    color: const Color(0xFFC7E4BF),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text("Numéros importants: ",
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontFamily: 'Arima',
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.black,
+                                          ),),
+                                        Text(getCountryFlag(myCountry), style: TextStyle(fontSize: 22),),
+                                      ],
                                     ),
                                   ),
-                                ),
-                              ],
+                                  Column(
+                                    children: numbersToDisplay.entries.map((entry) {
+                                      return Container(
+                                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 7),
+                                        child: Column(
+                                          children: [
+                                            Text(
+                                              entry.key,
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontFamily: 'Arima',
+                                                fontWeight: FontWeight.w700,
+                                                color: Colors.black,
+                                                // letterSpacing: -0.15,
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.symmetric(horizontal: 16),
+                                              child: TextButton(
+                                                onPressed: (){
+                                                  launchUrl(Uri.parse('tel://${entry.value}'));
+                                                },
+                                                child: Text(
+                                                entry.value,
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontSize: 15,
+                                                  fontFamily: 'Arima',
+                                                  decoration: TextDecoration.underline,
+                                                  decorationColor: Color(0xFF2D751A),
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Color(0xFF2D751A),
+                                                  // letterSpacing: -0.15,
+                                                ),
+                                              ),)
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    }).toList(), // Convert iterable to a List<Widget>
+                                  )
+                                ],
+                              ),
                             ),
-                          ),
-                          // Niveau 2
-                          Container(
-                            width: 340,
-                            height: 80,
-                            margin: const EdgeInsets.only(bottom: 8), // Espacement entre les niveaux
-                            decoration: const BoxDecoration(
-                              color: Color(0xFFC7E4BF), // Couleur de fond pour chaque niveau
-                              borderRadius: BorderRadius.all(Radius.circular(15)),
-                            ),
-                            child: const Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Niveau 2',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontFamily: 'Arima',
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.black,
-                                    letterSpacing: -0.15,
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 16), // Margin left et right
-                                  child: Text(
-                                    'Réagir rapidement et efficacement pendant un tremblement de terre',
-                                    textAlign: TextAlign.center, // Aligner le texte au centre
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontFamily: 'Arima',
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.black,
-                                      letterSpacing: -0.15,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          // Niveau 3
-                          Container(
-                            width: 340,
-                            height: 80,
-                            decoration: const BoxDecoration(
-                              color: Color(0xFFC7E4BF), // Couleur de fond pour chaque niveau
-                              borderRadius: BorderRadius.all(Radius.circular(15)),
-                            ),
-                            child: const Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Niveau 3',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontFamily: 'Arima',
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.black,
-                                    letterSpacing: -0.15,
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 16), // Margin left et right
-                                  child: Text(
-                                    'Sécuriser l\'environnement et éviter les dangers après un séisme.',
-                                    textAlign: TextAlign.center, // Aligner le texte au centre
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontFamily: 'Arima',
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.black,
-                                      letterSpacing: -0.15,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   );
@@ -604,6 +565,26 @@ class NavigationB extends State<NavigationBar> {
       ),
     );
   }
+
+  String getCountryFlag(MyCountry country) {
+    switch (country) {
+      case MyCountry.china:
+        return "🇨🇳";
+      case MyCountry.unitedStates:
+        return "🇺🇸";
+      case MyCountry.laReunion:
+        return "🇷🇪";
+      case MyCountry.france:
+        return "🇫🇷";
+      case MyCountry.turkish:
+        return "🇹🇷";
+      case MyCountry.japan:
+        return "🇯🇵";
+      default:
+        return "🏳️"; // Default flag
+    }
+  }
+
 }
 
 class CenterContent extends StatelessWidget {

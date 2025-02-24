@@ -1,5 +1,6 @@
 import 'package:cap/admin/add_quizz_screen.dart';
 import 'package:cap/admin/manage_quizz_screen.dart';
+import 'package:cap/global/audio_manager.dart';
 import 'package:cap/pages/search_user_screen.dart';
 import 'package:cap/widgets/progress_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -39,6 +40,7 @@ class _SettingsPageState extends State<SettingsPage> {
   bool isLogin = true;
   bool loading = false;
   // int age = 0;
+  bool usedGoogle = false;
 
   @override
   void initState() {
@@ -475,9 +477,11 @@ class _SettingsPageState extends State<SettingsPage> {
                 print(account.id);
                 Fluttertoast.showToast(msg: "Redirecting...", timeInSecForIosWeb: 4);
                 bool userAlreadyExists = await doesUserExistWithEmail(account.email);
+                usedGoogle = true;
                 if (userAlreadyExists) {
+                  print("User exists");
                   String hidden = await fetchHiddenThingGoogle();
-                  formValidation(account.email, hidden, context, setState);
+                  await formValidation(account.email, hidden, context, setState);
                 }
                 else {
                   String hidden = await fetchHiddenThingGoogle();
@@ -492,6 +496,7 @@ class _SettingsPageState extends State<SettingsPage> {
             } else if(label == "Apple") {
 
             } else if(label == "Email") {
+              usedGoogle = false;
               showAuthModal(context);
             }
           }, // Action à définir lors de l'appui sur le bouton
@@ -691,6 +696,7 @@ class _SettingsPageState extends State<SettingsPage> {
   formValidation(String email, String hidden, BuildContext context, StateSetter setState) {
     print('Entered properly 1');
     if (email.isNotEmpty && hidden.isNotEmpty) {
+      print("Login now");
       //Login
       // print(email);
       // print(hidden);
@@ -732,7 +738,9 @@ class _SettingsPageState extends State<SettingsPage> {
           setState(() {
             sharedPreferences;
           });
-          Navigator.pop(context);
+          if(!usedGoogle) {
+            Navigator.pop(context);
+          }
           Navigator.pop(context);
           // setState(() {
           //   sharedPreferences;
@@ -961,6 +969,18 @@ class _SettingToggleState extends State<SettingToggle> {
             setState(() {
               isEnabled = value; // Change l'état de l'interrupteur
             });
+            if(widget.title == "Musique" || widget.title == "Music") {
+              print("Bool is: $isEnabled");
+              if(isEnabled) {
+                AudioManager.play();
+              } else {
+                AudioManager.stop();
+              }
+            }
+            if(widget.title == "Son" || widget.title == "Sound") {
+              print("Bool is: $isEnabled");
+                playOrNot = isEnabled;
+            }
           },
           activeColor: Colors.green, // Couleur lorsque l'interrupteur est activé
         ),

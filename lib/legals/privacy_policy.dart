@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
+//Ceci est notre page montrant notre Politique de Confidentialité chez ShakeUp
 class PrivacyPolicyPage extends StatefulWidget {
   const PrivacyPolicyPage({super.key});
 
