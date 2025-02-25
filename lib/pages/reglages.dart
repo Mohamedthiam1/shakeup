@@ -1,4 +1,3 @@
-import 'package:cap/admin/add_quizz_screen.dart';
 import 'package:cap/admin/manage_quizz_screen.dart';
 import 'package:cap/global/audio_manager.dart';
 import 'package:cap/pages/search_user_screen.dart';
@@ -7,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -77,7 +76,8 @@ class _SettingsPageState extends State<SettingsPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black), // Icône de retour
           onPressed: () {
-            Navigator.pop(context);// Lien vers la page d'histoire);
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage()),
+            );// Lien vers la page d'accueil
           },
         ),
         title: Text(selectedLanguage == 'Français' ? 'Réglages' : 'Settings',
@@ -478,7 +478,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 print(account.photoUrl);
                 print(account.displayName);
                 print(account.id);
-                Fluttertoast.showToast(msg: "Redirecting...", timeInSecForIosWeb: 4);
+                showToast("Redirecting...", duration: const Duration(seconds: 4));
                 bool userAlreadyExists = await doesUserExistWithEmail(account.email);
                 usedGoogle = true;
                 if (userAlreadyExists) {
@@ -658,14 +658,14 @@ class _SettingsPageState extends State<SettingsPage> {
                             });
                           } else {
                             if (email.isEmpty || password.isEmpty || fullName.isEmpty || confirmPassword.isEmpty) {
-                              Fluttertoast.showToast(msg: "Tous les champs sont requis.");
+                              showToast("Tous les champs sont requis.");
                               setState(() {
                                 loading = false;
                               });
                               return;
                             }
                             if (password != confirmPassword) {
-                              Fluttertoast.showToast(msg: "Les mots de passe ne correspondent pas.");
+                              showToast("Les mots de passe ne correspondent pas.");
                               setState(() {
                                 loading = false;
                               });
@@ -705,13 +705,13 @@ class _SettingsPageState extends State<SettingsPage> {
       // print(hidden);
       loginNow(email, hidden, context, setState);
     } else {
-      Fluttertoast.showToast(msg: "Veuillez entrer une adresse email et un mot de passe valides.", timeInSecForIosWeb: 3);
+      showToast("Veuillez entrer une adresse email et un mot de passe valides.", duration: const Duration(seconds: 3));
     }
   }
 
   //Fonction pour récupérer les informations associées à l'utilisateur et les enregistrer en local
   Future readDataAndSetDataLocally(User currentUser, BuildContext context, StateSetter setState) async {
-    print(currentUser.email! +" hello");
+    print("${currentUser.email!} hello");
     await FirebaseFirestore.instance
         .collection("users")
         .doc(currentUser.uid)
@@ -758,7 +758,7 @@ class _SettingsPageState extends State<SettingsPage> {
           firebaseAuth.signOut();
           // Navigator.pop(context);
           Navigator.pop(context);
-          Fluttertoast.showToast(msg: "Votre comptre a été bloqué. Expliquez votre situation à: \n\nsupport@shakeup.com", timeInSecForIosWeb: 3);
+          showToast("Votre comptre a été bloqué. Expliquez votre situation à: \n\nsupport@shakeup.com", duration: const Duration(seconds: 3));
         }
       }
 
@@ -870,7 +870,7 @@ class _SettingsPageState extends State<SettingsPage> {
       showDialog(
           context: context,
           builder: (c) {
-            return ErrorDialog(message: "Error: ${error}");
+            return ErrorDialog(message: "Error: $error");
           });
     });
 

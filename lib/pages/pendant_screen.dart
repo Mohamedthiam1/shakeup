@@ -10,10 +10,13 @@ class PendantScreen extends StatefulWidget {
 }
 
 class _PendantScreenState extends State<PendantScreen> {
+  String selectedLanguage = 'Français'; // Langue par défaut
+
   @override
   void initState() {
     super.initState();
     _checkFirstTimeOpening(); // Vérifie si l'utilisateur ouvre la page pour la première fois
+    _loadLanguage();
   }
 
   // Vérifie si c'est la première fois que l'utilisateur ouvre cette page
@@ -58,6 +61,16 @@ class _PendantScreenState extends State<PendantScreen> {
     );
   }
 
+  Future<void> _loadLanguage() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? language = prefs.getString('selected_language');
+    if (language != null) {
+      setState(() {
+        selectedLanguage = language;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,8 +81,9 @@ class _PendantScreenState extends State<PendantScreen> {
             Navigator.of(context).pop(); // Action de retour
           },
         ),
-        title: const Text("Pendant un Séisme",
-          style: TextStyle(
+        title: Text(
+          selectedLanguage == 'Français' ? 'Pendant un Séisme' : 'During an Earthquake',
+          style: const TextStyle(
             fontFamily: 'Arima',
             fontSize: 22,
             fontWeight: FontWeight.w400,
@@ -88,57 +102,73 @@ class _PendantScreenState extends State<PendantScreen> {
             children: [
               // Section 1: Vérifiez si tout va bien
               _buildSection(
-                '1. Reste calme 😊',
-                'Ne panique pas, respire profondément et essaie de garder ton sang-froid.',
+                selectedLanguage == 'Français' ? '1. Reste calme 😊' : '1. Stay calm 😊',
+                selectedLanguage == 'Français'
+                    ? 'Ne panique pas, respire profondément et essaie de garder ton sang-froid.'
+                    : 'Do not panic, take deep breaths and try to stay calm.',
                 Icons.self_improvement,
               ),
 
               // Section 2: Reste loin des endroits dangereux
               _buildSection(
-                '2. Baisse-toi 🚧',
-                'Mets-toi rapidement à genoux pour ne pas perdre l’équilibre si le sol bouge.',
+                selectedLanguage == 'Français' ? '2. Baisse-toi 🚧' : '2. Drop down 🚧',
+                selectedLanguage == 'Français'
+                    ? 'Mets-toi rapidement à genoux pour ne pas perdre l’équilibre si le sol bouge.'
+                    : 'Quickly get on your knees to avoid losing balance if the ground shakes.',
                 Icons.accessibility_new,
               ),
 
               // Section 3: Appelle un adulte si besoin
               _buildSection(
-                '3. Cache-toi sous une table solide 🛡️',
-                'Trouve un abri sous un meuble stable, comme une table ou un bureau. Cela te protégera des objets qui pourraient tomber.',
+                selectedLanguage == 'Français' ? '3. Cache-toi sous une table solide 🛡️' : '3. Hide under a solid table 🛡️',
+                selectedLanguage == 'Français'
+                    ? 'Trouve un abri sous un meuble stable, comme une table ou un bureau.'
+                    : 'Find shelter under solid furniture like a table or desk.',
                 Icons.table_bar,
               ),
 
               // Section 4: Écoute les consignes
               _buildSection(
-                '4. Accroche-toi ✋',
-                'Tiens fermement la table ou le meuble sous lequel tu te caches pour éviter qu’il ne bouge.',
+                selectedLanguage == 'Français' ? '4. Accroche-toi ✋' : '4. Hold on ✋',
+                selectedLanguage == 'Français'
+                    ? 'Tiens fermement la table ou le meuble sous lequel tu te caches pour éviter qu’il ne bouge.'
+                    : 'Hold onto the furniture you are under to prevent it from moving.',
                 Icons.handshake,
               ),
 
               // Section 6: Ne retourne pas tout de suite à la maison
               _buildSection(
-                '5. Éloigne-toi des fenêtres et des objets qui peuvent tomber 🪟',
-                ' Reste loin des vitres, des étagères ou des appareils qui pourraient tomber ou se casser.',
+                selectedLanguage == 'Français' ? '5. Éloigne-toi des fenêtres et objets dangereux 🪟' : '5. Stay away from windows & objects 🪟',
+                selectedLanguage == 'Français'
+                    ? 'Reste loin des vitres, des étagères ou des appareils qui pourraient tomber.'
+                    : 'Stay away from windows, shelves, or appliances that could fall.',
                 Icons.window,
               ),
 
               // Section 7: Participe à aider
               _buildSection(
-                '6. Si tu es à l\'extérieur 🏞️',
-                'Éloigne-toi des bâtiments, des arbres, des lampadaires, et des lignes électriques.\n Trouve un espace ouvert et reste au sol jusqu\'à ce que les secousses s\'arrêtent.',
+                selectedLanguage == 'Français' ? '6. Si tu es à l\'extérieur 🏞️' : '6. If you’re outside 🏞️',
+                selectedLanguage == 'Français'
+                    ? 'Éloigne-toi des bâtiments, des arbres, des lampadaires, et des lignes électriques.\n Trouve un espace ouvert et reste au sol jusqu\'à ce que les secousses s\'arrêtent.'
+                    : 'Move away from buildings, trees, street lights, and power lines.\nFind an open space and stay on the ground until the shaking stops.',
                 Icons.park,
               ),
 
               // Section 7: Participe à aider
               _buildSection(
-                '7. Si tu es en voiture 🚗',
-                'Arrête-toi en sécurité, loin des ponts, des tunnels et des bâtiments. \n Reste dans la voiture jusqu\'à ce que les secousses cessent.',
+                selectedLanguage == 'Français' ? '7. Si tu es en voiture 🚗' : '7. If You’re in a car 🚗',
+                selectedLanguage == 'Français'
+                    ? 'Arrête-toi en sécurité, loin des ponts, tunnels et bâtiments.\n Reste dans la voiture jusqu\'à ce que les secousses cessent.'
+                    : 'Pull over safely, away from bridges, tunnels and buildings.\nStay in the car until the shaking stops.',
                 Icons.directions_car,
               ),
 
               // Section 7: Participe à aider
               _buildSection(
-                '8. Évite les escaliers et les ascenseurs 🚷',
-                'Les escaliers pourraient s’effondrer et les ascenseurs pourraient se bloquer.',
+                selectedLanguage == 'Français' ? '8. Évite les escaliers et ascenseurs 🚷' : '8. Avoid stairs & elevators 🚷',
+                selectedLanguage == 'Français'
+                    ? 'Les escaliers pourraient s’effondrer et les ascenseurs pourraient se bloquer.'
+                    : 'Stairs may collapse, and elevators could get stuck.',
                 Icons.stairs,
               ),
 
@@ -158,7 +188,7 @@ class _PendantScreenState extends State<PendantScreen> {
                       color: Colors.black,
                     ),
                   ),
-                  child: const Text('Retour à l\'Accueil'),
+                  child: Text(selectedLanguage == 'Français' ? 'Retour à l\'Accueil' : 'Return to home page'),
                 ),
               ),
             ],

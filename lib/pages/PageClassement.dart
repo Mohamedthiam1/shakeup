@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ClassementPage extends StatefulWidget {
   const ClassementPage({super.key});
@@ -10,20 +11,29 @@ class ClassementPage extends StatefulWidget {
 
 class _ClassementPageState extends State<ClassementPage> {
   String selectedAgeRange = "Tous";
-  final List<String> ageRanges = [
-    "Tous",
-    "0-5",
-    "6-10",
-    "11-15",
-    "16-20",
-    "21-25",
-    "26-30",
-    "31-35",
-    "36-40",
-    "41-45",
-    "46-50",
-    "51+"
-  ];
+  String selectedLanguage = "Français"; // Langue par défaut
+  List<String> ageRanges = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadLanguage();
+    ageRanges = [
+      selectedLanguage == "Français" ? "Tous" : "All",
+      "0-5", "6-10", "11-15", "16-20", "21-25",
+      "26-30", "31-35", "36-40", "41-45", "46-50", "51+"
+    ];
+  }
+
+  Future<void> _loadLanguage() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? language = prefs.getString('selected_language');
+    if (language != null) {
+      setState(() {
+        selectedLanguage = language;
+      });
+    }
+  }
 
   //Cette fonction nous permet de récupérer les utilisateurs et de les classer selon leurs nombres de points et tranche d'âge
   Stream<QuerySnapshot> getUsersStream() {
@@ -50,9 +60,9 @@ class _ClassementPageState extends State<ClassementPage> {
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: const Text(
-          "Classement",
-          style: TextStyle(
+        title: Text(
+          selectedLanguage == 'Français' ? "Classement" : "Ranking",
+          style: const TextStyle(
             fontFamily: 'Arima',
             fontSize: 22,
             fontWeight: FontWeight.w400,
@@ -156,7 +166,7 @@ class _ClassementPageState extends State<ClassementPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(fullName, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-                              Text("$age ans", style: TextStyle(fontSize: 14, color: Colors.grey[700])),
+                              Text("$age ${selectedLanguage == 'Français' ? 'ans' : 'years old'}", style: TextStyle(fontSize: 14, color: Colors.grey[700])),
                             ],
                           ),
                         ),
@@ -193,7 +203,7 @@ class _ClassementPageState extends State<ClassementPage> {
               ),
               const SizedBox(height: 10),
               Text(
-                "$age ans",
+                "$age ${selectedLanguage == 'Français' ? 'ans' : 'years old'}",
                 style: TextStyle(fontSize: 18, color: Colors.grey[700]),
               ),
               Text(
@@ -203,7 +213,7 @@ class _ClassementPageState extends State<ClassementPage> {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () => Navigator.of(context).pop(),
-                child: const Text("Fermer"),
+                child: Text(selectedLanguage == "Français" ? "Fermer" : "Close"),
               ),
             ],
           ),

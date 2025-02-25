@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AddImageTrouverAbriScreen extends StatefulWidget {
@@ -29,8 +29,7 @@ class _AddImageTrouverAbriScreenState extends State<AddImageTrouverAbriScreen> {
 
   Future<void> _uploadTrouverAbri() async {
     if (_imageFile == null || _answerController.text.isEmpty) {
-      Fluttertoast.showToast(
-          msg: "Veuillez sélectionner une image et entrer la réponse correcte.");
+      showToast("Veuillez sélectionner une image et entrer la réponse correcte.");
       return;
     }
 
@@ -56,13 +55,13 @@ class _AddImageTrouverAbriScreenState extends State<AddImageTrouverAbriScreen> {
         "correctAnswer": _answerController.text.trim(),
       });
 
-      Fluttertoast.showToast(msg: "TrouverAbri ajouté avec succès !");
+      showToast("TrouverAbri ajouté avec succès !");
       setState(() {
         _imageFile = null;
         _answerController.clear();
       });
     } catch (e) {
-      Fluttertoast.showToast(msg: "Erreur : ${e.toString()}");
+      showToast("Erreur : ${e.toString()}");
     } finally {
       setState(() {
         _isUploading = false;

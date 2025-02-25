@@ -10,10 +10,13 @@ class After_Screen extends StatefulWidget {
 }
 
 class _After_ScreenState extends State<After_Screen> {
+  String selectedLanguage = 'Français'; // Langue par défaut
+
   @override
   void initState() {
     super.initState();
     _checkFirstTimeOpening(); // Vérifie si l'utilisateur ouvre la page pour la première fois
+    _loadLanguage();
   }
 
   // Vérifie si c'est la première fois que l'utilisateur ouvre cette page
@@ -58,6 +61,16 @@ class _After_ScreenState extends State<After_Screen> {
     );
   }
 
+  Future<void> _loadLanguage() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? language = prefs.getString('selected_language');
+    if (language != null) {
+      setState(() {
+        selectedLanguage = language;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,8 +81,8 @@ class _After_ScreenState extends State<After_Screen> {
             Navigator.of(context).pop(); // Action de retour
           },
         ),
-        title: const Text("Après le tremblement de terre",
-          style: TextStyle(
+        title: Text(selectedLanguage == 'Français' ? 'Après le tremblement de terre' : 'After the earthquake',
+          style: const TextStyle(
             fontFamily: 'Arima',
             fontSize: 22,
             fontWeight: FontWeight.w400,

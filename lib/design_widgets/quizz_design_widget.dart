@@ -1,7 +1,6 @@
 import 'package:cap/models/quizz.dart';
 import 'package:cap/widgets/showloading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 //Ceci est notre design widget pour afficher un quizz que ce soit du côté de l'admin
 class QuizzDesignWidget extends StatefulWidget {
@@ -18,11 +17,10 @@ class _QuizzDesignWidgetState extends State<QuizzDesignWidget> {
   Widget build(BuildContext context) {
     //Ces 2 lignes nous permettent de récuprer les tailles exactes de l'écran de l'utilisateur. Les récupérer dans le Widget build, permet d'avoir les valeurs à jour à tout moment
     final double width = MediaQuery.of(context).size.width;
-    final double height = MediaQuery.of(context).size.height;
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      margin: EdgeInsets.only(bottom: 10, top: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      margin: const EdgeInsets.only(bottom: 10, top: 5),
       width: width,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,7 +34,7 @@ class _QuizzDesignWidgetState extends State<QuizzDesignWidget> {
               image: DecorationImage(image: NetworkImage(widget.model.pictureUrl!), fit: BoxFit.cover)
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           //Nous affichons la question
           Container(
             alignment: Alignment.centerLeft,
@@ -75,7 +73,7 @@ class _QuizzDesignWidgetState extends State<QuizzDesignWidget> {
                 //Nous ajoutons un showModalBottomSheet afin de bien confirmer la suppression pour ne pas que ce soit une erreur
                 showModalBottomSheet(
                   context: context,
-                  shape: RoundedRectangleBorder(
+                  shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
                   ),
                   builder: (BuildContext context) {
@@ -86,18 +84,18 @@ class _QuizzDesignWidgetState extends State<QuizzDesignWidget> {
                         children: [
                           Container(
                             alignment: Alignment.centerLeft,
-                            child: Text(
+                            child: const Text(
                               "Confirmer la suppression",
                               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                             ),
                           ),
-                          SizedBox(height: 10),
-                          Text(
+                          const SizedBox(height: 10),
+                          const Text(
                             "Êtes-vous sûr de vouloir supprimer ce quiz ? Cette action est irréversible.",
                             textAlign: TextAlign.center,
                             style: TextStyle(fontSize: 14),
                           ),
-                          SizedBox(height: 20),
+                          const SizedBox(height: 20),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
@@ -105,7 +103,7 @@ class _QuizzDesignWidgetState extends State<QuizzDesignWidget> {
                                 onPressed: () {
                                   Navigator.pop(context);
                                 },
-                                child: Text("Annuler", style: TextStyle(color: Colors.blueGrey, fontSize: 14)),
+                                child: const Text("Annuler", style: TextStyle(color: Colors.blueGrey, fontSize: 14)),
                               ),
                               TextButton(
                                 onPressed: () async {
@@ -120,7 +118,7 @@ class _QuizzDesignWidgetState extends State<QuizzDesignWidget> {
                                     Navigator.pop(context);
                                   });
                                 },
-                                child: Text("SUPPRIMER", style: TextStyle(color: Colors.redAccent, fontSize: 14, fontWeight: FontWeight.bold)),
+                                child: const Text("SUPPRIMER", style: TextStyle(color: Colors.redAccent, fontSize: 14, fontWeight: FontWeight.bold)),
                               ),
                             ],
                           ),

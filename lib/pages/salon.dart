@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:cap/pages/test-quiz.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../global/global.dart';
@@ -18,20 +18,32 @@ class SalonPage extends StatefulWidget {
 
 // Page pour gérer les salons : création ou connexion
 class _SalonPageState extends State<SalonPage> {
-  late TextEditingController professorName; //nom du sallon
+  late TextEditingController roomName; //nom du sallon
+  String selectedLanguage = 'Français'; // Langue par défaut
 
   @override
   void initState() {
     super.initState();
-    professorName = TextEditingController(); // Initialisation du TextEditingController
+    roomName = TextEditingController(); // Initialisation du TextEditingController
+    _loadLanguage(); // Charger la langue au démarrage
   }
 
   @override
   void dispose() {
-    professorName.dispose(); // Libération de la mémoire du contrôleur lorsque le widget est supprimé
+    roomName.dispose(); // Libération de la mémoire du contrôleur lorsque le widget est supprimé
     super.dispose();
   }
 
+  // Méthode pour récupérer la langue depuis SharedPreferences
+  Future<void> _loadLanguage() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? language = prefs.getString('selected_language'); // Vérifie s'il y a une langue sauvegardée
+    if (language != null) {
+      setState(() {
+        selectedLanguage = language; // Met à jour la langue sélectionnée
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,8 +56,9 @@ class _SalonPageState extends State<SalonPage> {
             Navigator.of(context).pop(); // Action de retour
           },
         ),
-        title: const Text('Salons', // Titre affiché dans la barre d'application
-          style: TextStyle(
+        title: Text(
+          selectedLanguage == "Français" ? "Salons" : "Lobby", // Titre affiché dans la barre d'application
+          style: const TextStyle(
             fontFamily: 'Arima',
             fontSize: 22,
             fontWeight: FontWeight.w400,
@@ -64,7 +77,7 @@ class _SalonPageState extends State<SalonPage> {
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.6, // 60% de la largeur de l'écran
               child: SalonButton(
-                title: 'Créer un salon',
+                title: selectedLanguage == "Français" ? "Créer un salon" : "Create a lobby",
                 onPressed: () => showCreateSalonDialog(context), // Afficher la popup pour créer un salon
               ),
             ),
@@ -75,7 +88,7 @@ class _SalonPageState extends State<SalonPage> {
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.6, // 60% de la largeur de l'écran
               child: SalonButton(
-                title: 'Rejoindre un salon',
+                title: selectedLanguage == "Français" ? "Rejoindre un salon" : "Join a lobby",
                 onPressed: () => showJoinSalonDialog(context), // Afficher la popup pour créer un salon
               ),
             ),
@@ -93,20 +106,20 @@ class _SalonPageState extends State<SalonPage> {
     // Créer un salon dans Firestore avec le code de salon, le nom du professeur et la difficulté
     await FirebaseFirestore.instance.collection("salons").doc(roomCode).set({
       'roomCode': roomCode,
-      'professorName': professorName.text, // Nom du salon
+      'roomName': roomName.text, // Nom du salon
       'participants': [], // Liste vide pour les participants
     }).whenComplete(() async {
       // Une fois que l'ajout Firestore est terminé, nous stockons les valeurs dans sharedPreferences
       sharedPreferences = await SharedPreferences.getInstance();
       await sharedPreferences!.setString("roomCode", roomCode);
-      await sharedPreferences!.setString("professorName", professorName.text);
+      await sharedPreferences!.setString("roomName", roomName.text);
 
       setState(() {
         sharedPreferences; // Met à jour l'état avec les nouvelles données
       });
 
       // Naviguer vers une autre page ou afficher un message de succès
-      Fluttertoast.showToast(msg: "Salon créé avec succès !");
+      showToast("Salon créé avec succès !");
       // Naviguer vers la page des participants
       Navigator.of(context).pop(); // Ferme le popup
       Navigator.of(context).push(
@@ -114,13 +127,13 @@ class _SalonPageState extends State<SalonPage> {
           builder: (context) =>
               ParticipantsPage(
                 roomNumber: roomCode, // Passer le code généré comme numéro de salon
-                professorName: professorName.text // Passer le nom du professeur
+                roomName: roomName.text // Passer le nom du professeur
               ),
         ),
       );
     }).catchError((e) {
       // Si une erreur survient, on peut afficher un message d'erreur
-      Fluttertoast.showToast(msg: "Erreur lors de la création du salon: $e");
+      showToast("Erreur lors de la création du salon: $e");
     });
   }
 
@@ -143,15 +156,15 @@ class _SalonPageState extends State<SalonPage> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min, // Ne pas occuper plus de place que nécessaire
                       children: [
-                        const Text(
-                          'Créer un salon',
+                        Text(
+                          selectedLanguage == "Français" ? "Créer un salon" : "Create a lobby",
                           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 16),
                         TextField(
-                          controller: professorName, // Le contrôleur pour le champ texte
-                          decoration: const InputDecoration(
-                            labelText: 'Nom du salon',
+                          controller: roomName, // Le contrôleur pour le champ texte
+                          decoration: InputDecoration(
+                            labelText: selectedLanguage == "Français" ? "Nom du salon" : "Lobby name",
                             border: OutlineInputBorder(), // Bordure du champ texte
                           ),
                         ),
@@ -163,11 +176,11 @@ class _SalonPageState extends State<SalonPage> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             TextButton(
-                              child: const Text('Annuler'),
+                              child: Text(selectedLanguage == "Français" ? "Annuler" : "Cancel"),
                               onPressed: () => Navigator.of(context).pop(), // Fermer le popup
                             ),
                             ElevatedButton(
-                              child: const Text('Créer'),
+                              child: Text(selectedLanguage == "Français" ? "Créer" : "Create"),
                               onPressed: () async {
                                 await createSalonAndSaveData(context, setState); // Créer le salon
                               },
@@ -205,8 +218,8 @@ class _SalonPageState extends State<SalonPage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min, // Pas plus large que nécessaire
                   children: [
-                    const Text(
-                      'Rejoindre un salon',
+                    Text(
+                      selectedLanguage == "Français" ? "Rejoindre un salon" : "Join a lobby",
                       style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
 
@@ -214,8 +227,8 @@ class _SalonPageState extends State<SalonPage> {
                     // Champ pour entrer le nom du joueur
                     TextField(
                       controller: playerNameController,
-                      decoration: const InputDecoration(
-                        labelText: 'Nom du joueur',
+                      decoration: InputDecoration(
+                        labelText: selectedLanguage == "Français" ? "Nom du joueur" : "Player name",
                         border: OutlineInputBorder(),
                       ),
                     ),
@@ -224,8 +237,8 @@ class _SalonPageState extends State<SalonPage> {
                     // Champ pour entrer le numéro du salon
                     TextField(
                       controller: roomController,
-                      decoration: const InputDecoration(
-                        labelText: 'Numéro de salon',
+                      decoration: InputDecoration(
+                        labelText: selectedLanguage == "Français" ? "Numéro de salon" : "Lobby number",
                         border: OutlineInputBorder(),
                       ),
                       keyboardType: TextInputType.text, // Type de clavier texte
@@ -237,11 +250,11 @@ class _SalonPageState extends State<SalonPage> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         TextButton(
-                          child: const Text('Annuler'),
+                          child: Text(selectedLanguage == "Français" ? "Annuler" : "Cancel"),
                           onPressed: () => Navigator.of(context).pop(), // Fermer la popup
                         ),
                         ElevatedButton(
-                          child: const Text('Rejoindre'),
+                          child: Text(selectedLanguage == "Français" ? "Rejoindre" : "Join"),
                           onPressed: () async {
                             String roomCode = roomController.text;
                             String playerName = playerNameController.text;
@@ -252,9 +265,9 @@ class _SalonPageState extends State<SalonPage> {
                                 .get();
 
                             if (salonSnapshot.exists) {
-                              String professorName = salonSnapshot['professorName'];
+                              String roomName = salonSnapshot['roomName'];
 
-                              joinSalon(context, roomCode, playerName, professorName);
+                              joinSalon(context, roomCode, playerName, roomName);
 
                               Navigator.of(context).pop(); // Fermer la popup
                               Navigator.push(
@@ -262,14 +275,13 @@ class _SalonPageState extends State<SalonPage> {
                                 MaterialPageRoute(
                                   builder: (context) => ParticipantsPage(
                                     roomNumber: roomCode, // Passer le code du salon
-                                    professorName: professorName, // Passer le nom du professeur
+                                    roomName: roomName, // Passer le nom du professeur
                                   ),
                                 ),
                               );
                             } else {
                               // Si le salon n'existe pas, afficher un message d'erreur
-                              Fluttertoast.showToast(
-                                  msg: "Salon introuvable ! Vérifiez le numéro de la salle.");
+                              showToast("Salon introuvable ! Vérifiez le numéro de la salle.");
                             }
                           },
                         ),
@@ -286,7 +298,7 @@ class _SalonPageState extends State<SalonPage> {
   }
 
   // Fonction pour rejoindre un salon
-  void joinSalon(BuildContext context, String roomNumber, String playerName, String professorName) async {
+  void joinSalon(BuildContext context, String roomNumber, String playerName, String roomName) async {
     final salonRef = FirebaseFirestore.instance.collection('salons').doc(roomNumber);
 
     try {
@@ -301,13 +313,13 @@ class _SalonPageState extends State<SalonPage> {
         MaterialPageRoute(
           builder: (context) => ParticipantsPage(
                 roomNumber: roomNumber,
-                professorName: professorName,
+                roomName: roomName,
               ),
         ),
       );
     } catch (e) {
       // Si une erreur survient, afficher un message d'erreur
-      Fluttertoast.showToast(msg: "Erreur lors de la connexion au salon: $e");
+      showToast("Erreur lors de la connexion au salon: $e");
     }
   }
 }
@@ -355,12 +367,12 @@ class SalonButton extends StatelessWidget {
 // Page des participants en attente
 class ParticipantsPage extends StatefulWidget {
   final String roomNumber;
-  final String professorName;
+  final String roomName;
 
   const ParticipantsPage({
     super.key,
     required this.roomNumber,
-    required this.professorName
+    required this.roomName
   });
 
   @override
@@ -370,14 +382,27 @@ class ParticipantsPage extends StatefulWidget {
 
 // État de la page des participants
 class _ParticipantsPageState extends State<ParticipantsPage> {
-  late String professorName;
+  late String roomName;
   late String roomNumber;
+  String selectedLanguage = 'Français'; // Langue par défaut
 
   @override
   void initState() {
     super.initState();
-    professorName = widget.professorName; // Récupérer le nom du professeur depuis les paramètres
+    roomName = widget.roomName; // Récupérer le nom du professeur depuis les paramètres
     roomNumber = widget.roomNumber; // Récupérer le numéro du salon depuis les paramètres
+    _loadLanguage(); // Charger la langue au démarrage
+  }
+
+  // Méthode pour récupérer la langue depuis SharedPreferences
+  Future<void> _loadLanguage() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? language = prefs.getString('selected_language'); // Vérifie s'il y a une langue sauvegardée
+    if (language != null) {
+      setState(() {
+        selectedLanguage = language; // Met à jour la langue sélectionnée
+      });
+    }
   }
 
   @override
@@ -410,12 +435,12 @@ class _ParticipantsPageState extends State<ParticipantsPage> {
             Container(
               color: Colors.grey[200],
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-              child: const Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Nom du salon',
-                    style: TextStyle(
+                    selectedLanguage == "Français" ? "Nom du salon" : "Lobby Name",
+                    style: const TextStyle(
                       fontFamily: 'Arima',
                       fontSize: 18,
                       fontWeight: FontWeight.w400,
@@ -423,7 +448,7 @@ class _ParticipantsPageState extends State<ParticipantsPage> {
                     ),
                   ),
                   Text(
-                    'N° de salle',
+                    selectedLanguage == "Français" ? "N° de salle": "Lobby number",
                     style: TextStyle(
                       fontFamily: 'Arima',
                       fontSize: 18,
@@ -441,7 +466,7 @@ class _ParticipantsPageState extends State<ParticipantsPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    professorName, // Affiche le nom du professeur
+                    roomName, // Affiche le nom du professeur
                     style: const TextStyle(
                       fontFamily: 'Arima',
                       fontSize: 18,
@@ -502,7 +527,7 @@ class _ParticipantsPageState extends State<ParticipantsPage> {
 
                         // Vérifier si la liste est vide ou inexistante
                         if (participants == null || participants.isEmpty) {
-                          return const Text("Aucun participant n'est dans cette salle.");
+                          return Text(selectedLanguage == "Français" ? "Aucun participant n'est dans cette salle." : "There are no participants in this room.");
                         }
 
                         // Si des participants sont présents, les afficher dans une liste

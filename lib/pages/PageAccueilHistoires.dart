@@ -5,13 +5,38 @@ import 'package:cap/pages/Story3.dart';
 import 'package:cap/pages/Story4.dart';
 import 'package:cap/pages/Story5.dart';
 import 'package:cap/pages/Story6.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'StoryPage.dart';
 import 'home_page.dart';
 
 
-class ModeHistoirePage extends StatelessWidget {
+class ModeHistoirePage extends StatefulWidget {
   const ModeHistoirePage({super.key});
+
+  @override
+  State<ModeHistoirePage> createState() => _ModeHistoirePageState();
+}
+
+class _ModeHistoirePageState extends State<ModeHistoirePage> {
+  String selectedLanguage = 'Français'; // Langue par défaut
+
+  @override
+  void initState() {
+    super.initState();
+    _loadLanguage(); // Charger la langue au démarrage
+  }
+
+  // Récupérer la langue enregistrée
+  Future<void> _loadLanguage() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? language = prefs.getString('selected_language');
+    if (language != null) {
+      setState(() {
+        selectedLanguage = language;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +48,9 @@ class ModeHistoirePage extends StatelessWidget {
             Navigator.of(context).pop(); // Action de retour
           },
         ),
-        title: const Text(
-          "Histoires",
-          style: TextStyle(
+        title: Text(
+          selectedLanguage == 'Français' ? "Histoires" : "Stories",
+          style: const TextStyle(
             fontFamily: 'Arima',
             fontSize: 22,
             fontWeight: FontWeight.w400,

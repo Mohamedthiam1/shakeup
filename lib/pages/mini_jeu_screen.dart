@@ -1,6 +1,7 @@
 import 'package:cap/pages/KitDeSurvie.dart';
 import 'package:cap/pages/evite%20les%20danger.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'TrouverAbriPage.dart';
 import 'home_page.dart';
@@ -14,6 +15,25 @@ class MiniJeuScreen extends StatefulWidget {
 }
 
 class _MiniJeuScreenState extends State<MiniJeuScreen> {
+  String selectedLanguage = 'Français'; // Langue par défaut
+
+  @override
+  void initState() {
+    super.initState();
+    _loadLanguage(); // Charger la langue au démarrage
+  }
+
+  // Récupérer la langue enregistrée
+  Future<void> _loadLanguage() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? language = prefs.getString('selected_language');
+    if (language != null) {
+      setState(() {
+        selectedLanguage = language;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -25,8 +45,8 @@ class _MiniJeuScreenState extends State<MiniJeuScreen> {
             Navigator.of(context).pop(); // Action de retour
           },
         ),
-        title: const Text("Mini jeux",
-          style: TextStyle(
+        title: Text(selectedLanguage == 'Français' ? "Mini jeux" : "Mini games",
+          style: const TextStyle(
             fontFamily: 'Arima',
             fontSize: 22,
             fontWeight: FontWeight.w400,
@@ -53,8 +73,9 @@ class _MiniJeuScreenState extends State<MiniJeuScreen> {
                       child: Image.asset('assets/images/img5.jpg'),
                     ),
                   ),
-                  const Text('Trouver l’abri',
-                    style: TextStyle(
+                  Text(
+                    selectedLanguage == 'Français' ? "Trouver l’abri" : "Find the shelter",
+                    style: const TextStyle(
                       fontFamily: 'Arima',
                       fontSize: 18,
                       fontWeight: FontWeight.w400,
@@ -75,8 +96,9 @@ class _MiniJeuScreenState extends State<MiniJeuScreen> {
                       child: Image.asset('assets/images/img4.jpg'),
                     ),
                   ),
-                  const Text('Kit de survie',
-                    style: TextStyle(
+                  Text(
+                    selectedLanguage == 'Français' ? "Kit de survie" : "Survival kit",
+                    style: const TextStyle(
                       fontFamily: 'Arima',
                       fontSize: 18,
                       fontWeight: FontWeight.w400,
@@ -97,8 +119,9 @@ class _MiniJeuScreenState extends State<MiniJeuScreen> {
                       child: Image.asset('assets/images/img3.jpg'),
                     ),
                   ),
-                  const Text('Éviter les dangers',
-                    style: TextStyle(
+                  Text(
+                    selectedLanguage == 'Français' ? "Éviter les dangers" : "Avoid the dangers",
+                    style: const TextStyle(
                       fontFamily: 'Arima',
                       fontSize: 18,
                       fontWeight: FontWeight.w400,

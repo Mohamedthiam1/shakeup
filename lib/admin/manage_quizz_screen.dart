@@ -27,8 +27,6 @@ class _ManageQuizzScreenState extends State<ManageQuizzScreen> {
   }
   @override
   Widget build(BuildContext context) {
-    final double width = MediaQuery.of(context).size.width;
-    final double height = MediaQuery.of(context).size.height;
 
     return Scaffold(
       appBar: AppBar(
@@ -38,7 +36,7 @@ class _ManageQuizzScreenState extends State<ManageQuizzScreen> {
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: Colors.grey.withOpacity(0.5),
           onPressed: (){
-          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => AddQuizzScreen()));
+          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const AddQuizzScreen()));
           }, label: const Icon(Icons.add_rounded, color: Colors.black, size: 25,)),
       body: CustomScrollView(
         slivers: [
@@ -55,7 +53,7 @@ class _ManageQuizzScreenState extends State<ManageQuizzScreen> {
                 )
                     : SliverStaggeredGrid.countBuilder(// Ce widget nous permet d'afficher les questions d'une bonne façon et avec un widget de type Sliver comme nous sommes dans un CustomScrollView
                   crossAxisCount: 1,
-                  staggeredTileBuilder: (index) => StaggeredTile.fit(1),
+                  staggeredTileBuilder: (index) => const StaggeredTile.fit(1),
                   itemBuilder: (context, index) {
                     Quizz model = Quizz.fromJson(
                       snapshot.data!.docs[index].data()! as Map<String, dynamic>,

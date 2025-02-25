@@ -1,0 +1,2 @@
+C:/Users/sarah/Documents/ecole/4a/shakeup/android/app/.cxx/RelWithDebInfo/6fx3w1z1/arm64-v8a/CMakeFiles/edit_cache.dir
+C:/Users/sarah/Documents/ecole/4a/shakeup/android/app/.cxx/RelWithDebInfo/6fx3w1z1/arm64-v8a/CMakeFiles/rebuild_cache.dir

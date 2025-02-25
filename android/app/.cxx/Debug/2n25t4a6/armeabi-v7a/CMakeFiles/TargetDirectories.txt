@@ -1,0 +1,2 @@
+C:/Users/sarah/Documents/ecole/4a/shakeup/android/app/.cxx/Debug/2n25t4a6/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/sarah/Documents/ecole/4a/shakeup/android/app/.cxx/Debug/2n25t4a6/armeabi-v7a/CMakeFiles/rebuild_cache.dir

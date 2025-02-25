@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
 //Ici, nous avons nos Conditions Générales d'Utilisation
 class TermsPage extends StatefulWidget {
   const TermsPage({super.key});

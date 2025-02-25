@@ -4,7 +4,7 @@ import 'package:cap/global/global.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as storage;
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../widgets/showloading.dart';
@@ -54,7 +54,6 @@ class _AddQuizzScreenState extends State<AddQuizzScreen> {
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
-    final double height = MediaQuery.of(context).size.height;
 
     return Scaffold(
       appBar: AppBar(
@@ -94,11 +93,11 @@ class _AddQuizzScreenState extends State<AddQuizzScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                        padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                         child: imageXFile == null //Nous verifions si l'image a été déjà choisie ou pas encore
                             ? Container(
                           alignment: Alignment.center,
-                          child: Text("Cliquez pour choisir une image"), //Si non on lui demande de la choisir
+                          child: const Text("Cliquez pour choisir une image"), //Si non on lui demande de la choisir
                         )
                             : Container(
                           width: width * 0.90,
@@ -175,7 +174,7 @@ class _AddQuizzScreenState extends State<AddQuizzScreen> {
       // Fluttertoast.showToast(msg: "Aucune photo choisie!", timeInSecForIosWeb: 2);
     }
     else {
-      Fluttertoast.showToast(msg: "Aucune photo choisie!", timeInSecForIosWeb: 2);
+      showToast("Aucune photo choisie!", duration: const Duration(seconds: 2));
     }
   }
 
@@ -187,7 +186,7 @@ class _AddQuizzScreenState extends State<AddQuizzScreen> {
         thirdController.text.isEmpty ||
         fourthController.text.isEmpty ||
         correctResponse == null) {
-      Fluttertoast.showToast(msg: "Veuillez remplir tous les champs et choisir une réponse correcte.", timeInSecForIosWeb: 5);
+      showToast("Veuillez remplir tous les champs et choisir une réponse correcte.", duration: const Duration(seconds: 5));
       return;
     }
     showloading(context);
@@ -234,7 +233,7 @@ class _AddQuizzScreenState extends State<AddQuizzScreen> {
       "created": DateTime.now()
     }).whenComplete((){
       Navigator.pop(context);
-      Fluttertoast.showToast(msg: "Question ajoutée avec succès!", timeInSecForIosWeb: 5);
+      showToast("Question ajoutée avec succès!", duration: const Duration(seconds: 5));
     });
 
     // Après tout on réinitialise et vide les controllers et variables

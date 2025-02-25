@@ -26,7 +26,7 @@ if (flutterVersionName == null) {
 }
 
 android {
-    namespace "com.esiea409.shakeup"
+    namespace 'com.esiea409.shakeup'
     compileSdk 34
     ndkVersion "25.1.8937393"
 

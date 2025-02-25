@@ -69,7 +69,7 @@ class NavigationB extends State<NavigationBar> {
 
   // Fonction pour vérifier et gérer le déblocage du trophée "Récolteur de points"
   Future<void> _checkTrophyUnlock() async {
-    int userPoints = sharedPreferences!.getInt("points") ?? 0;; // Récupère les points utilisateur
+    int userPoints = sharedPreferences!.getInt("points") ?? 0; // Récupère les points utilisateur
     bool hasUnlockedTrophy = sharedPreferences!.getBool('unlocked_recolteur_points') ?? false; // Vérifie si le trophée est déjà débloqué
 
     // Si l'utilisateur a au moins 15 points et n'a pas encore débloqué le trophée
@@ -157,7 +157,7 @@ class NavigationB extends State<NavigationBar> {
                   height: 50,
                   decoration: const BoxDecoration(
                     shape: BoxShape.circle, // Forme circulaire
-                    color: Colors.white, // Couleur de fond (modifiable)
+                    color: Color(0xFFE6EFE3), // Couleur de fond
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black26, // Ombre légère
@@ -209,7 +209,7 @@ class NavigationB extends State<NavigationBar> {
                                               height: 45,
                                               decoration: const BoxDecoration(
                                                 shape: BoxShape.circle, // Forme circulaire
-                                                color: Colors.white, // Couleur de fond blanche
+                                                color: Color(0xFFE6EFE3), // Couleur de fond blanche
                                                 boxShadow: [
                                                   BoxShadow(
                                                     color: Color(0x40000000), // Couleur de l'ombre
@@ -469,31 +469,31 @@ class NavigationB extends State<NavigationBar> {
                                 children: [
                                   Container(
                                     // margin: EdgeInsets.only(top: 10),
-                                    padding: EdgeInsets.only(bottom: 5, top: 5),
+                                    padding: const EdgeInsets.only(bottom: 5, top: 5),
                                     color: const Color(0xFFC7E4BF),
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        Text("Numéros importants: ",
+                                        const Text("Numéros importants: ",
                                           style: TextStyle(
                                             fontSize: 18,
                                             fontFamily: 'Arima',
                                             fontWeight: FontWeight.w700,
                                             color: Colors.black,
                                           ),),
-                                        Text(getCountryFlag(myCountry), style: TextStyle(fontSize: 22),),
+                                        Text(getCountryFlag(myCountry), style: const TextStyle(fontSize: 22),),
                                       ],
                                     ),
                                   ),
                                   Column(
                                     children: numbersToDisplay.entries.map((entry) {
                                       return Container(
-                                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 7),
+                                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 7),
                                         child: Column(
                                           children: [
                                             Text(
                                               entry.key,
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                 fontSize: 16,
                                                 fontFamily: 'Arima',
                                                 fontWeight: FontWeight.w700,
@@ -502,7 +502,7 @@ class NavigationB extends State<NavigationBar> {
                                               ),
                                             ),
                                             Padding(
-                                              padding: EdgeInsets.symmetric(horizontal: 16),
+                                              padding: const EdgeInsets.symmetric(horizontal: 16),
                                               child: TextButton(
                                                 onPressed: (){
                                                   launchUrl(Uri.parse('tel://${entry.value}'));
@@ -510,7 +510,7 @@ class NavigationB extends State<NavigationBar> {
                                                 child: Text(
                                                 entry.value,
                                                 textAlign: TextAlign.center,
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                   fontSize: 15,
                                                   fontFamily: 'Arima',
                                                   decoration: TextDecoration.underline,
