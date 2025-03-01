@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DangerPage extends StatefulWidget {
   const DangerPage({super.key});
@@ -14,14 +15,32 @@ class _DangerPageState extends State<DangerPage> {
   bool isCorrect = false;
   String? selectedImageUrl;
   final AudioPlayer _audioPlayer = AudioPlayer();
+  String selectedLanguage = 'Français'; // Langue par défaut
+
+  @override
+  void initState() {
+    super.initState();
+    _loadLanguage(); // Charger la langue au démarrage
+  }
+
+  // Méthode pour récupérer la langue depuis SharedPreferences
+  Future<void> _loadLanguage() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? language = prefs.getString('selected_language'); // Vérifie s'il y a une langue sauvegardée
+    if (language != null) {
+      setState(() {
+        selectedLanguage = language; // Met à jour la langue sélectionnée
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Éviter les Dangers",
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.w400, color: Colors.black),
+        title: Text(
+          selectedLanguage == 'Français' ? "Éviter les dangers" : "Avoid the dangers",
+          style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w400, color: Colors.black),
         ),
         backgroundColor: Colors.green[100],
         centerTitle: true,
@@ -55,9 +74,11 @@ class _DangerPageState extends State<DangerPage> {
               child: Column(
                 children: [
                   const SizedBox(height: 30), // 🔽 Descend les images un peu plus bas
-                  const Text(
-                    "Cliquez sur l'image qui montre le bon comportement 👇",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.blue),
+                  Text(
+                    selectedLanguage == 'Français'
+                        ? "Cliquez sur l'image qui montre le bon comportement 👇"
+                        : "Click on the image that shows the correct behavior 👇",
+                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.blue),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 30), // 🔽 Ajoute un espace avant les images
@@ -120,12 +141,16 @@ class _DangerPageState extends State<DangerPage> {
         return AlertDialog(
           backgroundColor: isCorrect ? Colors.green[100] : Colors.red[100],
           title: Text(
-            isCorrect ? "Bonne Réponse !" : "Mauvaise Réponse",
+            isCorrect
+                ? (selectedLanguage == 'Français' ? "Bonne réponse ! 🎉" : "Correct answer ! 🎉")
+                : (selectedLanguage == 'Français' ? "Mauvaise réponse 😞" : "Wrong answer 😞"),
             textAlign: TextAlign.center,
             style: TextStyle(color: isCorrect ? Colors.green[800] : Colors.red[800]),
           ),
           content: Text(
-            isCorrect ? "Bravo ! C'est le bon comportement ! 🎉" : "Oups ! Ce n'est pas le bon comportement. 😞",
+            isCorrect
+                ? (selectedLanguage == 'Français' ? "Bravo ! C'est le bon comportement ! 🎉" : "Well done ! That's the right behavior ! 🎉")
+                : (selectedLanguage == 'Français' ? "Oups ! Ce n'est pas le bon comportement. 😞" : "Oops! That's not the right behavior. 😞"),
             textAlign: TextAlign.center,
           ),
           actions: [
@@ -153,12 +178,13 @@ class _DangerPageState extends State<DangerPage> {
 
   //Widget affiché au final en guise de félicitations
   Widget _buildFinalCelebration() {
-    return const Center(
+    return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text("🎉 Félicitations ! Vous avez appris à éviter les dangers ! 🎉",
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.green)),
+          Text(
+              selectedLanguage == 'Français' ? "🎉 Félicitations ! Vous avez appris à éviter les dangers ! 🎉" : "🎉 Congratulations ! You have learned to avoid dangers ! 🎉",
+              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.green)),
         ],
       ),
     );

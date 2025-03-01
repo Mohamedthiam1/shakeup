@@ -9,6 +9,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../global/global.dart';
 import 'home_page.dart';
 
+//Salon = équipe
+
 class SalonPage extends StatefulWidget {
   const SalonPage({super.key});
 
@@ -16,9 +18,9 @@ class SalonPage extends StatefulWidget {
   State<SalonPage> createState() => _SalonPageState();
 }
 
-// Page pour gérer les salons : création ou connexion
+// Page pour gérer les équipes : création ou connexion
 class _SalonPageState extends State<SalonPage> {
-  late TextEditingController roomName; //nom du sallon
+  late TextEditingController roomName; //nom de l'équipe
   String selectedLanguage = 'Français'; // Langue par défaut
 
   @override
@@ -38,7 +40,7 @@ class _SalonPageState extends State<SalonPage> {
   Future<void> _loadLanguage() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? language = prefs.getString('selected_language'); // Vérifie s'il y a une langue sauvegardée
-    if (language != null) {
+    if (language != null && mounted) { // Vérifie si le widget est toujours actif avant d'appeler setState
       setState(() {
         selectedLanguage = language; // Met à jour la langue sélectionnée
       });
@@ -57,7 +59,7 @@ class _SalonPageState extends State<SalonPage> {
           },
         ),
         title: Text(
-          selectedLanguage == "Français" ? "Salons" : "Lobby", // Titre affiché dans la barre d'application
+          selectedLanguage == "Français" ? "Équipes" : "Teams", // Titre affiché dans la barre d'application
           style: const TextStyle(
             fontFamily: 'Arima',
             fontSize: 22,
@@ -73,23 +75,23 @@ class _SalonPageState extends State<SalonPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           // Centrage vertical des cadres (au milieu de la page)
           children: [
-            // Bouton "Créer un salon"
+            // Bouton "Créer une équipe"
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.6, // 60% de la largeur de l'écran
               child: SalonButton(
-                title: selectedLanguage == "Français" ? "Créer un salon" : "Create a lobby",
-                onPressed: () => showCreateSalonDialog(context), // Afficher la popup pour créer un salon
+                title: selectedLanguage == "Français" ? "Créer une équipe" : "Create a team",
+                onPressed: () => showCreateSalonDialog(context), // Afficher la popup pour créer une équipe
               ),
             ),
 
             const SizedBox(height: 10), // Espacement entre les deux cadres
 
-            // Bouton "Rejoindre un salon"
+            // Bouton "Rejoindre une équipe"
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.6, // 60% de la largeur de l'écran
               child: SalonButton(
-                title: selectedLanguage == "Français" ? "Rejoindre un salon" : "Join a lobby",
-                onPressed: () => showJoinSalonDialog(context), // Afficher la popup pour créer un salon
+                title: selectedLanguage == "Français" ? "Rejoindre une équipe" : "Join a team",
+                onPressed: () => showJoinSalonDialog(context), // Afficher la popup pour créer une équipe
               ),
             ),
           ],
@@ -99,14 +101,14 @@ class _SalonPageState extends State<SalonPage> {
     );
   }
 
-  // Fonction pour créer un salon et sauvegarder les données dans Firestore et SharedPreferences
+  // Fonction pour créer un équipe et sauvegarder les données dans Firestore et SharedPreferences
   Future createSalonAndSaveData(BuildContext context, StateSetter setState) async {
-    String roomCode = generateRandomCode(8); // Génère un code de salon aléatoire
+    String roomCode = generateRandomCode(8); // Génère un code d'équipe aléatoire
 
-    // Créer un salon dans Firestore avec le code de salon, le nom du professeur et la difficulté
+    // Créer une équipe dans Firestore avec le code d'équipe, le nom du professeur et la difficulté
     await FirebaseFirestore.instance.collection("salons").doc(roomCode).set({
       'roomCode': roomCode,
-      'roomName': roomName.text, // Nom du salon
+      'roomName': roomName.text, // Nom de l'équipe
       'participants': [], // Liste vide pour les participants
     }).whenComplete(() async {
       // Une fois que l'ajout Firestore est terminé, nous stockons les valeurs dans sharedPreferences
@@ -119,25 +121,25 @@ class _SalonPageState extends State<SalonPage> {
       });
 
       // Naviguer vers une autre page ou afficher un message de succès
-      showToast("Salon créé avec succès !");
+      showToast("Équipe créé avec succès !");
       // Naviguer vers la page des participants
       Navigator.of(context).pop(); // Ferme le popup
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) =>
               ParticipantsPage(
-                roomNumber: roomCode, // Passer le code généré comme numéro de salon
+                roomNumber: roomCode, // Passer le code généré comme numéro d'équipe
                 roomName: roomName.text // Passer le nom du professeur
               ),
         ),
       );
     }).catchError((e) {
       // Si une erreur survient, on peut afficher un message d'erreur
-      showToast("Erreur lors de la création du salon: $e");
+      showToast("Erreur lors de la création de l'équipe: $e");
     });
   }
 
-  // Popup pour créer un salon (demande nom professeur et niveau de difficulté)
+  // Popup pour créer une équipe (demande nom professeur et niveau de difficulté)
   void showCreateSalonDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -157,20 +159,20 @@ class _SalonPageState extends State<SalonPage> {
                       mainAxisSize: MainAxisSize.min, // Ne pas occuper plus de place que nécessaire
                       children: [
                         Text(
-                          selectedLanguage == "Français" ? "Créer un salon" : "Create a lobby",
+                          selectedLanguage == "Français" ? "Créer une équipe" : "Create a team",
                           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 16),
                         TextField(
                           controller: roomName, // Le contrôleur pour le champ texte
                           decoration: InputDecoration(
-                            labelText: selectedLanguage == "Français" ? "Nom du salon" : "Lobby name",
+                            labelText: selectedLanguage == "Français" ? "Nom de l'équipe" : "Team name",
                             border: OutlineInputBorder(), // Bordure du champ texte
                           ),
                         ),
                         const SizedBox(height: 16),
                         // Dropdown pour sélectionner la difficulté
-                        
+
                         const SizedBox(height: 24),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
@@ -182,7 +184,7 @@ class _SalonPageState extends State<SalonPage> {
                             ElevatedButton(
                               child: Text(selectedLanguage == "Français" ? "Créer" : "Create"),
                               onPressed: () async {
-                                await createSalonAndSaveData(context, setState); // Créer le salon
+                                await createSalonAndSaveData(context, setState); // Créer l'équipe
                               },
                             ),
                           ],
@@ -200,7 +202,7 @@ class _SalonPageState extends State<SalonPage> {
   }
 
 
-  // Popup pour rejoindre un salon (bouton rejoindre) : demande le numéro de salle
+  // Popup pour rejoindre une équipe (bouton rejoindre) : demande le numéro de salle
   void showJoinSalonDialog(BuildContext context) {
     final TextEditingController roomController = TextEditingController(); // Boîte pour récupérer le numéro de la salle
     final TextEditingController playerNameController = TextEditingController(); // Boîte pour récupérer le nom du joueur
@@ -219,7 +221,7 @@ class _SalonPageState extends State<SalonPage> {
                   mainAxisSize: MainAxisSize.min, // Pas plus large que nécessaire
                   children: [
                     Text(
-                      selectedLanguage == "Français" ? "Rejoindre un salon" : "Join a lobby",
+                      selectedLanguage == "Français" ? "Rejoindre une équipe" : "Join a team",
                       style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
 
@@ -234,11 +236,11 @@ class _SalonPageState extends State<SalonPage> {
                     ),
 
                     const SizedBox(height: 16),
-                    // Champ pour entrer le numéro du salon
+                    // Champ pour entrer le numéro d'équipe
                     TextField(
                       controller: roomController,
                       decoration: InputDecoration(
-                        labelText: selectedLanguage == "Français" ? "Numéro de salon" : "Lobby number",
+                        labelText: selectedLanguage == "Français" ? "Numéro de l'équipe" : "Team number",
                         border: OutlineInputBorder(),
                       ),
                       keyboardType: TextInputType.text, // Type de clavier texte
@@ -267,20 +269,21 @@ class _SalonPageState extends State<SalonPage> {
                             if (salonSnapshot.exists) {
                               String roomName = salonSnapshot['roomName'];
 
-                              joinSalon(context, roomCode, playerName, roomName);
+                              if (context.mounted) { // Vérifie si le widget est encore actif
+                                joinSalon(context, roomCode, playerName, roomName);
 
-                              Navigator.of(context).pop(); // Fermer la popup
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ParticipantsPage(
-                                    roomNumber: roomCode, // Passer le code du salon
-                                    roomName: roomName, // Passer le nom du professeur
+                                Navigator.of(context).pop(); // Fermer la popup
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ParticipantsPage(roomNumber: roomCode, // Passer le code d'équipe
+                                          roomName: roomName, // Passer le nom du professeur
+                                        ),
                                   ),
-                                ),
-                              );
+                                );
+                              }
                             } else {
-                              // Si le salon n'existe pas, afficher un message d'erreur
+                              // Si l'équipe n'existe pas, afficher un message d'erreur
                               showToast("Salon introuvable ! Vérifiez le numéro de la salle.");
                             }
                           },
@@ -297,7 +300,7 @@ class _SalonPageState extends State<SalonPage> {
     );
   }
 
-  // Fonction pour rejoindre un salon
+  // Fonction pour rejoindre une équipe
   void joinSalon(BuildContext context, String roomNumber, String playerName, String roomName) async {
     final salonRef = FirebaseFirestore.instance.collection('salons').doc(roomNumber);
 
@@ -319,12 +322,12 @@ class _SalonPageState extends State<SalonPage> {
       );
     } catch (e) {
       // Si une erreur survient, afficher un message d'erreur
-      showToast("Erreur lors de la connexion au salon: $e");
+      showToast("Erreur lors de la connexion à l'équipe: $e");
     }
   }
 }
 
-// Cadres boutons pour "Créer un salon" and "Rejoindre un salon"
+// Cadres boutons pour "Créer une équipe" and "Rejoindre une équipe"
 class SalonButton extends StatelessWidget {
   final String title; // Titre du bouton
   final VoidCallback onPressed; // Action au clic
@@ -390,7 +393,7 @@ class _ParticipantsPageState extends State<ParticipantsPage> {
   void initState() {
     super.initState();
     roomName = widget.roomName; // Récupérer le nom du professeur depuis les paramètres
-    roomNumber = widget.roomNumber; // Récupérer le numéro du salon depuis les paramètres
+    roomNumber = widget.roomNumber; // Récupérer le numéro d'équipe depuis les paramètres
     _loadLanguage(); // Charger la langue au démarrage
   }
 
@@ -439,7 +442,7 @@ class _ParticipantsPageState extends State<ParticipantsPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    selectedLanguage == "Français" ? "Nom du salon" : "Lobby Name",
+                    selectedLanguage == "Français" ? "Nom d'équipe" : "Team Name",
                     style: const TextStyle(
                       fontFamily: 'Arima',
                       fontSize: 18,
@@ -448,7 +451,7 @@ class _ParticipantsPageState extends State<ParticipantsPage> {
                     ),
                   ),
                   Text(
-                    selectedLanguage == "Français" ? "N° de salle": "Lobby number",
+                    selectedLanguage == "Français" ? "N° d'équipe": "Team number",
                     style: TextStyle(
                       fontFamily: 'Arima',
                       fontSize: 18,
@@ -527,18 +530,20 @@ class _ParticipantsPageState extends State<ParticipantsPage> {
 
                         // Vérifier si la liste est vide ou inexistante
                         if (participants == null || participants.isEmpty) {
-                          return Text(selectedLanguage == "Français" ? "Aucun participant n'est dans cette salle." : "There are no participants in this room.");
+                          return Text(selectedLanguage == "Français" ? "Aucun participant n'est dans cette équipe." : "There are no participants in this team.");
                         }
 
                         // Si des participants sont présents, les afficher dans une liste
-                        return ListView.builder(
-                          shrinkWrap: true, // Empêche la liste de prendre tout l'espace disponible
-                          itemCount: participants.length, // Nombre d'éléments dans la liste
-                          itemBuilder: (context, index) {
-                            return ListTile(
-                              title: Text(participants[index]),// Affiche le nom de chaque participant
-                            );
-                          },
+                        return Expanded(  // Permet d'éviter l'espace inutile et fait le scroll dans participants
+                            child: ListView.builder(
+                              shrinkWrap: true, // Empêche la liste de prendre tout l'espace disponible
+                              itemCount: participants.length, // Nombre d'éléments dans la liste
+                              itemBuilder: (context, index) {
+                                return ListTile(
+                                  title: Text(participants[index]),// Affiche le nom de chaque participant
+                                );
+                            },
+                          ),
                         );
                       },
                     ),

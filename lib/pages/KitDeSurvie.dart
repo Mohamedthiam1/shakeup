@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class KitDeSurviePage extends StatefulWidget {
   const KitDeSurviePage({super.key});
@@ -15,14 +16,32 @@ class _KitDeSurviePageState extends State<KitDeSurviePage> {
   String? selectedImageUrl;
   String? explanation; // Explication dynamique en fonction de l'image
   final AudioPlayer _audioPlayer = AudioPlayer();
+  String selectedLanguage = 'Français'; // Langue par défaut
+
+  @override
+  void initState() {
+    super.initState();
+    _loadLanguage(); // Charger la langue au démarrage
+  }
+
+  // Méthode pour récupérer la langue depuis SharedPreferences
+  Future<void> _loadLanguage() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? language = prefs.getString('selected_language'); // Vérifie s'il y a une langue sauvegardée
+    if (language != null) {
+      setState(() {
+        selectedLanguage = language; // Met à jour la langue sélectionnée
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Kit de survie",
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.w400, color: Colors.black),
+        title: Text(
+          selectedLanguage == 'Français' ? "Kit de survie" : "Survival kit",
+          style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w400, color: Colors.black),
         ),
         backgroundColor: Colors.green[100],
         centerTitle: true,
@@ -57,9 +76,11 @@ class _KitDeSurviePageState extends State<KitDeSurviePage> {
               child: Column(
                 children: [
                   const SizedBox(height: 30),
-                  const Text(
-                    "Cliquez sur l'image qui montre le bon comportement 👇",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.blue),
+                  Text(
+                    selectedLanguage == 'Français'
+                        ? "Cliquez sur l'image qui montre le bon comportement 👇"
+                        : "Click on the image that shows the correct behavior 👇",
+                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.blue),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 30),
@@ -123,7 +144,9 @@ class _KitDeSurviePageState extends State<KitDeSurviePage> {
         return AlertDialog(
           backgroundColor: isCorrect ? Colors.green[100] : Colors.red[100],
           title: Text(
-            isCorrect ? "Bonne Réponse !" : "Mauvaise Réponse",
+            isCorrect
+                ? (selectedLanguage == 'Français' ? "Bonne réponse ! 🎉" : "Correct answer ! 🎉")
+                : (selectedLanguage == 'Français' ? "Mauvaise réponse 😞" : "Wrong answer 😞"),
             textAlign: TextAlign.center,
             style: TextStyle(color: isCorrect ? Colors.green[800] : Colors.red[800]),
           ),
@@ -131,13 +154,15 @@ class _KitDeSurviePageState extends State<KitDeSurviePage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                isCorrect ? "Bravo ! C'est le bon comportement ! 🎉" : "Oups ! Ce n'est pas le bon comportement. 😞",
+                isCorrect
+                    ? (selectedLanguage == 'Français' ? "Bravo ! C'est le bon comportement ! 🎉" : "Well done ! That's the right behavior ! 🎉")
+                    : (selectedLanguage == 'Français' ? "Oups ! Ce n'est pas le bon comportement. 😞" : "Oops! That's not the right behavior. 😞"),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 10),
               Text(
-                explanation ?? "Pas d'explication disponible.",
-                style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
+                explanation ?? (selectedLanguage == 'Français' ? "Pas d'explication disponible." : "No explanation available."),
+                style: const TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
                 textAlign: TextAlign.center,
               ),
             ],
@@ -166,12 +191,12 @@ class _KitDeSurviePageState extends State<KitDeSurviePage> {
   }
 
   Widget _buildFinalCelebration() {
-    return const Center(
+    return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text("🎉 Félicitations ! Vous avez appris à utiliser le kit de survie ! 🎉",
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.green)),
+          Text(selectedLanguage == 'Français' ? "🎉 Félicitations ! Vous avez appris à utiliser le kit de survie ! 🎉" : "🎉 Congratulations! You have learned how to use the survival kit! 🎉",
+              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.green)),
         ],
       ),
     );

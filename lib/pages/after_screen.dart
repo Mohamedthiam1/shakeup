@@ -37,16 +37,18 @@ class _After_ScreenState extends State<After_Screen> {
       builder: (BuildContext context) {
         return AlertDialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          title: const Row(
+          title: Row(
             children: [
-              Icon(Icons.search, color: Colors.blue, size: 40),
-              SizedBox(width: 10),
-              Text("Badge Débloqué !"),
+              const Icon(Icons.search, color: Colors.blue, size: 40),
+              const SizedBox(width: 10),
+              Text(selectedLanguage == 'Français' ? 'Badge Débloqué !' : 'Badge Unlocked !'),
             ],
           ),
-          content: const Text(
-            "Félicitations ! Tu as obtenu le badge \"Chercheur débutant\".",
-            style: TextStyle(fontSize: 16),
+          content: Text(
+            selectedLanguage == 'Français'
+                ? 'Félicitations ! Tu as obtenu le badge "Chercheur débutant".'
+                : 'Congratulations ! You have earned the "Beginner Explorer" badge.',
+            style: const TextStyle(fontSize: 16),
           ),
           actions: [
             TextButton(
@@ -101,50 +103,78 @@ class _After_ScreenState extends State<After_Screen> {
             children: [
               // Section 1: Vérifiez si tout va bien
               _buildSection(
-                '1. Vérifie si tout va bien 😊',
-                'Regarde autour de toi pour voir si tout le monde va bien. Si quelqu’un est blessé, dis-le à un adulte.',
+                selectedLanguage == 'Français'
+                    ? '1. Vérifie si tout va bien 😊'
+                    : '1. Check if everyone is okay 😊',
+                selectedLanguage == 'Français'
+                    ? 'Regarde autour de toi pour voir si tout le monde va bien. Si quelqu’un est blessé, dis-le à un adulte.'
+                    : 'Look around to see if everyone is okay. If someone is hurt, tell an adult.',
                 Icons.favorite,
               ),
 
               // Section 2: Reste loin des endroits dangereux
               _buildSection(
-                '2. Éloigne-toi des dangers 🚧',
-                'N\'approche pas des murs cassés, des objets qui pourraient tomber, ou des câbles électriques.',
+                selectedLanguage == 'Français'
+                    ? '2. Éloigne-toi des dangers 🚧'
+                    : '2. Stay away from dangers 🚧',
+                selectedLanguage == 'Français'
+                    ? 'N\'approche pas des murs cassés, des objets qui pourraient tomber, ou des câbles électriques.'
+                    : 'Don’t go near broken walls, objects that could fall, or electrical wires.',
                 Icons.dangerous,
               ),
 
               // Section 3: Appelle un adulte si besoin
               _buildSection(
-                '3. Demande de l’aide 📞',
-                'Si tu es perdu ou as besoin d\'aide, appelle un adulte ou les secours. Explique où tu es.',
+                selectedLanguage == 'Français'
+                    ? '3. Demande de l’aide 📞'
+                    : '3. Ask for help 📞',
+                selectedLanguage == 'Français'
+                    ? 'Si tu es perdu ou as besoin d\'aide, appelle un adulte ou les secours. Explique où tu es.'
+                    : 'If you are lost or need help, call an adult or emergency services. Explain where you are.',
                 Icons.phone,
               ),
 
               // Section 4: Écoute les consignes
               _buildSection(
-                '4. Écoute les grandes personnes 👂',
-                'Les adultes vont te dire quoi faire. Reste avec eux et écoute leurs conseils.',
+                selectedLanguage == 'Français'
+                    ? '4. Écoute les grandes personnes 👂'
+                    : '4. Listen to adults 👂',
+                selectedLanguage == 'Français'
+                    ? 'Les adultes vont te dire quoi faire. Reste avec eux et écoute leurs conseils.'
+                    : 'Adults will tell you what to do. Stay with them and follow their advice.',
                 Icons.record_voice_over,
               ),
 
               // Section 5: Reste calme
               _buildSection(
-                '5. Reste calme 🧘',
-                'Si tu as peur, respire doucement et rappelle-toi que les secours vont venir t’aider.',
+                selectedLanguage == 'Français'
+                    ? '5. Reste calme 🧘'
+                    : '5. Stay calm 🧘',
+                selectedLanguage == 'Français'
+                    ? 'Si tu as peur, respire doucement et rappelle-toi que les secours vont venir t’aider.'
+                    : 'If you are scared, breathe slowly and remember that help is on the way.',
                 Icons.self_improvement,
               ),
 
               // Section 6: Ne retourne pas tout de suite à la maison
               _buildSection(
-                '6. N\'entre pas tout de suite chez toi 🏠',
-                'Attends qu’un adulte vérifie que tout est sûr avant d’aller à l’intérieur.',
+                selectedLanguage == 'Français'
+                    ? '6. N\'entre pas tout de suite chez toi 🏠'
+                    : '6. Don’t go inside your house right away 🏠',
+                selectedLanguage == 'Français'
+                    ? 'Attends qu’un adulte vérifie que tout est sûr avant d’aller à l’intérieur.'
+                    : 'Wait for an adult to check if it is safe before going inside.',
                 Icons.house_siding,
               ),
 
               // Section 7: Participe à aider
               _buildSection(
-                '7. Aide si tu peux 🤝',
-                'Si les grandes personnes te le demandent, aide-les à ranger ou à donner des choses utiles.',
+                selectedLanguage == 'Français'
+                    ? '7. Aide si tu peux 🤝'
+                    : '7. Help if you can 🤝',
+                selectedLanguage == 'Français'
+                    ? 'Si les grandes personnes te le demandent, aide-les à ranger ou à donner des choses utiles.'
+                    : 'If adults ask you to, help clean up or share useful items.',
                 Icons.handshake,
               ),
 
@@ -164,7 +194,7 @@ class _After_ScreenState extends State<After_Screen> {
                       color: Colors.black,
                     ),
                   ),
-                  child: const Text('Retour à l\'Accueil'),
+                  child: Text(selectedLanguage == 'Français' ? 'Retour à l\'Accueil' : 'Return to home page'),
                 ),
               ),
             ],

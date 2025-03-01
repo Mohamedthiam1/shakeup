@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:in_app_notification/in_app_notification.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:oktoast/oktoast.dart';
 
 import 'firebase_options.dart';
 import 'global/audio_manager.dart';
@@ -111,20 +112,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InAppNotification(
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: const HomePage(),
-        routes: {
-          '/settings': (context) => const SettingsPage(),
-          '/privacy': (context) => const PrivacyPolicyPage(),
-          '/terms': (context) => const TermsPage(),
-        },
+    return OKToast(
+      child: InAppNotification(
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: const HomePage(),
+          routes: {
+            '/settings': (context) => const SettingsPage(),
+            '/privacy': (context) => const PrivacyPolicyPage(),
+            '/terms': (context) => const TermsPage(),
+          },
+        ),
       ),
     );
   }
 }
-
-
-
-

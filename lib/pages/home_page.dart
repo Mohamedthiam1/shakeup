@@ -89,6 +89,8 @@ class NavigationB extends State<NavigationBar> {
       } else {
         print("Erreur: UID utilisateur introuvable.");
       }
+      // Met à jour l'UI si nécessaire
+      setState(() {});
       // Afficher un pop-up pour annoncer le trophée débloqué
       _showTrophyPopup(userPoints); // Passer le nouveau nombre de points pour l'afficher dans le pop-up
     }

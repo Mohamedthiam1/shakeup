@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TrouverAbriPage extends StatefulWidget {
   const TrouverAbriPage({super.key});
@@ -14,6 +15,7 @@ class _TrouverAbriPageState extends State<TrouverAbriPage> {
   bool isCorrect = false;
   String? selectedAnswer;
   bool showCelebration = false;
+  String selectedLanguage = 'Français'; // Langue par défaut
 
   final AudioPlayer _audioPlayer = AudioPlayer(); // Lecteur audio
 
@@ -35,12 +37,29 @@ class _TrouverAbriPageState extends State<TrouverAbriPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _loadLanguage(); // Charger la langue au démarrage
+  }
+
+  // Méthode pour récupérer la langue depuis SharedPreferences
+  Future<void> _loadLanguage() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? language = prefs.getString('selected_language'); // Vérifie s'il y a une langue sauvegardée
+    if (language != null) {
+      setState(() {
+        selectedLanguage = language; // Met à jour la langue sélectionnée
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Trouver l’Abri",
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.w400, color: Colors.black),
+        title: Text(
+          selectedLanguage == 'Français' ? 'Trouver l’Abri' : 'Find the shelter',
+          style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w400, color: Colors.black),
         ),
         backgroundColor: Colors.green[100],
         centerTitle: true,
@@ -58,16 +77,18 @@ class _TrouverAbriPageState extends State<TrouverAbriPage> {
 
             final data = snapshot.data!.docs;
             if (currentIndex >= data.length) {
-              return const Center(
+              return Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "🎊 Félicitations ! Vous avez trouvé tous les abris ! 🎊",
+                      selectedLanguage == 'Français'
+                          ? '🎊 Félicitations ! Vous avez trouvé tous les abris ! 🎊'
+                          : '🎊 Congratulations ! You found all the shelters ! 🎊',
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.green),
+                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.green),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                   ],
                 ),
               );
@@ -101,9 +122,11 @@ class _TrouverAbriPageState extends State<TrouverAbriPage> {
                             color: Colors.blue[50],
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          child: const Text(
-                            "🏠 Cliquez sur le numéro de l'abri 🏠",
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.blue),
+                          child: Text(
+                            selectedLanguage == 'Français'
+                                ? '🏠 Cliquez sur le numéro de l\'abri 🏠'
+                                : '🏠 Click on the shelter number 🏠',
+                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.blue),
                           ),
                         ),
                         const SizedBox(height: 20),
@@ -199,12 +222,16 @@ class _TrouverAbriPageState extends State<TrouverAbriPage> {
         return AlertDialog(
           backgroundColor: isCorrect ? Colors.green[100] : Colors.red[100],
           title: Text(
-            isCorrect ? "Bonne réponse ! 🎉" : "Mauvaise réponse 😞",
+            isCorrect
+                ? (selectedLanguage == 'Français' ? "Bonne réponse ! 🎉" : "Correct answer ! 🎉")
+                : (selectedLanguage == 'Français' ? "Mauvaise réponse 😞" : "Wrong answer 😞"),
             textAlign: TextAlign.center,
             style: TextStyle(color: isCorrect ? Colors.green[800] : Colors.red[800]),
           ),
           content: Text(
-            isCorrect ? "Félicitations, vous avez trouvé le bon abri ! 🏆" : "Réessayez pour trouver le bon abri. 💪",
+            isCorrect
+                ? (selectedLanguage == 'Français' ? "Félicitations, vous avez trouvé le bon abri ! 🏆" : "Congratulations, you have found the right shelter ! 🏆")
+                : (selectedLanguage == 'Français' ? "Réessayez pour trouver le bon abri. 💪" : "Try again to find the right shelter. 💪"),
             textAlign: TextAlign.center,
           ),
           actions: [

@@ -37,16 +37,18 @@ class _PendantScreenState extends State<PendantScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          title: const Row(
+          title: Row(
             children: [
-              Icon(Icons.search, color: Colors.blue, size: 40),
-              SizedBox(width: 10),
-              Text("Badge Débloqué !"),
+              const Icon(Icons.search, color: Colors.blue, size: 40),
+              const SizedBox(width: 10),
+              Text(selectedLanguage == 'Français' ? 'Badge Débloqué !' : 'Badge Unlocked !'),
             ],
           ),
-          content: const Text(
-            "Félicitations ! Tu as obtenu le badge \"Chercheur débutant\".",
-            style: TextStyle(fontSize: 16),
+          content: Text(
+            selectedLanguage == 'Français'
+                ? 'Félicitations ! Tu as obtenu le badge "Chercheur débutant".'
+                : 'Congratulations ! You have earned the "Beginner Explorer" badge.',
+            style: const TextStyle(fontSize: 16),
           ),
           actions: [
             TextButton(

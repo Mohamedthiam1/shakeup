@@ -159,7 +159,7 @@ class _TropheeScreenState extends State<TropheeScreen> {
   // Vérifie si d'autres trophées sont débloqués
   Future<void> _checkTrophies() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool hasUnlockedTrophy = prefs.getBool('unlocked_recolteur_points') ?? false;
+    bool hasUnlockedTrophy = prefs.getBool('unlocked_recolteur_points') ?? false; // Vérifie si le trophée est déjà débloqué
 
     // Vérifier si le trophée "Récolteur de points" est débloqué
     if (hasUnlockedTrophy) {
