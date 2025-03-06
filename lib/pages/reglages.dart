@@ -175,24 +175,24 @@ class _SettingsPageState extends State<SettingsPage> {
                   const SizedBox(height: 20),
 
                   if(sharedPreferences!.getString("uid") != null)
-                  ElevatedButton(
-                      onPressed: (){
-                        setState(() {
-                          setPortrait = true;
-                        });
-                        SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
-                            .then((_) {
-                          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const ManageQuizzScreen()));
-                          // Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => AddQuizzScreen()));
-                        });
-                      }, style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFC7E4BF),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7))
-                  ), child: Row(
-                    children: [
-                      Text(selectedLanguage == 'Français' ? 'Gérer Quizz' : 'Manage Quizzes', style: const TextStyle(color: Colors.black),),
-                    ],
-                  )),
+                    ElevatedButton(
+                        onPressed: (){
+                          setState(() {
+                            setPortrait = true;
+                          });
+                          SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+                              .then((_) {
+                            Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const ManageQuizzScreen()));
+                            // Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => AddQuizzScreen()));
+                          });
+                        }, style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFC7E4BF),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7))
+                    ), child: Row(
+                      children: [
+                        Text(selectedLanguage == 'Français' ? 'Gérer Quizz' : 'Manage Quizzes', style: const TextStyle(color: Colors.black),),
+                      ],
+                    )),
 
                   // Options de réglages avec des interrupteurs
                   SettingToggle(title: selectedLanguage == 'Français' ? 'Son' : 'Sound'),
@@ -307,7 +307,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       child: ElevatedButton(
                         onPressed: isLoading ? null : saveUserData,
                         style: ElevatedButton.styleFrom(backgroundColor: Colors.green,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                         child: isLoading // isLoading nous permet de montrer la période de chargement
                             ? const CircularProgressIndicator(color: Colors.white)
                             : const Text("ENREGISTRER", style: TextStyle(color: Colors.white),),
@@ -636,10 +636,10 @@ class _SettingsPageState extends State<SettingsPage> {
                       width: MediaQuery.of(context).size.width * 0.4,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(7),
-                          )
+                            backgroundColor: Colors.green,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(7),
+                            )
                         ),
                         onPressed: () async {
                           String email = emailController.text.trim();
@@ -987,7 +987,7 @@ class _SettingToggleState extends State<SettingToggle> {
             }
             if(widget.title == "Son" || widget.title == "Sound") {
               print("Bool is: $isEnabled");
-                playOrNot = isEnabled;
+              playOrNot = isEnabled;
             }
           },
           activeColor: Colors.green, // Couleur lorsque l'interrupteur est activé
